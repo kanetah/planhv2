@@ -1,4 +1,4 @@
-#PlanH V2 API 描述文档
+# PlanH V2 API 描述文档
 
 本文档内api路径皆以 https://api.planhv2.kanetah.top 为前缀
 
@@ -13,7 +13,7 @@
 
 ---
 
-##管理员
+## 管理员
 ###`post` /authorized 管理员鉴权
 参数：
 - password `ByteArray` 管理员口令
@@ -29,7 +29,7 @@
 }
 ```
 
-###`delete` /authorized 注销鉴权
+### `delete` /authorized 注销鉴权
 参数：
 - authorized `String` 管理员鉴权码
 
@@ -42,7 +42,7 @@
 }
 ```
 
-###`get` /admins 管理员列表
+### `get` /admins 管理员列表
 参数：
 - authorized `String` 管理员鉴权码
 
@@ -61,7 +61,7 @@
 ]
 ```
 
-###`post` /admin 新建管理员
+### `post` /admin 新建管理员
 参数：
 - authorized `String` 管理员鉴权码
 - newPassword `ByteArray` 新管理员口令
@@ -75,7 +75,7 @@
 }
 ```
 
-###`delete` /admin/:id 删除管理员
+### `delete` /admin/:id 删除管理员
 参数：
 - authorized `String` 管理员鉴权码
 
@@ -88,7 +88,7 @@
 }
 ```
 
-###`delete` /admin/:id 查找管理员
+### `delete` /admin/:id 查找管理员
 参数：
 - authorized `String` 管理员鉴权码
 
@@ -103,8 +103,8 @@
 
 ---
 
-##用户
-###`post` /token 用户登录
+## 用户
+### `post` /token 用户登录
 参数：
 - userCode `String` 用户代码
 - userName `String` 用户名
@@ -119,7 +119,7 @@
 }
 ```
 
-###`delete` /token 注销登录
+### `delete` /token 注销登录
 参数：
 - token `String` 用户Token
 
@@ -132,7 +132,7 @@
 }
 ```
 
-###`get` /user 用户详情
+### `get` /user 用户详情
 参数：
 - token `String` 用户Token
 
@@ -152,7 +152,7 @@
 }
 ```
 
-###`patch` /user/:id 用户设置
+### `patch` /user/:id 用户设置
 参数：
 - token `String?` 用户Token
 - theme `String?` 主题样式
@@ -169,7 +169,7 @@
 }
 ```
 
-###`get` /users 用户列表
+### `get` /users 用户列表
 参数：
 - token `String` 用户Token
 
@@ -192,7 +192,7 @@
 ]
 ```
 
-###`post` /user 新建用户
+### `post` /user 新建用户
 参数：
 - authorized `String` 管理员鉴权码
 - userCode `String` 用户代码
@@ -207,7 +207,7 @@
 }
 ```
 
-###`delete` /user/:id 删除用户
+### `delete` /user/:id 删除用户
 参数：
 - authorized `String` 管理员鉴权码
 
@@ -220,7 +220,7 @@
 }
 ```
 
-###`put` /user/:id 修改用户
+### `put` /user/:id 修改用户
 参数：
 - authorized `String` 管理员鉴权码
 - userId `Number` 用户Id
@@ -236,7 +236,7 @@
 }
 ```
 
-###`get` /user/:id 用户详情
+### `get` /user/:id 用户详情
 参数：
 - authorized `String` 管理员鉴权码
 
@@ -258,8 +258,8 @@
 
 ---
 
-##团队
-###`get` /teams 团队列表
+## 团队
+### `get` /teams 团队列表
 参数：
 - token `String?` 用户Token
 
@@ -287,7 +287,7 @@
 ]
 ```
 
-###`post` /team 创建团队
+### `post` /team 创建团队
 参数：
 - token `String` 用户Token
 - teamName `String?` 团队名称
@@ -304,7 +304,7 @@
 }
 ```
 
-###`delete` /team/:id 删除团队
+### `delete` /team/:id 删除团队
 参数：
 - token `String` 用户Token
 返回：
@@ -316,7 +316,7 @@
 }
 ```
 
-###`put` /team/:id 修改团队
+### `put` /team/:id 修改团队
 参数：
 - token `String` 用户Token
 - subjectId `Number` 科目Id
@@ -334,7 +334,7 @@
 }
 ```
 
-###`get` /team/:id 团队详情
+### `get` /team/:id 团队详情
 参数：
 - token `String` 用户Token
 
@@ -354,8 +354,8 @@
 
 ---
 
-##科目
-###`get` /subjects 科目列表
+## 科目
+### `get` /subjects 科目列表
 返回：
 所有科目详情列表  
 例：
@@ -379,7 +379,7 @@
 ]
 ```
 
-###`post` /subject 新建科目
+### `post` /subject 新建科目
 参数：
 - authorized `String` 管理员鉴权码
 - subjectName `String` 科目名称
@@ -396,7 +396,7 @@
 }
 ```
 
-###`delete` /subject/:id 删除科目
+### `delete` /subject/:id 删除科目
 参数：
 - authorized `String` 管理员鉴权码
 
@@ -409,7 +409,7 @@
 }
 ```
 
-###`put` /subject/:id 修改科目
+### `put` /subject/:id 修改科目
 参数：
 - authorized `String` 管理员鉴权码
 - subjectName `String` 科目名称
@@ -426,7 +426,7 @@
 }
 ```
 
-###`get` /subject/:id 科目详情
+### `get` /subject/:id 科目详情
 返回：
 科目详情  
 例：
@@ -442,8 +442,8 @@
 
 ---
 
-##任务
-###`get` /tasks 任务列表
+## 任务
+### `get` /tasks 任务列表
 参数：
 - userId `Number` 用户Id
 - page `Number` 页数
@@ -481,7 +481,7 @@
 ]
 ```
 
-###`post` /task 新建任务
+### `post` /task 新建任务
 参数：
 - authorized `String` 管理员鉴权码
 - subjectId `String` 科目Id
@@ -502,7 +502,7 @@
 }
 ```
 
-###`delete` /task/:id 删除任务
+### `delete` /task/:id 删除任务
 参数：
 - authorized `String` 管理员鉴权码
 
@@ -515,7 +515,7 @@
 }
 ```
 
-###`put` /task/:id 修改任务
+### `put` /task/:id 修改任务
 参数：
 - authorized `String` 管理员鉴权码
 - subjectId `String` 科目Id
@@ -536,7 +536,7 @@
 }
 ```
 
-###`get` /task/:id 任务详情
+### `get` /task/:id 任务详情
 返回：
 任务详情  
 例：
@@ -556,8 +556,8 @@
 
 ---
 
-##提交
-###`get` /submissions 提交列表
+## 提交
+### `get` /submissions 提交列表
 参数：
 - token `String` 用户Token
 
@@ -596,7 +596,7 @@
 ]
 ```
 
-###`post` /submission 提交任务文件
+### `post` /submission 提交任务文件
 参数：
 - token `String` 用户Token
 - taskId `Number` 任务Id
@@ -612,7 +612,7 @@
 }
 ```
 
-###`delete` /submission 删除任务文件
+### `delete` /submission 删除任务文件
 参数：
 - token `String` 用户Token
 - taskId `Number` 任务Id
@@ -626,7 +626,7 @@
 }
 ```
 
-###`get` /submission 下载任务文件
+### `get` /submission 下载任务文件
 参数：
 - token `String` 用户Token
 - taskId `Number` 任务Id
@@ -636,8 +636,8 @@
 
 ---
 
-##资料文档
-###`get` /resources 资料文档列表
+## 资料文档
+### `get` /resources 资料文档列表
 返回：
 可下载的资料文件详情列表  
 例：
@@ -659,7 +659,7 @@
 ]
 ```
 
-###`post` /resource 上传资料文档
+### `post` /resource 上传资料文档
 参数：
 - token `String` 用户Token
 - file `File` 资料文件
@@ -674,7 +674,7 @@
 }
 ```
 
-###`delete` /resource/:id 删除资料文档
+### `delete` /resource/:id 删除资料文档
 参数：
 - authorized `String` 管理员鉴权码
 
@@ -687,14 +687,14 @@
 }
 ```
 
-###`get` /resource/:filename 下载资料
+### `get` /resource/:filename 下载资料
 返回：
 资料文件
 
 ---
 
-##格式化处理器
-###`get` /format/processor 格式化处理器列表
+## 格式化处理器
+### `get` /format/processor 格式化处理器列表
 参数：
 - authorized `String` 管理员鉴权码
 
@@ -717,7 +717,7 @@
 ]
 ```
 
-###`post` /format/processor 添加格式化处理器
+### `post` /format/processor 添加格式化处理器
 参数：
 - authorized `String` 管理员鉴权码
 - formatProcessorName `String` 格式化处理器名称
@@ -733,7 +733,7 @@
 }
 ```
 
-###`delete` /format/processor/:id 删除格式化处理器
+### `delete` /format/processor/:id 删除格式化处理器
 参数：
 - authorized `String` 管理员鉴权码
 
@@ -746,7 +746,7 @@
 }
 ```
 
-###`get` /format/processor/:id 格式化处理器详情
+### `get` /format/processor/:id 格式化处理器详情
 参数：
 - authorized `String` 管理员鉴权码
 

@@ -1,4 +1,4 @@
-#PlanH V2 实体 描述文档
+# PlanH V2 实体 描述文档
 
 * [管理员](#管理员)
 * [用户](#用户)
@@ -13,7 +13,7 @@
 
 ---
 
-###管理员
+### 管理员
 完全限定名：
 `top.kanetah.planhv2.api.entity.Admin`  
 
@@ -31,7 +31,7 @@
 
 ---
 
-###用户
+### 用户
 完全限定名：
 `top.kanetah.planhv2.api.entity.User`  
 
@@ -42,7 +42,7 @@
 - config `Object?` [用户设置](#用户设置)
 - accessToken `String?` 用户AccessToken
 
->####用户设置
+>#### 用户设置
 >完全限定名
 >`top.kanetah.planhv2.api.entity.Config`  
 >
@@ -66,7 +66,7 @@
 
 ---
 
-###团队
+### 团队
 完全限定名：
 `top.kanetah.planhv2.api.entity.Team`  
 
@@ -92,7 +92,7 @@
 
 ---
 
-###科目
+### 科目
 完全限定名：
 `top.kanetah.planhv2.api.entity.Subject`  
 
@@ -116,7 +116,7 @@
 
 ---
 
-###任务
+### 任务
 完全限定名：
 `top.kanetah.planhv2.api.entity.Task`  
 
@@ -148,7 +148,7 @@
 
 ---
 
-###提交
+### 提交
 完全限定名：
 `top.kanetah.planhv2.api.entity.Submission`  
 
@@ -160,7 +160,7 @@
 - submitData `Date` 提交时间
 - fileAttributes `Object` [提交文件属性](#提交文件属性)
 
->####提交文件属性
+>#### 提交文件属性
 >完全限定名：
 >`top.kanetah.planhv2.api.entity.SubmitFileAttributes`  
 >
@@ -189,7 +189,7 @@
 
 ---
 
-###资料文档
+### 资料文档
 完全限定名：
 `top.kanetah.planhv2.api.entity.Resource`  
 
@@ -211,7 +211,7 @@
 
 ---
 
-###格式化处理器
+### 格式化处理器
 完全限定名：
 `top.kanetah.planhv2.api.entity.FormatProcessor`  
 
