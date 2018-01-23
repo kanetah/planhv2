@@ -14,7 +14,7 @@
 ---
 
 ## 管理员
-###`post` /authorized 管理员鉴权
+### `post` /authorized 管理员鉴权
 参数：
 - password `ByteArray` 管理员口令
 - validate `String` 人机身份验证
