@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/planhv2
+    username: root
+    password: nicopoiduang
+server:
+  port: 8000
