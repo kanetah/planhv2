@@ -647,13 +647,13 @@
   resourceId: 1,
   resourceName: "example.zip",
   resourceSize: 1000000,
-  resourceUrl: "https://planhapi.kanetah.top/v2/resource/example.zip"
+  resourceUrl: "https://api.planhv2.kanetah.top/resource/example.zip"
 },
 {
   resourceId: 1,
   resourceName: "other.zip",
   resourceSize: 1000000,
-  resourceUrl: "https://planhapi.kanetah.top/v2/resource/other.zip"
+  resourceUrl: "https://api.planhv2.kanetah.top/resource/other.zip"
 },
 ...
 ]
@@ -670,7 +670,7 @@
 ```
 {
   success: true,
-  resourceUrl: "https://planhapi.kanetah.top/v2/resource/example.zip",
+  resourceUrl: "https://api.planhv2.kanetah.top/resource/example.zip",
 }
 ```
 
@@ -706,12 +706,12 @@
 {
   formatProcessorId: 1,
   formatProcessorName: "最外层文件名格式化处理器",
-  formatProcessorClassName: "top.kanetah.planhapi.format.processor.OutsideFileNameFormatProcessor",
+  formatProcessorClassName: "top.kanetah.planhv2.api.format.processor.OutsideFileNameFormatProcessor",
 },
 {
   formatProcessorId: 2,
   formatProcessorName: "最外层原文件名处理器",
-  formatProcessorClassName: "top.kanetah.planhapi.format.processor.OutsideFormerFileNameFormatProcessor",
+  formatProcessorClassName: "top.kanetah.planhv2.api.format.processor.OutsideOriginalFileNameFormatProcessor",
 },
 ...
 ]
@@ -722,7 +722,7 @@
 - authorized `String` 管理员鉴权码
 - formatProcessorName `String` 格式化处理器名称
 - formatProcessorClassName `String` 格式化处理器完全限定名
-- processorcode `String` 格式化处理器代码
+- processorCode `String` 格式化处理器代码
 
 返回：
 添加结果  
@@ -757,6 +757,6 @@
 {
   formatProcessorId: 1,
   formatProcessorName: "最外层文件名格式化处理器",
-  formatProcessorClassName: "top.kanetah.planhapi.format.processor.OutsideFileNameFormatProcessor",
+  formatProcessorClassName: "top.kanetah.planhv2.api.format.processor.OutsideFileNameFormatProcessor",
 }
 ```
