@@ -4,5 +4,11 @@ spring:
     url: jdbc:mysql://localhost:3306/planhv2
     username: root
     password: nicopoiduang
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  jackson:
+    serialization: true
 server:
   port: 8000

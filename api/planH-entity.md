@@ -19,7 +19,7 @@
 
 属性：
 - adminId `Number` 管理员Id
-- password `ByteArray` 管理员口令
+- password `String` 管理员口令
 
 例：
 ```
@@ -39,12 +39,12 @@
 - userId `Number` 用户Id
 - userCode `String` 用户代码
 - userName `String` 用户名
-- config `Object?` [用户设置](#用户设置)
+- userConfig `UserConfig?` [用户设置](#用户设置)
 - accessToken `String?` 用户AccessToken
 
 >#### 用户设置
 >完全限定名
->`top.kanetah.planhv2.api.entity.Config`  
+>`top.kanetah.planhv2.api.entity.UserConfig`  
 >
 >属性：
 >- theme `String` 主题
@@ -75,8 +75,8 @@
 - subjectId `Number` 科目Id
 - teamIndex `Number` 团队编号
 - teamName `String?` 团队名称
-- memberUserIdArray `NumberArray` 团队成员数组
-- leaderUserIdArray `NumberArray` 团队领导数组
+- memberUserIdArray `Array<Number>` 团队成员数组
+- leaderUserIdArray `Array<Number>` 团队领导数组
 
 例：
 ```
@@ -122,14 +122,14 @@
 
 属性：
 - taskId `Number` 任务Id
-- subjectId `String` 科目Id
+- subjectId `Number` 科目Id
 - title `String` 标题
 - content `String` 内容
 - isTeamTask `Boolean` 是否团队任务
 - deadline `Date` 截止日期
 - type `String` 文件类型
-- format `String?` 存储格式
 - formatProcessorId `String` 存储处理器Id
+- format `String?` 存储格式
 
 例：
 ```
@@ -141,8 +141,8 @@
   isTeamTask: false,
   deadline: "2018/1/1 12:00:00",
   type: ".mp3, .mp4",
-  format: "[code]_[name]",
   formatProcessorId: 1,
+  format: "[code]_[name]",
 }
 ```
 
@@ -158,7 +158,7 @@
 - userId `Number` 用户Id
 - teamId `Number?` 团队Id
 - submitData `Date` 提交时间
-- fileAttributes `Object` [提交文件属性](#提交文件属性)
+- fileAttributes `SubmitFileAttributes` [提交文件属性](#提交文件属性)
 
 >#### 提交文件属性
 >完全限定名：
