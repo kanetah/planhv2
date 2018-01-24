@@ -39,7 +39,7 @@
 - userId `Int` 用户Id
 - userCode `String` 用户代码
 - userName `String` 用户名
-- userConfig `UserConfig?` [用户设置](#用户设置)
+- userConfig `UserConfig` [用户设置](#用户设置)
 - accessToken `String?` 用户AccessToken
 
 >#### 用户设置
@@ -47,7 +47,7 @@
 >`top.kanetah.planhv2.api.entity.UserConfig`  
 >
 >属性：
->- theme `String` 主题
+>- theme `String?` 主题
 >- accessByToken `Boolean` 能否通过令牌直接访问
 
 例：

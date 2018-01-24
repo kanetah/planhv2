@@ -10,9 +10,14 @@ data class Team(
         val subjectId: Int,
         val teamIndex: Int,
         val teamName: String?,
-        val memberUserIdArray: Array<Int>,
-        val leaderUserIdArray: Array<Int>
+        val memberUserIdArray: IntArray,
+        val leaderUserIdArray: IntArray
 ) {
+    constructor(teamId: Int, subjectId: Int, teamIndex: Int, teamName: String?,
+                memberUserIdArray: String, leaderUserIdArray: String
+    ) : this(teamId, subjectId, teamIndex, teamName,
+            memberUserIdArray.toIntArray(), leaderUserIdArray.toIntArray())
+    
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -38,4 +43,13 @@ data class Team(
         result = 31 * result + Arrays.hashCode(leaderUserIdArray)
         return result
     }
+}
+
+fun String.toIntArray(): IntArray {
+    val stringArray = this.slice(IntRange(1, this.length - 2)).split(", ")
+    val intArray = IntArray(stringArray.size)
+    for ((index, value) in stringArray.withIndex())
+        intArray[index] = value.toInt()
+    print(intArray.contentToString())
+    return intArray
 }
