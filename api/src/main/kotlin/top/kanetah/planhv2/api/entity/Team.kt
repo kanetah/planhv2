@@ -1,19 +1,17 @@
 package top.kanetah.planhv2.api.entity
 
 import java.util.*
-import javax.persistence.Entity
 
 /**
  * created by kane on 2018/1/23
  */
-@Entity
 data class Team(
-        val teamId: Number,
-        val subjectId: Number,
-        val teamIndex: Number,
+        val teamId: Int,
+        val subjectId: Int,
+        val teamIndex: Int,
         val teamName: String?,
-        val memberUserIdArray: Array<Number>,
-        val leaderUserIdArray: Array<Number>
+        val memberUserIdArray: Array<Int>,
+        val leaderUserIdArray: Array<Int>
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

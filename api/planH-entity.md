@@ -18,7 +18,7 @@
 `top.kanetah.planhv2.api.entity.Admin`  
 
 属性：
-- adminId `Number` 管理员Id
+- adminId `Int` 管理员Id
 - password `String` 管理员口令
 
 例：
@@ -36,7 +36,7 @@
 `top.kanetah.planhv2.api.entity.User`  
 
 属性：
-- userId `Number` 用户Id
+- userId `Int` 用户Id
 - userCode `String` 用户代码
 - userName `String` 用户名
 - userConfig `UserConfig?` [用户设置](#用户设置)
@@ -71,12 +71,12 @@
 `top.kanetah.planhv2.api.entity.Team`  
 
 属性：
-- teamId `Number` 团队Id
-- subjectId `Number` 科目Id
-- teamIndex `Number` 团队编号
+- teamId `Int` 团队Id
+- subjectId `Int` 科目Id
+- teamIndex `Int` 团队编号
 - teamName `String?` 团队名称
-- memberUserIdArray `Array<Number>` 团队成员数组
-- leaderUserIdArray `Array<Number>` 团队领导数组
+- memberUserIdArray `Array<Int>` 团队成员数组
+- leaderUserIdArray `Array<Int>` 团队领导数组
 
 例：
 ```
@@ -97,11 +97,11 @@
 `top.kanetah.planhv2.api.entity.Subject`  
 
 属性：
-- subjectId `Number` 科目Id
+- subjectId `Int` 科目Id
 - subjectName `String` 科目名称
 - teacherName `String` 教师姓名
 - emailAddress `String` 邮箱地址
-- recommendProcessorId `Number` 推荐格式化处理器Id
+- recommendProcessorId `Int` 推荐格式化处理器Id
 
 例：
 ```
@@ -121,8 +121,8 @@
 `top.kanetah.planhv2.api.entity.Task`  
 
 属性：
-- taskId `Number` 任务Id
-- subjectId `Number` 科目Id
+- taskId `Int` 任务Id
+- subjectId `Int` 科目Id
 - title `String` 标题
 - content `String` 内容
 - isTeamTask `Boolean` 是否团队任务
@@ -153,10 +153,10 @@
 `top.kanetah.planhv2.api.entity.Submission`  
 
 属性：
-- submissionId `Number` 提交Id
-- taskId `Number` 任务Id
-- userId `Number` 用户Id
-- teamId `Number?` 团队Id
+- submissionId `Int` 提交Id
+- taskId `Int` 任务Id
+- userId `Int` 用户Id
+- teamId `Int?` 团队Id
 - submitData `Date` 提交时间
 - fileAttributes `SubmitFileAttributes` [提交文件属性](#提交文件属性)
 
@@ -167,7 +167,7 @@
 >属性：
 >- formerName `String` 原文件名
 >- saveName `String` 保存文件名
->- size `Number` 文件大小
+>- size `Long` 文件大小
 >- path `String` 文件存储路径
 
 例：
@@ -194,9 +194,9 @@
 `top.kanetah.planhv2.api.entity.Resource`  
 
 属性：
-- resourceId `Number` 资料文档Id
+- resourceId `Int` 资料文档Id
 - resourceName `String` 资料文档名称
-- resourceSize `Number` 资料文档大小
+- resourceSize `Long` 资料文档大小
 - resourceUrl `String` 资料文档Url
 
 例：
@@ -216,7 +216,7 @@
 `top.kanetah.planhv2.api.entity.FormatProcessor`  
 
 属性：
-- formatProcessorId `Number` 格式化处理器Id
+- formatProcessorId `Int` 格式化处理器Id
 - formatProcessorName `String` 格式化处理器名称
 - formatProcessorClassName `String` 格式化处理器完全限定名
 

@@ -1,14 +1,10 @@
+mybatis:
+  type-aliases-package: top.kanetah.planhv2.entity
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/planhv2
+    url: jdbc:mysql://localhost:3306/planhv2?useSSL=false
     username: root
     password: nicopoiduang
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-  jackson:
-    serialization: true
 server:
-  port: 8000
+  port: 8888

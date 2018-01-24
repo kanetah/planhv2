@@ -16,7 +16,7 @@
 ## 管理员
 ### `post` /authorized 管理员鉴权
 参数：
-- password `ByteArray` 管理员口令
+- password `String` 管理员口令
 - validate `String` 人机身份验证
 
 返回：
@@ -64,7 +64,7 @@
 ### `post` /admin 新建管理员
 参数：
 - authorized `String` 管理员鉴权码
-- newPassword `ByteArray` 新管理员口令
+- newPassword `String` 新管理员口令
 
 返回：
 新建结果  
@@ -223,7 +223,7 @@
 ### `put` /user/:id 修改用户
 参数：
 - authorized `String` 管理员鉴权码
-- userId `Number` 用户Id
+- userId `Int` 用户Id
 - userCode `String?` 用户代码
 - userName `String?` 用户名
 
@@ -291,9 +291,9 @@
 参数：
 - token `String` 用户Token
 - teamName `String?` 团队名称
-- subjectId `Number` 科目Id
-- memberUserIdArray `NumberArray` 团队成员数组
-- leaderUserIdArray `NumberArray` 团队领导数组
+- subjectId `Int` 科目Id
+- memberUserIdArray `Array<Int>` 团队成员数组
+- leaderUserIdArray `Array<Int>` 团队领导数组
 
 返回：
 创建结果  
@@ -319,11 +319,11 @@
 ### `put` /team/:id 修改团队
 参数：
 - token `String` 用户Token
-- subjectId `Number` 科目Id
-- teamIndex `Number` 团队编号
+- subjectId `Int` 科目Id
+- teamIndex `Int` 团队编号
 - teamName `String?` 团队名称
-- memberUserIdArray `NumberArray` 团队成员数组
-- leaderUserIdArray `NumberArray` 团队领导数组
+- memberUserIdArray `Array<Int>` 团队成员数组
+- leaderUserIdArray `Array<Int>` 团队领导数组
 
 返回：
 修改结果  
@@ -385,7 +385,7 @@
 - subjectName `String` 科目名称
 - teacherName `String` 教师姓名
 - emailAddress `String` 邮箱地址
-- recommendProcessorId `Number` 推荐格式化处理器Id
+- recommendProcessorId `Int` 推荐格式化处理器Id
 
 返回：
 新建结果  
@@ -415,7 +415,7 @@
 - subjectName `String` 科目名称
 - teacherName `String` 教师姓名
 - emailAddress `String` 邮箱地址
-- recommendProcessorId `Number` 推荐格式化处理器Id
+- recommendProcessorId `Int` 推荐格式化处理器Id
 
 返回：
 修改结果  
@@ -445,10 +445,10 @@
 ## 任务
 ### `get` /tasks 任务列表
 参数：
-- userId `Number` 用户Id
-- page `Number` 页数
+- userId `Int` 用户Id
+- page `Int` 页数
 - subject `String?` 科目
-- limit `Number` 每一页的任务数量
+- limit `Int` 每一页的任务数量
 
 返回：
 任务内容详情列表  
@@ -599,9 +599,9 @@
 ### `post` /submission 提交任务文件
 参数：
 - token `String` 用户Token
-- taskId `Number` 任务Id
+- taskId `Int` 任务Id
 - file `File` 任务文件
-- teamId `Number?` 团队Id
+- teamId `Int?` 团队Id
 
 返回：
 提交结果  
@@ -615,7 +615,7 @@
 ### `delete` /submission 删除任务文件
 参数：
 - token `String` 用户Token
-- taskId `Number` 任务Id
+- taskId `Int` 任务Id
 
 返回：
 删除结果  
@@ -629,7 +629,7 @@
 ### `get` /submission 下载任务文件
 参数：
 - token `String` 用户Token
-- taskId `Number` 任务Id
+- taskId `Int` 任务Id
 
 返回：
 任务文件
