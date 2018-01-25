@@ -7,6 +7,6 @@ import top.kanetah.planhv2.api.annotation.Entity
  */
 @Entity
 data class Admin(
-        val adminId: Int,
+        val adminId: Int = Int.MIN_VALUE,
         val password: String
 )

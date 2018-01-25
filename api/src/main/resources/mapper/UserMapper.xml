@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="top.kanetah.planhv2.api.repository.UserRepository">
+
+    <insert id="save">
+        INSERT INTO user_tab (
+            user_code, user_name, theme, access_by_token, access_token
+        ) VALUE (
+            #{userCode}, #{userName}, #{theme}, #{accessByToken}, #{accessToken}
+        )
+    </insert>
+
     <sql id="select_user">
-        SELECT
-            *
+        SELECT *
         FROM user_tab
     </sql>
     <select id="findByCode" resultType="top.kanetah.planhv2.api.entity.User">
@@ -12,4 +20,5 @@
             user_code = #{code}
         </where>
     </select>
+
 </mapper>

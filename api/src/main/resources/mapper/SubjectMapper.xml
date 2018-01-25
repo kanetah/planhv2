@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.kanetah.planhv2.api.repository.SubjectRepository">
+
+    <insert id="save">
+        INSERT INTO subject_tab (
+            subject_name, teacher_name, email_address, recommend_processor_id
+        ) VALUE (
+            #{subjectName}, #{teacherName}, #{emailAddress}, #{recommendProcessorId}
+        )
+    </insert>
+
+    <sql id="find_subject">
+        SELECT *
+        FROM subject_tab
+    </sql>
+    <select id="findBySubjectName" resultType="top.kanetah.planhv2.api.entity.Subject">
+        <include refid="find_subject"/>
+        <where>
+            subject_name = #{subjectName}
+        </where>
+    </select>
+
+</mapper>

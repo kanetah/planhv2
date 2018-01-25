@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.kanetah.planhv2.api.repository.FormatProcessorRepository">
+
+    <insert id="save">
+        INSERT INTO format_processor_tab (
+            format_processor_name, format_processor_class_name
+        ) VALUE (
+                #{formatProcessorName}, #{formatProcessorClassName}
+        )
+    </insert>
+
+    <sql id="find_format_processor">
+        SELECT
+            *
+        FROM format_processor_tab
+    </sql>
+    <select id="findByName" resultType="top.kanetah.planhv2.api.entity.FormatProcessor">
+        <include refid="find_format_processor"/>
+        <where>
+            format_processor_name = #{formatProcessorName}
+        </where>
+    </select>
+
+</mapper>

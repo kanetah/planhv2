@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.kanetah.planhv2.api.repository.TaskRepository">
+
+    <insert id="save">
+        INSERT INTO task_tab (
+            subject_id, title, content, is_team_task, deadline, type, format_processor_id, format
+        ) VALUE (
+            #{subjectId}, #{title}, #{content}, #{isTeamTask},
+            #{deadline}, #{type}, #{formatProcessorId}, #{format}
+        )
+    </insert>
+
+    <sql id="find_task">
+        SELECT
+            *
+        FROM task_tab
+    </sql>
+    <select id="findByTitleLike" resultType="top.kanetah.planhv2.api.entity.Task">
+        <include refid="find_task"/>
+        <where>
+            title LIKE "%"#{title}"%"
+        </where>
+    </select>
+
+</mapper>

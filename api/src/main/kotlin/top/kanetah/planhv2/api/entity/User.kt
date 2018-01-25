@@ -7,7 +7,7 @@ import top.kanetah.planhv2.api.annotation.Entity
  */
 @Entity
 data class User(
-        val userId: Int,
+        val userId: Int = Int.MIN_VALUE,
         val userCode: String,
         val userName: String,
         val userConfig: UserConfig,

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.kanetah.planhv2.api.repository.ResourceRepository">
+
+    <insert id="save">
+        INSERT INTO resource_tab (
+            resource_name, resource_size, resource_url
+        ) VALUE (
+                #{resourceName}, #{resourceSize}, #{resourceUrl}
+        )
+    </insert>
+
+    <sql id="find_resource">
+        SELECT
+            *
+        FROM resource_tab
+    </sql>
+    <select id="findByNameLike" resultType="top.kanetah.planhv2.api.entity.Resource">
+        <include refid="find_resource"/>
+        <where>
+            resource_name LIKE "%"#{resourceName}"%"
+        </where>
+    </select>
+
+</mapper>

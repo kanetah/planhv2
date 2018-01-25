@@ -13,12 +13,12 @@
     </insert>
 
     <!--<resultMap id="teamResultMap" type="top.kanetah.planhv2.api.entity.Team">-->
-        <!--<result typeHandler="top.kanetah.planhv2.api.typeHandler.IntArrayTypeHandler"-->
-                <!--column="member_user_id_array" javaType="int[]"-->
-                <!--jdbcType="VARCHAR" property="memberUserIdArray"/>-->
-        <!--<result typeHandler="top.kanetah.planhv2.api.typeHandler.IntArrayTypeHandler"-->
-                <!--column="leader_user_id_array" javaType="int[]"-->
-                <!--jdbcType="VARCHAR" property="leaderUserIdArray"/>-->
+    <!--<result typeHandler="top.kanetah.planhv2.api.typeHandler.IntArrayTypeHandler"-->
+    <!--column="member_user_id_array" javaType="int[]"-->
+    <!--jdbcType="VARCHAR" property="memberUserIdArray"/>-->
+    <!--<result typeHandler="top.kanetah.planhv2.api.typeHandler.IntArrayTypeHandler"-->
+    <!--column="leader_user_id_array" javaType="int[]"-->
+    <!--jdbcType="VARCHAR" property="leaderUserIdArray"/>-->
     <!--</resultMap>-->
 
     <sql id="find_team">
@@ -31,4 +31,5 @@
             team_index = #{teamIndex}
         </where>
     </select>
+
 </mapper>

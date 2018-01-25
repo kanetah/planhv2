@@ -9,5 +9,7 @@ import top.kanetah.planhv2.api.entity.Admin
 @DataAccess
 interface AdminRepository {
     
-    fun findByPassword(password: String): Admin
+    fun save(admin: Admin): Int
+    
+    fun findByPassword(password: String): Admin?
 }

@@ -9,5 +9,7 @@ import top.kanetah.planhv2.api.entity.User
 @DataAccess
 interface UserRepository {
     
-    fun findByCode(code: String): User
+    fun save(user: User): Int
+    
+    fun findByCode(code: String): User?
 }

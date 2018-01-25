@@ -1,12 +1,14 @@
 package top.kanetah.planhv2.api.entity
 
+import top.kanetah.planhv2.api.annotation.Entity
 import java.util.*
 
 /**
  * created by kane on 2018/1/23
  */
+@Entity
 data class Team(
-        val teamId: Int,
+        val teamId: Int = Int.MIN_VALUE,
         val subjectId: Int,
         val teamIndex: Int,
         val teamName: String?,

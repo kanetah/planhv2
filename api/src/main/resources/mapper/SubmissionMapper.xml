@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.kanetah.planhv2.api.repository.SubmissionRepository">
+
+    <insert id="save">
+        INSERT INTO submission_tab (
+            task_id, user_id, team_id, submit_data, former_name, save_name, size, path
+        ) VALUE (
+            #{taskId}, #{userId}, #{teamId}, #{submitDate}, #{formerName}, #{saveName}, #{size}, #{path}
+        )
+    </insert>
+
+    <sql id="find_submission">
+        SELECT *
+        FROM submission_tab
+    </sql>
+    <select id="findByUserId" resultType="top.kanetah.planhv2.api.entity.Submission">
+        <include refid="find_submission"/>
+        <where>
+            user_id = #{userId}
+        </where>
+    </select>
+
+</mapper>
