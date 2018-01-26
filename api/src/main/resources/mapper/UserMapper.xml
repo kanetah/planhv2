@@ -10,6 +10,27 @@
         )
     </insert>
 
+    <delete id="delete">
+        DELETE FROM user_tab
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+
+    <update id="update">
+        UPDATE user_tab
+        <set>
+            user_code = #{userCode},
+            user_name = #{userName},
+            theme = #{theme},
+            access_by_token = #{accessByToken},
+            access_token = #{accessToken}
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
     <sql id="select_user">
         SELECT *
         FROM user_tab

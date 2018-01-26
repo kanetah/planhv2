@@ -10,6 +10,25 @@
         )
     </insert>
 
+    <delete id="delete">
+        DELETE FROM resource_tab
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+
+    <update id="update">
+        UPDATE resource_tab
+        <set>
+            resource_name = #{resourceName},
+            resource_size = #{resourceSize},
+            resource_url = #{resourceUrl}
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
     <sql id="find_resource">
         SELECT
             *

@@ -11,6 +11,30 @@
         )
     </insert>
 
+    <delete id="delete">
+        DELETE FROM task_tab
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+
+    <update id="update">
+        UPDATE task_tab
+        <set>
+            subject_id = #{subjectId},
+            title = #{title},
+            content = #{content},
+            is_team_task = #{isTeamTask},
+            deadline = #{deadline},
+            type = #{type},
+            format_processor_id = #{formatProcessorId},
+            format = #{format}
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
     <sql id="find_task">
         SELECT
             *

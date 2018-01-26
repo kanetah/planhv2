@@ -10,6 +10,30 @@
         )
     </insert>
 
+    <delete id="delete">
+        DELETE FROM submission_tab
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+
+    <update id="update">
+        UPDATE submission_tab
+        <set>
+            task_id = #{taskId},
+            user_id = #{userId},
+            team_id = #{teamId},
+            submit_data = #{submitDate},
+            former_name = #{formerName},
+            save_name = #{saveName},
+            size = #{size},
+            path = #{path}
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
     <sql id="find_submission">
         SELECT *
         FROM submission_tab

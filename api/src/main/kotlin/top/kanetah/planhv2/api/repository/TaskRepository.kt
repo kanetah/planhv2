@@ -11,5 +11,9 @@ interface TaskRepository {
     
     fun save(task: Task): Int
     
+    fun delete(id: Int)
+    
+    fun update(task: Task)
+    
     fun findByTitleLike(title: String): Array<Task>?
 }

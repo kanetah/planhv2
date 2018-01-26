@@ -46,6 +46,7 @@ class TestController @Autowired constructor(
     
     @RequestMapping("/task")
     fun task(): Array<Task>? {
+        repositoryService.taskRepository.delete(2)
         return repositoryService.taskRepository.findByTitleLike("测")
     }
     

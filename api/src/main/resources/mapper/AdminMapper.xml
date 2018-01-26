@@ -10,6 +10,23 @@
         )
     </insert>
 
+    <delete id="delete">
+        DELETE FROM admin_tab
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+
+    <update id="update">
+        UPDATE admin_tab
+        <set>
+            psd = #{psd}
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
     <sql id="select_admin">
         SELECT *
         FROM admin_tab

@@ -11,5 +11,9 @@ interface FormatProcessorRepository {
     
     fun save(formatProcessor: FormatProcessor): Int
     
+    fun delete(id: Int)
+    
+    fun update(formatProcessor: FormatProcessor)
+    
     fun findByName(formatProcessorName: String): FormatProcessor?
 }

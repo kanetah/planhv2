@@ -22,5 +22,18 @@ interface SubmissionRepository {
             @Param("path") path: String
     ): Int
     
+    fun delete(id: Int)
+    
+    fun update(
+            @Param("taskId") taskId: Int,
+            @Param("userId") userId: Int,
+            @Param("teamId") teamId: Int?,
+            @Param("submitDate") submitDate: Timestamp,
+            @Param("formerName") formerName: String,
+            @Param("saveName") saveName: String,
+            @Param("size") size: Double,
+            @Param("path") path: String
+    )
+    
     fun findByUserId(userId: Int): Array<Submission>?
 }

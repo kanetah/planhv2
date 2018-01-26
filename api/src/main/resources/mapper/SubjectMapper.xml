@@ -10,6 +10,26 @@
         )
     </insert>
 
+    <delete id="delete">
+        DELETE FROM subject_tab
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+
+    <update id="update">
+        UPDATE subject_tab
+        <set>
+            subject_name = #{subjectName},
+            teacher_name = #{teacherName},
+            email_address = #{emailAddress},
+            recommend_processor_id = #{recommendProcessorId}
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
     <sql id="find_subject">
         SELECT *
         FROM subject_tab

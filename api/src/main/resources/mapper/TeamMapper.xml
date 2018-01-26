@@ -12,6 +12,27 @@
         )
     </insert>
 
+    <delete id="delete">
+        DELETE FROM team_tab
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+
+    <update id="update">
+        UPDATE team_tab
+        <set>
+            subject_id = #{subjectId},
+            team_index = #{teamIndex},
+            team_name = #{teamName},
+            member_user_id_array = #{memberUserIdArray},
+            leader_user_id_array = #{leaderUserIdArray}
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
     <!--<resultMap id="teamResultMap" type="top.kanetah.planhv2.api.entity.Team">-->
     <!--<result typeHandler="top.kanetah.planhv2.api.typeHandler.IntArrayTypeHandler"-->
     <!--column="member_user_id_array" javaType="int[]"-->

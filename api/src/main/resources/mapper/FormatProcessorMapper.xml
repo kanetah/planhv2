@@ -10,6 +10,24 @@
         )
     </insert>
 
+    <delete id="delete">
+        DELETE FROM format_processor_tab
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+
+    <update id="update">
+        UPDATE format_processor_tab
+        <set>
+            format_processor_name = #{formatProcessorName},
+            format_processor_class_name = #{formatProcessorClassName}
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
     <sql id="find_format_processor">
         SELECT
             *

@@ -11,5 +11,9 @@ interface UserRepository {
     
     fun save(user: User): Int
     
+    fun delete(id: Int)
+    
+    fun update(user: User)
+    
     fun findByCode(code: String): User?
 }

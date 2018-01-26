@@ -11,5 +11,9 @@ interface ResourceRepository {
     
     fun save(resource: Resource): Int
     
+    fun delete(id: Int)
+    
+    fun update(resource: Resource)
+    
     fun findByNameLike(resourceName: String): Array<Resource>?
 }

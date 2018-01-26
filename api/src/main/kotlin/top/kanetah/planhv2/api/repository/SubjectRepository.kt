@@ -11,5 +11,9 @@ interface SubjectRepository {
     
     fun save(subject: Subject): Int
     
+    fun delete(id: Int)
+    
+    fun update(subject: Subject)
+    
     fun findBySubjectName(subjectName: String): Subject?
 }

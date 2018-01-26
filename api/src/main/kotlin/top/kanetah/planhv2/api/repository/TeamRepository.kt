@@ -1,6 +1,5 @@
 package top.kanetah.planhv2.api.repository
 
-import org.apache.ibatis.annotations.Param
 import top.kanetah.planhv2.api.annotation.DataAccess
 import top.kanetah.planhv2.api.entity.Team
 
@@ -9,16 +8,12 @@ import top.kanetah.planhv2.api.entity.Team
  */
 @DataAccess
 interface TeamRepository {
-
-//    fun save(
-//            @Param("subjectId")subjectId: Int,
-//            @Param("teamIndex")teamIndex: Int,
-//            @Param("teamName")teamName: String? = null,
-//            @Param("memberUserIdArray")memberUserIdArray: IntArray,
-//            @Param("leaderUserIdArray")leaderUserIdArray: IntArray
-//    ): Int
     
     fun save(team: Team): Int
+    
+    fun delete(id: Int)
+    
+    fun update(team: Team)
     
     fun findByIndex(teamIndex: Int): Team?
 }

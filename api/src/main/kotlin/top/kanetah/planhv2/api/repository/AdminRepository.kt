@@ -11,5 +11,9 @@ interface AdminRepository {
     
     fun save(admin: Admin): Int
     
+    fun delete(id: Int)
+    
+    fun update(admin: Admin)
+    
     fun findByPassword(password: String): Admin?
 }
