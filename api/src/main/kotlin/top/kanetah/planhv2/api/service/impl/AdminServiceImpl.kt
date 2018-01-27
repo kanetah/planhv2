@@ -19,9 +19,10 @@ class AdminServiceImpl @Autowired constructor(
     
     override fun adminWriteIn(
             password: String, validate: String
-    ) = repositoryService.adminRepository.findByPassword(password)?.let {
-        val auth = "planhII${it.adminId}|${password.hashCode()}|${(Date().hashCode())}"
-        val saved = repositoryService.authRepository.save(Auth(adminId = it.adminId, authorized = auth))
+    ) = repositoryService.adminRepository.findByPassword(password)?.let { admin ->
+        repositoryService.authRepository.deleteByAdminId(admin.adminId)
+        val auth = Date().hashCode().let { "planhII${admin.adminId}|${password.hashCode()}|${(it)}" }
+        val saved = repositoryService.authRepository.save(Auth(adminId = admin.adminId, authorized = auth))
         if (saved > 0) auth else null
     }
     

@@ -22,7 +22,7 @@ class AdminController @Autowired constructor(
     ) = adminService.adminWriteIn(password, validate).let {
         object {
             @JsonValue
-            val success = if (it === null) "true" else "false"
+            val success = if (it !== null) "true" else "false"
             @JsonValue
             val authorized = it
         }

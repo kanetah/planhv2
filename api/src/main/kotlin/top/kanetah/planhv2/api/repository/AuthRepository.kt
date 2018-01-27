@@ -11,7 +11,7 @@ interface AuthRepository {
     
     fun save(auth: Auth): Int
     
-    fun delete(id: Int): Int
+    fun deleteByAdminId(adminId: Int): Int
     
     fun deleteByAuthorized(authorized: String): Int
     
