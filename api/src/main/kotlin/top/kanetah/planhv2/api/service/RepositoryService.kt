@@ -7,6 +7,7 @@ import top.kanetah.planhv2.api.repository.*
  */
 interface RepositoryService {
     val adminRepository: AdminRepository
+    val authRepository: AuthRepository
     val userRepository: UserRepository
     val teamRepository: TeamRepository
     val subjectRepository: SubjectRepository

@@ -11,6 +11,7 @@ import top.kanetah.planhv2.api.service.RepositoryService
 @Service
 class RepositoryServiceImpl @Autowired constructor(
         override val adminRepository: AdminRepository,
+        override val authRepository: AuthRepository,
         override val userRepository: UserRepository,
         override val teamRepository: TeamRepository,
         override val subjectRepository: SubjectRepository,

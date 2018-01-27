@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.kanetah.planhv2.api.repository.AdminRepository">
+
+    <insert id="save">
+        INSERT INTO auth_tab (
+            admin_id, authorized
+        ) VALUE (
+                #{adminId}, #{authorized}
+        )
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM auth_tab
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+    <delete id="deleteByAuthorized">
+        DELETE FROM auth_tab
+        <where>
+            authorized = #{authorized}
+        </where>
+    </delete>
+
+    <sql id="find_auth">
+        SELECT
+            *
+        FROM auth_tab
+    </sql>
+    <select id="find" resultType="top.kanetah.planhv2.api.entity.Auth">
+        <include refid="find_auth"/>
+        <where>
+            id = #{id}
+        </where>
+    </select>
+    <select id="findByAuthorized" resultType="top.kanetah.planhv2.api.entity.Auth">
+        <include refid="find_auth"/>
+        <where>
+            authorized = #{authorized}
+        </where>
+    </select>
+
+</mapper>
