@@ -6,7 +6,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
-import top.kanetah.planhv2.api.service.UserLoginService
+import top.kanetah.planhv2.api.service.AccessSecurityService
 
 /**
  * created by kane on 2018/1/22
@@ -14,11 +14,11 @@ import top.kanetah.planhv2.api.service.UserLoginService
 @Configuration
 @EnableWebSecurity
 open class SecurityConfiguration @Autowired constructor(
-        private val userLoginService: UserLoginService
+        private val accessSecurityService: AccessSecurityService
 ) : WebSecurityConfigurerAdapter(){
 
     override fun configure(auth: AuthenticationManagerBuilder?) {
-        auth?.userDetailsService(userLoginService)
+        auth?.userDetailsService(accessSecurityService)
     }
 
     override fun configure(http: HttpSecurity?) {
@@ -26,5 +26,8 @@ open class SecurityConfiguration @Autowired constructor(
                 ?.authorizeRequests()
                 ?.anyRequest()
                 ?.permitAll()
+                ?.and()
+                ?.csrf()
+                ?.disable()
     }
 }

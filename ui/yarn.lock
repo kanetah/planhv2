@@ -581,9 +581,9 @@ babel-messages@^6.23.0:
   dependencies:
     babel-runtime "^6.22.0"
 
-babel-plugin-check-es2015-constants@^6.22.0:
+babel-plugin-authCheck-es2015-constants@^6.22.0:
   version "6.22.0"
-  resolved "http://r.cnpmjs.org/babel-plugin-check-es2015-constants/download/babel-plugin-check-es2015-constants-6.22.0.tgz#35157b101426fd2ffd3da3f75c7d1e91835bbf8a"
+  resolved "http://r.cnpmjs.org/babel-plugin-authCheck-es2015-constants/download/babel-plugin-authCheck-es2015-constants-6.22.0.tgz#35157b101426fd2ffd3da3f75c7d1e91835bbf8a"
   dependencies:
     babel-runtime "^6.22.0"
 
@@ -909,7 +909,7 @@ babel-preset-env@1.6.1:
   version "1.6.1"
   resolved "http://r.cnpmjs.org/babel-preset-env/download/babel-preset-env-1.6.1.tgz#a18b564cc9b9afdf4aae57ae3c1b0d99188e6f48"
   dependencies:
-    babel-plugin-check-es2015-constants "^6.22.0"
+    babel-plugin-authCheck-es2015-constants "^6.22.0"
     babel-plugin-syntax-trailing-function-commas "^6.22.0"
     babel-plugin-transform-async-to-generator "^6.22.0"
     babel-plugin-transform-es2015-arrow-functions "^6.22.0"
@@ -1770,7 +1770,7 @@ css-select@^1.1.0:
     boolbase "~1.0.0"
     css-what "2.1"
     domutils "1.5.1"
-    nth-check "~1.0.1"
+    nth-authCheck "~1.0.1"
 
 css-selector-tokenizer@^0.7.0:
   version "0.7.0"
@@ -4079,7 +4079,7 @@ levn@^0.3.0, levn@~0.3.0:
   resolved "http://r.cnpmjs.org/levn/download/levn-0.3.0.tgz#3b09924edf9f083c0490fdd4c0bc4421e04764ee"
   dependencies:
     prelude-ls "~1.1.2"
-    type-check "~0.3.2"
+    type-authCheck "~0.3.2"
 
 load-json-file@^1.0.0:
   version "1.1.0"
@@ -4589,9 +4589,9 @@ npmlog@^4.0.2:
     gauge "~2.7.3"
     set-blocking "~2.0.0"
 
-nth-check@~1.0.1:
+nth-authCheck@~1.0.1:
   version "1.0.1"
-  resolved "http://r.cnpmjs.org/nth-check/download/nth-check-1.0.1.tgz#9929acdf628fc2c41098deab82ac580cf149aae4"
+  resolved "http://r.cnpmjs.org/nth-authCheck/download/nth-authCheck-1.0.1.tgz#9929acdf628fc2c41098deab82ac580cf149aae4"
   dependencies:
     boolbase "~1.0.0"
 
@@ -4683,7 +4683,7 @@ optionator@^0.8.1, optionator@^0.8.2:
     fast-levenshtein "~2.0.4"
     levn "~0.3.0"
     prelude-ls "~1.1.2"
-    type-check "~0.3.2"
+    type-authCheck "~0.3.2"
     wordwrap "~1.0.0"
 
 original@>=0.0.5:
@@ -6798,9 +6798,9 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "http://r.cnpmjs.org/tweetnacl/download/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
 
-type-check@~0.3.2:
+type-authCheck@~0.3.2:
   version "0.3.2"
-  resolved "http://r.cnpmjs.org/type-check/download/type-check-0.3.2.tgz#5884cab512cf1d355e3fb784f30804b2b520db72"
+  resolved "http://r.cnpmjs.org/type-authCheck/download/type-authCheck-0.3.2.tgz#5884cab512cf1d355e3fb784f30804b2b520db72"
   dependencies:
     prelude-ls "~1.1.2"
 

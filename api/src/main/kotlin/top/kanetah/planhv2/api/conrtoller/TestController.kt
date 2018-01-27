@@ -1,12 +1,11 @@
 package top.kanetah.planhv2.api.conrtoller
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import top.kanetah.planhv2.api.entity.*
 import top.kanetah.planhv2.api.service.RepositoryService
-import java.sql.Timestamp
-import java.util.*
 
 /**
  * created by kane on 2018/1/23
@@ -32,10 +31,6 @@ class TestController @Autowired constructor(
     
     @RequestMapping("/team")
     fun team(): Team? {
-        repositoryService.taskRepository.save(
-                Task(subjectId = 1, title = "poi", content = "nico", deadline = Timestamp(Date().time),
-                        type = ".htm", formatProcessorId = 1)
-        )
         return repositoryService.teamRepository.findByIndex(6)
     }
     
@@ -46,7 +41,6 @@ class TestController @Autowired constructor(
     
     @RequestMapping("/task")
     fun task(): Array<Task>? {
-        repositoryService.taskRepository.delete(2)
         return repositoryService.taskRepository.findByTitleLike("测")
     }
     

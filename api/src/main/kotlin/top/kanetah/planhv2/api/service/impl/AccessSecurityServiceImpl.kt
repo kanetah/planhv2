@@ -4,13 +4,14 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
-import top.kanetah.planhv2.api.service.UserLoginService
+import top.kanetah.planhv2.api.service.AccessSecurityService
 
 /**
  * created by kane on 2018/1/23
  */
 @Service
-class UserLoginServiceImpl : UserLoginService {
+class AccessSecurityServiceImpl : AccessSecurityService {
+    
     override fun loadUserByUsername(username: String?): UserDetails {
         return User(username, "123", MutableList(1, { GrantedAuthority { "user" } }))
     }

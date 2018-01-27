@@ -31,6 +31,15 @@
         SELECT *
         FROM admin_tab
     </sql>
+    <select id="findAll" resultType="top.kanetah.planhv2.api.entity.Admin">
+        <include refid="select_admin"/>
+    </select>
+    <select id="find" resultType="top.kanetah.planhv2.api.entity.Admin">
+        <include refid="select_admin"/>
+        <where>
+            id = #{id}
+        </where>
+    </select>
     <select id="findByPassword" resultType="top.kanetah.planhv2.api.entity.Admin">
         <include refid="select_admin"/>
         <where>

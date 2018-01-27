@@ -42,7 +42,7 @@
 }
 ```
 
-### `get` /admins 管理员列表
+### `get` /getAllAdmins 管理员列表
 参数：
 - authorized `String` 管理员鉴权码
 
@@ -64,7 +64,7 @@
 ### `post` /admin 新建管理员
 参数：
 - authorized `String` 管理员鉴权码
-- newPassword `String` 新管理员口令
+- password `String` 新管理员口令
 
 返回：
 新建结果  
@@ -88,7 +88,7 @@
 }
 ```
 
-### `delete` /admin/:id 查找管理员
+### `get` /admin/:id 查找管理员
 参数：
 - authorized `String` 管理员鉴权码
 
