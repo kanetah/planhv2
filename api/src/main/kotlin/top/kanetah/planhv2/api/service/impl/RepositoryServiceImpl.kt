@@ -13,6 +13,7 @@ class RepositoryServiceImpl @Autowired constructor(
         override val adminRepository: AdminRepository,
         override val authRepository: AuthRepository,
         override val userRepository: UserRepository,
+        override val tokenRepository: TokenRepository,
         override val teamRepository: TeamRepository,
         override val subjectRepository: SubjectRepository,
         override val taskRepository: TaskRepository,

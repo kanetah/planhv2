@@ -21,7 +21,9 @@ class AdminServiceImpl @Autowired constructor(
             password: String, validate: String
     ) = repositoryService.adminRepository.findByPassword(password)?.let { admin ->
         repositoryService.authRepository.deleteByAdminId(admin.adminId)
-        val auth = Date().hashCode().let { "planhII${admin.adminId}|${password.hashCode()}|${(it)}" }
+        val auth = Date().hashCode().let {
+            "planhII${admin.adminId}-${password.hashCode()}-$it"
+        }
         val saved = repositoryService.authRepository.save(Auth(adminId = admin.adminId, authorized = auth))
         if (saved > 0) auth else null
     }

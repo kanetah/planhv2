@@ -9,6 +9,7 @@ interface RepositoryService {
     val adminRepository: AdminRepository
     val authRepository: AuthRepository
     val userRepository: UserRepository
+    val tokenRepository: TokenRepository
     val teamRepository: TeamRepository
     val subjectRepository: SubjectRepository
     val taskRepository: TaskRepository

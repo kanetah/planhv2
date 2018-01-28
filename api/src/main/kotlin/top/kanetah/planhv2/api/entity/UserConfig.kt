@@ -4,6 +4,6 @@ package top.kanetah.planhv2.api.entity
  * created by kane on 2018/1/23
  */
 data class UserConfig(
-        val theme: String?,
-        val accessByToken: Boolean
+        val theme: String? = null,
+        val enableAccessToken: Boolean = false
 )

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.kanetah.planhv2.api.repository.TokenRepository">
+
+    <insert id="save">
+        INSERT INTO token_table (
+            user_id, token
+        ) VALUE (
+            #{userId}, #{token}
+        )
+    </insert>
+
+    <delete id="deleteByUserId">
+        DELETE FROM token_table
+        <where>
+            user_id = #{userId}
+        </where>
+    </delete>
+    <delete id="deleteByToken">
+        DELETE FROM token_table
+        <where>
+            token = #{token}
+        </where>
+    </delete>
+
+    <sql id="find_token">
+        SELECT
+            *
+        FROM token_table
+    </sql>
+    <select id="findByToken" resultType="top.kanetah.planhv2.api.entity.Token">
+        <include refid="find_token"/>
+        <where>
+            token = #{token}
+        </where>
+    </select>
+
+</mapper>

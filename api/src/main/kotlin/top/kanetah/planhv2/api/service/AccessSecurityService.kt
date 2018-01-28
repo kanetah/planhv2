@@ -7,5 +7,5 @@ import org.springframework.security.core.userdetails.UserDetailsService
  */
 interface AccessSecurityService : UserDetailsService {
     fun authCheck(authorized: String?): Boolean// = !this.isNullOrEmpty()
-    fun tokenCheck(authorized: String?): Boolean// = !this.isNullOrEmpty()
+    fun tokenCheck(token: String?, id: Int? = null): Boolean// = !this.isNullOrEmpty()
 }

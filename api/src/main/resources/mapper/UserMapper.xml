@@ -4,9 +4,9 @@
 
     <insert id="save">
         INSERT INTO user_tab (
-            user_code, user_name, theme, access_by_token, access_token
+            user_code, user_name, theme, enable_access_token, access_token
         ) VALUE (
-            #{userCode}, #{userName}, #{theme}, #{accessByToken}, #{accessToken}
+            #{userCode}, #{userName}, #{theme}, #{enableAccessToken}, #{accessToken}
         )
     </insert>
 
@@ -23,7 +23,7 @@
             user_code = #{userCode},
             user_name = #{userName},
             theme = #{theme},
-            access_by_token = #{accessByToken},
+            enable_access_token = #{enableAccessToken},
             access_token = #{accessToken}
         </set>
         <where>
@@ -31,15 +31,37 @@
         </where>
     </update>
 
-    <sql id="select_user">
+    <resultMap id="user_result" type="top.kanetah.planhv2.api.entity.User">
+        <id property="userId" column="id"/>
+        <result property="userCode" column="user_code"/>
+        <result property="userName" column="user_name"/>
+        <result property="userConfig.theme" column="theme"/>
+        <result property="userConfig.enableAccessToken" column="enable_access_token"/>
+        <result property="accessToken" column="access_token"/>
+    </resultMap>
+
+    <sql id="find_user">
         SELECT *
         FROM user_tab
     </sql>
-    <select id="findByCode" resultType="top.kanetah.planhv2.api.entity.User">
-        <include refid="select_user"/>
+    <select id="findAll" resultMap="user_result">
+        <include refid="find_user"/>
+    </select>
+    <select id="findByCode" resultMap="user_result">
+        <include refid="find_user"/>
         <where>
             user_code = #{code}
         </where>
+    </select>
+    <select id="findByToken" resultMap="user_result">
+        <include refid="find_user"/>
+        <where>
+            id = (SELECT user_id FROM token_table WHERE token = #{token})
+        </where>
+    </select>
+    <select id="count" resultType="Int">
+        SELECT count(*)
+        FROM user_tab
     </select>
 
 </mapper>

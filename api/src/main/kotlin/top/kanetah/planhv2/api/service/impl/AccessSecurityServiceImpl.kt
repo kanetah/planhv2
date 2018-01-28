@@ -15,14 +15,15 @@ import top.kanetah.planhv2.api.service.RepositoryService
 class AccessSecurityServiceImpl @Autowired constructor(
         private val repositoryService: RepositoryService
 ) : AccessSecurityService {
+    
     override fun authCheck(
             authorized: String?
     ) = authorized !== null &&
             repositoryService.authRepository.findByAuthorized(authorized) !== null
     
-    override fun tokenCheck(authorized: String?): Boolean {
-        TODO("not implemented")
-    }
+    override fun tokenCheck(
+            token: String?, id: Int?
+    ) = token !== null //todo
     
     override fun loadUserByUsername(username: String?): UserDetails {
         return User(username, "123", MutableList(1, { GrantedAuthority { "user" } }))

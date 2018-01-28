@@ -10,10 +10,14 @@ data class User(
         val userId: Int = Int.MIN_VALUE,
         val userCode: String,
         val userName: String,
-        val userConfig: UserConfig,
-        val accessToken: String?
+        val userConfig: UserConfig = UserConfig(),
+        val accessToken: String? = null
 ) {
     constructor(
-            userId: Int, userCode: String, userName: String, theme: String?, accessByToken: Boolean, accessToken: String?
-    ): this(userId, userCode, userName, UserConfig(theme, accessByToken), accessToken)
+            userId: Int, userCode: String, userName: String, theme: String?, enableAccessToken: Boolean, accessToken: String?
+    ): this(userId, userCode, userName, UserConfig(theme, enableAccessToken), accessToken)
+    
+    fun getTheme() = userConfig.theme
+    
+    fun getEnableAccessToken() = userConfig.enableAccessToken
 }

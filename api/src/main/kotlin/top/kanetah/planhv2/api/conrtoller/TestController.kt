@@ -1,7 +1,6 @@
 package top.kanetah.planhv2.api.conrtoller
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import top.kanetah.planhv2.api.entity.*
@@ -21,12 +20,14 @@ class TestController @Autowired constructor(
     
     @RequestMapping("/admin")
     fun admin(): Admin? {
-        return repositoryService.adminRepository.findByPassword("poi")
+        return repositoryService.adminRepository.findByPassword("nico")
     }
     
     @RequestMapping("/user")
-    fun user(): User? {
-        return repositoryService.userRepository.findByCode("1521192213")
+    fun user()
+//            = repositoryService.userRepository.count()
+            : User? {
+        return repositoryService.userRepository.findByCode("1521192211")
     }
     
     @RequestMapping("/team")

@@ -146,7 +146,7 @@
   userName: "某某",
   config: {
     theme: "dark",
-    accessByToken: false,
+    enableAccessToken: false,
   },
   accessToken: null,
 }
@@ -154,13 +154,14 @@
 
 ### `patch` /user/:id 用户设置
 参数：
-- token `String?` 用户Token
+- token `String` 用户Token
+- userId `Int` 用户Id
 - theme `String?` 主题样式
-- accessByToken `Boolean?` 能否通过令牌直接访问
+- enableAccessToken `Boolean?` 能否通过令牌直接访问
 
 返回：
 修改结果
-(仅当accessByToken被修改为true时返回访问令牌内容)  
+(仅当enableAccessToken被修改为true时返回访问令牌内容)  
 例：
 ```
 {
@@ -250,7 +251,7 @@
   userName: "某某",
   config: {
     theme: "dark",
-    accessByToken: false,
+    enableAccessToken: false,
   },
   accessToken: null,
 }

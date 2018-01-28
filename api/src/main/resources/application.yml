@@ -1,7 +1,7 @@
 mybatis:
   type-aliases-package: top.kanetah.planhv2.entity
   mapper-locations: classpath:mapper/*.xml
-#  config-location: classpath:mybatis-config.xml
+  config-location: classpath:mybatis-config.xml
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
