@@ -50,16 +50,13 @@ class UserController @Autowired constructor(
             @PathVariable("id") userId: Int,
             @RequestParam theme: String?,
             @RequestParam enableAccessToken: Boolean?
-    ) = takeIf { accessSecurityService.tokenCheck(token, userId) }?.let {
-        userService.configUser(token, theme, enableAccessToken ?: false)
-    }
+    ) = userService.takeIf { accessSecurityService.tokenCheck(token, userId) }
+            ?.configUser(token, theme, enableAccessToken ?: false)
     
     @RequestMapping(value = ["/users"], method = [RequestMethod.GET])
     fun users(
             @RequestParam token: String
-    ) = takeIf { accessSecurityService.tokenCheck(token) }?.let {
-        userService.getAllUser()
-    }
+    ) = userService.takeIf { accessSecurityService.tokenCheck(token) }?.getAllUser()
     
     @RequestMapping(value = ["/user"], method = [RequestMethod.POST])
     fun createUser(
@@ -90,10 +87,10 @@ class UserController @Autowired constructor(
             @PathVariable("id") userId: Int,
             @RequestParam userCode: String?,
             @RequestParam userName: String?
-    ) = takeIf { accessSecurityService.authCheck(authorized) }?.let {
+    ) = userService.takeIf { accessSecurityService.authCheck(authorized) }?.let {
         object {
             @JsonValue
-            val success = userService.updateUser(userId, userCode, userName)
+            val success = it.updateUser(userId, userCode, userName)
         }
     }
     
@@ -101,7 +98,5 @@ class UserController @Autowired constructor(
     fun findUser(
             @RequestParam authorized: String,
             @PathVariable("id") userId: Int
-    ) = takeIf { accessSecurityService.authCheck(authorized) }?.let {
-        userService.findUser(userId)
-    }
+    ) = userService.takeIf { accessSecurityService.authCheck(authorized) }?.findUser(userId)
 }

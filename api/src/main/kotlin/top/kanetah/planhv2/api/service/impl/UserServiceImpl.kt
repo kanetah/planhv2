@@ -18,6 +18,7 @@ import kotlin.collections.ArrayList
 class UserServiceImpl @Autowired constructor(
         private val repositoryService: RepositoryService
 ) : UserService {
+    
     override fun login(
             userCode: String, userName: String
     ) = repositoryService.userRepository.findByCode(userCode)?.let { user ->
@@ -39,15 +40,15 @@ class UserServiceImpl @Autowired constructor(
     
     override fun configUser(
             token: String, theme: String?, enableAccessToken: Boolean
-    ) = repositoryService.userRepository.findByToken(token)?.let { user ->
-        val accessTokenFlag = user.userConfig.enableAccessToken != enableAccessToken && enableAccessToken
+    ) = repositoryService.userRepository.findByToken(token)?.let {
+        val accessTokenFlag = it.userConfig.enableAccessToken != enableAccessToken && enableAccessToken
         val accessToken =
                 if (accessTokenFlag)
-                    "${user.userId}-planhII-${user.userCode.hashCode() + user.userName.hashCode()}-"
+                    "${it.userId}-planhII-${it.userCode.hashCode() + it.userName.hashCode()}-"
                 else null
-        val saved = repositoryService.userRepository.update(user.copy(
+        val saved = repositoryService.userRepository.update(it.copy(
                 userConfig = UserConfig(theme, enableAccessToken),
-                accessToken = if (accessTokenFlag) accessToken else user.accessToken
+                accessToken = if (accessTokenFlag) accessToken else it.accessToken
         ))
         object {
             @JsonValue
@@ -59,7 +60,6 @@ class UserServiceImpl @Autowired constructor(
     
     override fun getAllUser() = ArrayList<Any>().also { list ->
         repositoryService.userRepository.findAll()?.forEach {
-            println(it)
             list.add(object {
                 @JsonValue
                 val userId = it.userId
@@ -81,10 +81,10 @@ class UserServiceImpl @Autowired constructor(
     
     override fun updateUser(
             id: Int, userCode: String?, userName: String?
-    ) = repositoryService.userRepository.find(id)?.let {
-        repositoryService.userRepository.update(
-                it.copy(userName = userName ?: it.userName, userCode = userCode ?: it.userCode)
-        ) > 0
+    ) = with(repositoryService.userRepository) {
+        find(id)?.let {
+            update(it.copy(userName = userName ?: it.userName, userCode = userCode ?: it.userCode)) > 0
+        }
     }
     
     override fun findUser(

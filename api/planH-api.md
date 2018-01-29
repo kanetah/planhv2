@@ -291,10 +291,10 @@
 ### `post` /team 创建团队
 参数：
 - token `String` 用户Token
-- teamName `String?` 团队名称
 - subjectId `Int` 科目Id
-- memberUserIdArray `Array<Int>` 团队成员数组
-- leaderUserIdArray `Array<Int>` 团队领导数组
+- teamName `String?` 团队名称
+- memberUserIdArrayJsonString `String` 团队成员数组Json
+- leaderUserIdArrayJsonString `String` 团队领导数组Json
 
 返回：
 创建结果  
@@ -308,6 +308,8 @@
 ### `delete` /team/:id 删除团队
 参数：
 - token `String` 用户Token
+- <font color = red>teamId</font> `Int` 团队Id `PathVariable:id`
+
 返回：
 删除结果  
 例：
@@ -320,11 +322,11 @@
 ### `put` /team/:id 修改团队
 参数：
 - token `String` 用户Token
+- <font color = red>teamId</font> `Int` 团队Id `PathVariable:id`
 - subjectId `Int` 科目Id
-- teamIndex `Int` 团队编号
 - teamName `String?` 团队名称
-- memberUserIdArray `Array<Int>` 团队成员数组
-- leaderUserIdArray `Array<Int>` 团队领导数组
+- memberUserIdArrayJsonString `String?` 团队成员数组Json
+- leaderUserIdArrayJsonString `String?` 团队领导数组Json
 
 返回：
 修改结果  
@@ -338,6 +340,7 @@
 ### `get` /team/:id 团队详情
 参数：
 - token `String` 用户Token
+- <font color = red>teamId</font> `Int` 团队Id `PathVariable:id`
 
 返回：
 团队详情
@@ -367,6 +370,7 @@
   subjectName: "音乐",
   teacherName: "赵",
   emailAddress: "123456789@hehe.com",
+  teamLimit: [0, 7, 8],
   recommendProcessorId: 1,
 },
 {
@@ -374,6 +378,7 @@
   subjectName: "美术",
   teacherName: "李",
   emailAddress: "987654321@hehe.com",
+  teamLimit: [0, 5, 7],
   recommendProcessorId: 1,
 },
 ...
@@ -386,6 +391,7 @@
 - subjectName `String` 科目名称
 - teacherName `String` 教师姓名
 - emailAddress `String` 邮箱地址
+- teamLimit `String?` 团队人数限制数组Json
 - recommendProcessorId `Int` 推荐格式化处理器Id
 
 返回：
@@ -416,6 +422,7 @@
 - subjectName `String` 科目名称
 - teacherName `String` 教师姓名
 - emailAddress `String` 邮箱地址
+- teamLimit `String?` 团队人数限制数组Json
 - recommendProcessorId `Int` 推荐格式化处理器Id
 
 返回：
@@ -437,6 +444,7 @@
   subjectName: "音乐",
   teacherName: "赵",
   emailAddress: "123456789@hehe.com",
+  teamLimit: [0, 7, 8],
   recommendProcessorId: 1,
 }
 ```

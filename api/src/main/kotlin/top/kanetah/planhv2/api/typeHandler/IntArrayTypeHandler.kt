@@ -15,18 +15,25 @@ import java.sql.ResultSet
 @MappedTypes(IntArray::class)
 class IntArrayTypeHandler : BaseTypeHandler<IntArray>() {
     override fun getNullableResult(rs: ResultSet?, columnIndex: Int): IntArray? {
-        return null
+        return rs?.getString(columnIndex)?.toIntArray()
     }
 
     override fun getNullableResult(rs: ResultSet?, columnName: String?): IntArray? {
-        return null
+        return rs?.getString(columnName)?.toIntArray()
     }
 
     override fun getNullableResult(cs: CallableStatement?, columnIndex: Int): IntArray? {
-        return null
+        return cs?.getString(columnIndex)?.toIntArray()
     }
     
     override fun setNonNullParameter(ps: PreparedStatement?, i: Int, parameter: IntArray?, jdbcType: JdbcType?) {
         ps?.setString(i, parameter?.toTypedArray()?.contentDeepToString())
+    }
+}
+
+fun String.toIntArray(
+) = this.slice(IntRange(1, this.length - 2)).split(", ").let { stringArray ->
+    IntArray(stringArray.size).also { intArray ->
+        stringArray.withIndex().forEach { (key, value) -> intArray[key] = value.toInt() }
     }
 }

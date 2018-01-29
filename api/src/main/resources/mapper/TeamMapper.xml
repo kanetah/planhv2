@@ -25,32 +25,55 @@
             subject_id = #{subjectId},
             team_index = #{teamIndex},
             team_name = #{teamName},
-            member_user_id_array = #{memberUserIdArray},
-            leader_user_id_array = #{leaderUserIdArray}
+            member_user_id_array = #{memberUserIdArray, typeHandler = top.kanetah.planhv2.api.typeHandler.IntArrayTypeHandler},
+            leader_user_id_array = #{leaderUserIdArray, typeHandler = top.kanetah.planhv2.api.typeHandler.IntArrayTypeHandler}
         </set>
         <where>
             id = #{id}
         </where>
     </update>
 
-    <!--<resultMap id="teamResultMap" type="top.kanetah.planhv2.api.entity.Team">-->
-    <!--<result typeHandler="top.kanetah.planhv2.api.typeHandler.IntArrayTypeHandler"-->
-    <!--column="member_user_id_array" javaType="int[]"-->
-    <!--jdbcType="VARCHAR" property="memberUserIdArray"/>-->
-    <!--<result typeHandler="top.kanetah.planhv2.api.typeHandler.IntArrayTypeHandler"-->
-    <!--column="leader_user_id_array" javaType="int[]"-->
-    <!--jdbcType="VARCHAR" property="leaderUserIdArray"/>-->
-    <!--</resultMap>-->
+    <resultMap id="team_result" type="top.kanetah.planhv2.api.entity.Team">
+        <id property="teamId" column="id"/>
+        <result property="subjectId" column="subject_id"/>
+        <result property="teamIndex" column="team_index"/>
+        <result property="teamName" column="team_name"/>
+        <result property="memberUserIdArray" column="member_user_id_array" typeHandler="top.kanetah.planhv2.api.typeHandler.IntArrayTypeHandler"/>
+        <result property="leaderUserIdArray" column="leader_user_id_array" typeHandler="top.kanetah.planhv2.api.typeHandler.IntArrayTypeHandler"/>
+    </resultMap>
 
     <sql id="find_team">
         SELECT *
         FROM team_tab
     </sql>
-    <select id="findByIndex" resultType="top.kanetah.planhv2.api.entity.Team">
+    <select id="findAll" resultMap="team_result">
+        <include refid="find_team"/>
+    </select>
+    <select id="find" resultMap="team_result">
+        <include refid="find_team"/>
+        <where>
+            id = #{id}
+        </where>
+    </select>
+    <select id="findByIndex" resultMap="team_result">
         <include refid="find_team"/>
         <where>
             team_index = #{teamIndex}
         </where>
+    </select>
+    <select id="findAllByUserToken" resultMap="team_result">
+        <include refid="find_team"/>
+        <where>
+            member_user_id_array LIKE CONCAT('%',
+            (SELECT user_id FROM token_table WHERE token = #{token})
+            , '%')
+        </where>
+    </select>
+    <select id="findAllIndexBySubjectId" resultType="Int">
+        SELECT team_index
+        FROM team_tab
+        WHERE subject_id = #{subjectId}
+        ORDER BY team_index
     </select>
 
 </mapper>

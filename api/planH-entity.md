@@ -101,6 +101,7 @@
 - subjectName `String` 科目名称
 - teacherName `String` 教师姓名
 - emailAddress `String` 邮箱地址
+- teamLimit `IntArray?` 科目团队人数限制
 - recommendProcessorId `Int` 推荐格式化处理器Id
 
 例：
@@ -110,6 +111,7 @@
   subjectName: "音乐",
   teacherName: "赵",
   emailAddress: "123456789@hehe.com",
+  teamLimit: [0, 7, 8]
   recommendProcessorId: 1,
 }
 ```
