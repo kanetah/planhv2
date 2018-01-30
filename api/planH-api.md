@@ -78,6 +78,7 @@
 ### `delete` /admin/:id 删除管理员
 参数：
 - authorized `String` 管理员鉴权码
+- _adminId_ `Int` 管理员Id `PathVariable:id`
 
 返回：
 删除结果  
@@ -91,6 +92,7 @@
 ### `get` /admin/:id 查找管理员
 参数：
 - authorized `String` 管理员鉴权码
+- _adminId_ `Int` 管理员Id `PathVariable:id`
 
 返回：
 查找结果  
@@ -155,7 +157,7 @@
 ### `patch` /user/:id 用户设置
 参数：
 - token `String` 用户Token
-- userId `Int` 用户Id
+- _userId_ `Int` 用户Id `PathVariable:id`
 - theme `String?` 主题样式
 - enableAccessToken `Boolean?` 能否通过令牌直接访问
 
@@ -211,6 +213,7 @@
 ### `delete` /user/:id 删除用户
 参数：
 - authorized `String` 管理员鉴权码
+- _userId_ `Int` 用户Id `PathVariable:id`
 
 返回：
 删除结果  
@@ -224,7 +227,7 @@
 ### `put` /user/:id 修改用户
 参数：
 - authorized `String` 管理员鉴权码
-- userId `Int` 用户Id
+- _userId_ `Int` 用户Id `PathVariable:id`
 - userCode `String?` 用户代码
 - userName `String?` 用户名
 
@@ -240,6 +243,7 @@
 ### `get` /user/:id 用户详情
 参数：
 - authorized `String` 管理员鉴权码
+- _userId_ `Int` 用户Id `PathVariable:id`
 
 返回：
 用户详情内容  
@@ -308,7 +312,7 @@
 ### `delete` /team/:id 删除团队
 参数：
 - token `String` 用户Token
-- <font color = red>teamId</font> `Int` 团队Id `PathVariable:id`
+- _teamId_ `Int` 团队Id `PathVariable:id`
 
 返回：
 删除结果  
@@ -322,7 +326,7 @@
 ### `put` /team/:id 修改团队
 参数：
 - token `String` 用户Token
-- <font color = red>teamId</font> `Int` 团队Id `PathVariable:id`
+- _teamId_ `Int` 团队Id `PathVariable:id`
 - subjectId `Int` 科目Id
 - teamName `String?` 团队名称
 - memberUserIdArrayJsonString `String?` 团队成员数组Json
@@ -340,7 +344,7 @@
 ### `get` /team/:id 团队详情
 参数：
 - token `String` 用户Token
-- <font color = red>teamId</font> `Int` 团队Id `PathVariable:id`
+- _teamId_ `Int` 团队Id `PathVariable:id`
 
 返回：
 团队详情
@@ -406,6 +410,7 @@
 ### `delete` /subject/:id 删除科目
 参数：
 - authorized `String` 管理员鉴权码
+- _subjectId_ `Int` 科目Id `PathVariable:id`
 
 返回：
 删除结果  
@@ -419,6 +424,7 @@
 ### `put` /subject/:id 修改科目
 参数：
 - authorized `String` 管理员鉴权码
+- _subjectId_ `Int` 科目Id `PathVariable:id`
 - subjectName `String` 科目名称
 - teacherName `String` 教师姓名
 - emailAddress `String` 邮箱地址
@@ -435,6 +441,9 @@
 ```
 
 ### `get` /subject/:id 科目详情
+参数：
+- _subjectId_ `Int` 科目Id `PathVariable:id`
+
 返回：
 科目详情  
 例：
@@ -514,6 +523,7 @@
 ### `delete` /task/:id 删除任务
 参数：
 - authorized `String` 管理员鉴权码
+- _taskId_ `Int` 任务Id `PathVariable:id`
 
 返回：
 删除结果  
@@ -527,6 +537,7 @@
 ### `put` /task/:id 修改任务
 参数：
 - authorized `String` 管理员鉴权码
+- _taskId_ `Int` 任务Id `PathVariable:id`
 - subjectId `String` 科目Id
 - title `String` 标题
 - content `String` 内容
@@ -546,6 +557,9 @@
 ```
 
 ### `get` /task/:id 任务详情
+参数：
+- _taskId_ `Int` 任务Id `PathVariable:id`
+
 返回：
 任务详情  
 例：
@@ -686,6 +700,7 @@
 ### `delete` /resource/:id 删除资料文档
 参数：
 - authorized `String` 管理员鉴权码
+- _resourceId_ `Int` 资料文档Id `PathVariable:id`
 
 返回：
 资料删除结果  
@@ -745,6 +760,7 @@
 ### `delete` /format/processor/:id 删除格式化处理器
 参数：
 - authorized `String` 管理员鉴权码
+- _formatProcessorId_ `Int` 格式化处理器Id `PathVariable:id`
 
 返回：
 删除结果  
@@ -758,6 +774,7 @@
 ### `get` /format/processor/:id 格式化处理器详情
 参数：
 - authorized `String` 管理员鉴权码
+- _formatProcessorId_ `Int` 格式化处理器Id `PathVariable:id`
 
 返回：
 格式化处理器详情  

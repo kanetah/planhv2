@@ -12,7 +12,7 @@ data class Subject(
         val subjectName: String,
         val teacherName: String,
         val emailAddress: String,
-        val teamLimit: IntArray,
+        val teamLimit: IntArray? = null,
         val recommendProcessorId: Int
 ) {
     override fun equals(other: Any?): Boolean {
