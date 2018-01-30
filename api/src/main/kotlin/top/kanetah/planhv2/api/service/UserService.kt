@@ -14,6 +14,6 @@ UserService {
     fun getAllUser(): ArrayList<Any>
     fun createUser(user: User): Boolean
     fun deleteUser(id: Int): Boolean
-    fun updateUser(id: Int, userCode: String?, userName: String?): Boolean?
+    fun updateUser(id: Int, userCode: String?, userName: String?): Boolean
     fun findUser(id: Int): User?
 }

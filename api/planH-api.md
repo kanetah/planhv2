@@ -464,8 +464,8 @@
 ### `get` /tasks 任务列表
 参数：
 - userId `Int` 用户Id
-- page `Int` 页数
-- subject `String?` 科目
+- subjectId `Int?` 科目Id
+- page `Int` 页码
 - limit `Int` 每一页的任务数量
 
 返回：
@@ -502,14 +502,14 @@
 ### `post` /task 新建任务
 参数：
 - authorized `String` 管理员鉴权码
-- subjectId `String` 科目Id
+- subjectId `Int` 科目Id
 - title `String` 标题
 - content `String` 内容
 - isTeamTask `Boolean` 是否团队任务
-- deadline `Date` 截止日期
+- deadline `Timestamp` 截止日期
 - type `String` 文件类型
 - format `String?` 存储格式
-- formatProcessorId `String` 存储处理器Id
+- formatProcessorId `Int` 存储处理器Id
 
 返回：
 新建结果  
@@ -538,17 +538,17 @@
 参数：
 - authorized `String` 管理员鉴权码
 - _taskId_ `Int` 任务Id `PathVariable:id`
-- subjectId `String` 科目Id
+- subjectId `Int` 科目Id
 - title `String` 标题
 - content `String` 内容
 - isTeamTask `Boolean` 是否团队任务
-- deadline `Date` 截止日期
+- deadline `Timestamp` 截止日期
 - type `String` 文件类型
 - format `String?` 存储格式
-- formatProcessorId `String` 存储处理器Id
+- formatProcessorId `Int` 存储处理器Id
 
 返回：
-新建结果  
+修改结果  
 例：
 ```
 {

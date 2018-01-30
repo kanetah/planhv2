@@ -46,6 +46,15 @@
         SELECT *
         FROM subject_tab
     </sql>
+    <select id="findAll" resultMap="subject_result">
+        <include refid="find_subject"/>
+    </select>
+    <select id="find" resultMap="subject_result">
+        <include refid="find_subject"/>
+        <where>
+            id = #{id}
+        </where>
+    </select>
     <select id="findBySubjectName" resultMap="subject_result">
         <include refid="find_subject"/>
         <where>

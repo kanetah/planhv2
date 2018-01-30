@@ -40,11 +40,26 @@
             *
         FROM task_tab
     </sql>
+    <select id="find" resultType="top.kanetah.planhv2.api.entity.Task">
+        <include refid="find_task"/>
+        <where>
+            id = #{id}
+        </where>
+    </select>
     <select id="findByTitleLike" resultType="top.kanetah.planhv2.api.entity.Task">
         <include refid="find_task"/>
         <where>
             title LIKE "%"#{title}"%"
         </where>
+    </select>
+    <select id="taskList" resultType="top.kanetah.planhv2.api.entity.Task">
+        <include refid="find_task"/>
+        <where>
+            <if test="subjectId != null">
+                subject_id = #{subjectId}
+            </if>
+        </where>
+        ORDER BY deadline DESC
     </select>
 
 </mapper>

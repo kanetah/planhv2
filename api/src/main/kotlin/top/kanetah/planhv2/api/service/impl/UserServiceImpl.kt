@@ -85,7 +85,7 @@ class UserServiceImpl @Autowired constructor(
         find(id)?.let {
             update(it.copy(userName = userName ?: it.userName, userCode = userCode ?: it.userCode)) > 0
         }
-    }
+    }.let { false }
     
     override fun findUser(
             id: Int
