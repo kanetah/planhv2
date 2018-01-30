@@ -14,19 +14,21 @@ import java.sql.ResultSet
 @MappedJdbcTypes(JdbcType.VARCHAR)
 @MappedTypes(IntArray::class)
 class IntArrayTypeHandler : BaseTypeHandler<IntArray>() {
-    override fun getNullableResult(rs: ResultSet?, columnIndex: Int): IntArray? {
-        return rs?.getString(columnIndex)?.toIntArray()
-    }
+    override fun getNullableResult(
+            rs: ResultSet?, columnIndex: Int
+    ) = rs?.getString(columnIndex)?.toIntArray()
 
-    override fun getNullableResult(rs: ResultSet?, columnName: String?): IntArray? {
-        return rs?.getString(columnName)?.toIntArray()
-    }
+    override fun getNullableResult(
+            rs: ResultSet?, columnName: String?
+    ) = rs?.getString(columnName)?.toIntArray()
 
-    override fun getNullableResult(cs: CallableStatement?, columnIndex: Int): IntArray? {
-        return cs?.getString(columnIndex)?.toIntArray()
-    }
+    override fun getNullableResult(
+            cs: CallableStatement?, columnIndex: Int
+    ) = cs?.getString(columnIndex)?.toIntArray()
     
-    override fun setNonNullParameter(ps: PreparedStatement?, i: Int, parameter: IntArray?, jdbcType: JdbcType?) {
+    override fun setNonNullParameter(
+            ps: PreparedStatement?, i: Int, parameter: IntArray?, jdbcType: JdbcType?
+    ) {
         ps?.setString(i, parameter?.toTypedArray()?.contentDeepToString())
     }
 }
