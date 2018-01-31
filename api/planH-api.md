@@ -42,7 +42,7 @@
 }
 ```
 
-### `get` /getAllAdmins 管理员列表
+### `get` /admins 管理员列表
 参数：
 - authorized `String` 管理员鉴权码
 
