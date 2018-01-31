@@ -5,6 +5,7 @@ import top.kanetah.planhv2.api.entity.SubmitFileAttributes
 import top.kanetah.planhv2.api.format.processor.OutsideFileNameFormatProcessor
 import top.kanetah.planhv2.api.APP_CONTEXT
 import top.kanetah.planhv2.api.entity.Task
+import top.kanetah.planhv2.api.entity.Team
 import top.kanetah.planhv2.api.entity.User
 import top.kanetah.planhv2.api.property.PropertyListener
 import top.kanetah.planhv2.api.service.RepositoryService
@@ -18,7 +19,7 @@ interface FormatProcessorClass {
     val savePath: String
         get() = PropertyListener.getProperty("submission-path")!!
     
-    fun saveFile(user: User, task: Task, file: MultipartFile): SubmitFileAttributes
+    fun saveFile(user: User, task: Task, team: Team?, file: MultipartFile): SubmitFileAttributes
     fun sendEMail(taskId: Int): Boolean
     
     companion object {

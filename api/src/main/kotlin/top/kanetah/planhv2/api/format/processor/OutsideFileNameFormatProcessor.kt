@@ -5,6 +5,7 @@ import top.kanetah.planhv2.api.annotation.FormatProcessorName
 import top.kanetah.planhv2.api.APP_CONTEXT
 import top.kanetah.planhv2.api.entity.SubmitFileAttributes
 import top.kanetah.planhv2.api.entity.Task
+import top.kanetah.planhv2.api.entity.Team
 import top.kanetah.planhv2.api.entity.User
 import top.kanetah.planhv2.api.format.FormatProcessorClass
 import top.kanetah.planhv2.api.service.ResourceService
@@ -22,7 +23,7 @@ object OutsideFileNameFormatProcessor:FormatProcessorClass {
     }
     
     override fun saveFile(
-            user: User, task: Task, file: MultipartFile
+            user: User, task: Task, team: Team?, file: MultipartFile
     ): SubmitFileAttributes {
         return SubmitFileAttributes(
                 resourceId = resourceService.createResource(file)!!.resourceId,
@@ -34,6 +35,7 @@ object OutsideFileNameFormatProcessor:FormatProcessorClass {
     }
     
     override fun sendEMail(taskId: Int): Boolean {
-        TODO("not implemented")
+        //TODO("not implemented")
+        return false
     }
 }

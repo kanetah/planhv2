@@ -3,7 +3,7 @@
 <mapper namespace="top.kanetah.planhv2.api.repository.TokenRepository">
 
     <insert id="save">
-        INSERT INTO token_table (
+        INSERT INTO token_tab (
             user_id, token
         ) VALUE (
             #{userId}, #{token}
@@ -11,13 +11,13 @@
     </insert>
 
     <delete id="deleteByUserId">
-        DELETE FROM token_table
+        DELETE FROM token_tab
         <where>
             user_id = #{userId}
         </where>
     </delete>
     <delete id="deleteByToken">
-        DELETE FROM token_table
+        DELETE FROM token_tab
         <where>
             token = #{token}
         </where>
@@ -26,7 +26,7 @@
     <sql id="find_token">
         SELECT
             *
-        FROM token_table
+        FROM token_tab
     </sql>
     <select id="findByToken" resultType="top.kanetah.planhv2.api.entity.Token">
         <include refid="find_token"/>

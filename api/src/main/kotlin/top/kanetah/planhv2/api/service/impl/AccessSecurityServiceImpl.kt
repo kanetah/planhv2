@@ -16,14 +16,21 @@ class AccessSecurityServiceImpl @Autowired constructor(
         private val repositoryService: RepositoryService
 ) : AccessSecurityService {
     
+    private fun check(srt: String?, block: (String) -> Boolean): Boolean {
+        return srt !== null && block(srt)
+    }
+    
     override fun authCheck(
             authorized: String?
-    ) = authorized !== null &&
-            repositoryService.authRepository.findByAuthorized(authorized) !== null
+    ) = check(authorized) {
+        repositoryService.authRepository.findByAuthorized(it) !== null
+    }
     
     override fun tokenCheck(
             token: String?, id: Int?
-    ) = token !== null //todo
+    ) = check(token) {
+        repositoryService.tokenRepository.findByToken(it)?.userId === id
+    }
     
 //    override fun loadUserByUsername(username: String?): UserDetails {
 //        return User(username, "123", MutableList(1, { GrantedAuthority { "user" } }))

@@ -637,13 +637,15 @@
 }
 ```
 
-### `delete` /submission 删除提交
+### `put` /submission 更新提交
 参数：
 - token `String` 用户Token
 - taskId `Int` 任务Id
+- teamId `Int?` 团队Id
+- file `File` 任务文件
 
 返回：
-删除结果  
+更新结果  
 例：
 ```
 {

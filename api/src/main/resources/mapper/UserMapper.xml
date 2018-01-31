@@ -56,7 +56,7 @@
     <select id="findByToken" resultMap="user_result">
         <include refid="find_user"/>
         <where>
-            id = (SELECT user_id FROM token_table WHERE token = #{token})
+            id = (SELECT user_id FROM token_tab WHERE token = #{token})
         </where>
     </select>
     <select id="count" resultType="Int">

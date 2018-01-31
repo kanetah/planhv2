@@ -11,9 +11,11 @@ interface SubmissionRepository {
     
     fun save(submission: Submission): Int
     
-    fun delete(id: Int)
+    fun delete(id: Int): Int
     
-    fun update(submission: Submission)
+    fun update(submission: Submission): Int
     
     fun findAllByUserId(userId: Int): ArrayList<Submission>?
+    
+    fun findByTokenAndTaskId(token: String, taskId: Int): Submission?
 }

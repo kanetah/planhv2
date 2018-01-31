@@ -65,7 +65,7 @@
         <include refid="find_team"/>
         <where>
             member_user_id_array LIKE CONCAT('%',
-            (SELECT user_id FROM token_table WHERE token = #{token})
+            (SELECT user_id FROM token_tab WHERE token = #{token})
             , '%')
         </where>
     </select>

@@ -33,14 +33,16 @@ class SubmissionController(
         }
     }
 
-    @RequestMapping(value = ["/submission"], method = [RequestMethod.DELETE])
-    fun deleteSubmission(
+    @RequestMapping(value = ["/submission"], method = [RequestMethod.PUT])
+    fun updateSubmission(
             @RequestParam token: String,
-            @RequestParam taskId: Int
+            @RequestParam taskId: Int,
+            @RequestParam teamId: Int?,
+            @RequestPart file: MultipartFile
     ) = submissionService.takeIf { accessSecurityService.tokenCheck(token) }?.let {
         object {
             @JsonValue
-            val success = it.deleteSubmission(token, taskId)
+            val success = it.updateSubmission(token, taskId, teamId, file)
         }
     }
 

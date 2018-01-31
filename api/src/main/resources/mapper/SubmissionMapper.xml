@@ -57,5 +57,12 @@
             user_id = #{userId}
         </where>
     </select>
+    <select id="findByTokenAndTaskId" resultMap="submission_result">
+        <include refid="find_submission"/>
+        <where>
+            user_id = (SELECT user_id FROM token_tab WHERE token = #{token}),
+            task_id = #{taskId}
+        </where>
+    </select>
 
 </mapper>

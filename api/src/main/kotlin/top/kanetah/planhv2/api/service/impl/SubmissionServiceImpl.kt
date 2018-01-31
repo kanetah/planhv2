@@ -22,22 +22,33 @@ class SubmissionServiceImpl @Autowired constructor(
         repositoryService.submissionRepository.findAllByUserId(it.userId)
     }
     
+    private fun handlerUserTaskTeam(
+            token: String, taskId: Int, teamId: Int?, file: MultipartFile, block: (Submission) -> Int
+    ) = repositoryService.userRepository.findByToken(token)?.let { user ->
+        repositoryService.taskRepository.find(taskId)?.let { task ->
+            block(Submission(
+                    user.userId,
+                    task.taskId,
+                    teamId,
+                    FormatProcessorClass[taskId].saveFile(user, task,
+                            teamId?.let { repositoryService.teamRepository.find(it) }, file)
+            ))
+        }
+    }.let { if (it === null) false else it > 0 }
+    
     override fun createSubmission(
             token: String, taskId: Int, teamId: Int?, file: MultipartFile
-    ) = repositoryService.userRepository.findByToken(token)?.let {
-        repositoryService.submissionRepository.save(Submission(
-                taskId,
-                it.userId,
-                teamId,
-                FormatProcessorClass[taskId].saveFile(it, repositoryService.taskRepository.find(taskId)!!, file)
-        )) > 0
-    } ?: false
-    
-    override fun deleteSubmission(token: String, taskId: Int): Boolean {
-        TODO("not implemented")
+    ) = handlerUserTaskTeam(token, taskId, teamId, file) {
+        repositoryService.submissionRepository.save(it)
     }
     
-    override fun findByTokenAndTaskId(token: String, taskId: Int): Submission? {
-        TODO("not implemented")
+    override fun updateSubmission(
+            token: String, taskId: Int, teamId: Int?, file: MultipartFile
+    ) = handlerUserTaskTeam(token, taskId, teamId, file) {
+        repositoryService.submissionRepository.update(it)
     }
+    
+    override fun findByTokenAndTaskId(
+            token: String, taskId: Int
+    ) = repositoryService.submissionRepository.findByTokenAndTaskId(token, taskId)
 }
