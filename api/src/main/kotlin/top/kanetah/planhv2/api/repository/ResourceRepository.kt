@@ -11,9 +11,13 @@ interface ResourceRepository {
     
     fun save(resource: Resource): Int
     
-    fun delete(id: Int)
+    fun delete(id: Int): Int
     
-    fun update(resource: Resource)
+    fun update(resource: Resource): Int
+    
+    fun find(id: Int): Resource?
     
     fun findByNameLike(resourceName: String): Array<Resource>?
+    
+    fun findAllWithoutForeignKeyWithSubmission(): ArrayList<Resource>?
 }

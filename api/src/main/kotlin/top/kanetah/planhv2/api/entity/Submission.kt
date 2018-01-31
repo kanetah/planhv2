@@ -1,5 +1,6 @@
 package top.kanetah.planhv2.api.entity
 
+import org.springframework.web.multipart.MultipartFile
 import top.kanetah.planhv2.api.annotation.Entity
 import java.sql.Timestamp
 import java.util.*
@@ -13,12 +14,17 @@ data class Submission(
         val taskId: Int,
         val userId: Int,
         val teamId: Int? = null,
-        val submitData: Timestamp,
+        val submitDate: Timestamp,
         val fileAttributes: SubmitFileAttributes
 ) {
-    constructor(submissionId: Int, taskId: Int, userId: Int, teamId: Int? = null, submitData: Timestamp,
-                formerName: String, saveName: String, size: Double, path: String) : this(
-            submissionId, taskId, userId, teamId, submitData,
-            SubmitFileAttributes(formerName, saveName, size, path)
-    )
+    constructor(
+            taskId: Int, userId: Int, teamId: Int?, fileAttributes: SubmitFileAttributes
+    ): this(taskId = taskId, userId = userId, teamId = teamId,
+            submitDate = Timestamp(Date().time), fileAttributes = fileAttributes)
+    
+    fun getResourceId() = fileAttributes.resourceId
+    fun getFormerName() = fileAttributes.formerName
+    fun getSaveName() = fileAttributes.saveName
+    fun getSize() = fileAttributes.size
+    fun getPath() = fileAttributes.path
 }

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import top.kanetah.planhv2.api.entity.*
+import top.kanetah.planhv2.api.property.PropertyListener
 import top.kanetah.planhv2.api.service.RepositoryService
 
 /**
@@ -27,7 +28,7 @@ class TestController @Autowired constructor(
     fun user()
 //            = repositoryService.userRepository.count()
             : User? {
-        return repositoryService.userRepository.findByCode("1521192211")
+        return repositoryService.userRepository.findByCode("1421162123")
     }
     
     @RequestMapping("/team")
@@ -56,7 +57,10 @@ class TestController @Autowired constructor(
     }
     
     @RequestMapping("/submission")
-    fun submission(): Array<Submission>? {
-        return repositoryService.submissionRepository.findByUserId(1)
+    fun submission(): ArrayList<Submission>? {
+        return repositoryService.submissionRepository.findAllByUserId(1)
     }
+    
+    @RequestMapping("/props")
+    fun props() = PropertyListener.getAllProperties()
 }

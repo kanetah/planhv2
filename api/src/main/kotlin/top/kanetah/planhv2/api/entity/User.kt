@@ -13,11 +13,6 @@ data class User(
         val userConfig: UserConfig = UserConfig(),
         val accessToken: String? = null
 ) {
-    constructor(
-            userId: Int, userCode: String, userName: String, theme: String?, enableAccessToken: Boolean, accessToken: String?
-    ): this(userId, userCode, userName, UserConfig(theme, enableAccessToken), accessToken)
-    
     fun getTheme() = userConfig.theme
-    
     fun getEnableAccessToken() = userConfig.enableAccessToken
 }

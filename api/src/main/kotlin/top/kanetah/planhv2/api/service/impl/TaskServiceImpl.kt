@@ -66,7 +66,7 @@ class TaskServiceImpl @Autowired constructor(
                     formatProcessorId = formatProcessorId
             )) > 0
         }
-    }.let { false }
+    } ?: false
     
     override fun findTask(
             id: Int

@@ -4,9 +4,9 @@
 
     <insert id="save">
         INSERT INTO submission_tab (
-            task_id, user_id, team_id, submit_data, former_name, save_name, size, path
+            task_id, user_id, team_id, submit_date, resource_id, former_name, save_name, size, path
         ) VALUE (
-            #{taskId}, #{userId}, #{teamId}, #{submitDate}, #{formerName}, #{saveName}, #{size}, #{path}
+            #{taskId}, #{userId}, #{teamId}, #{submitDate},#{resourceId} , #{formerName}, #{saveName}, #{size}, #{path}
         )
     </insert>
 
@@ -34,11 +34,24 @@
         </where>
     </update>
 
+    <resultMap id="submission_result" type="top.kanetah.planhv2.api.entity.Submission">
+        <id property="submissionId" column="id"/>
+        <result property="taskId" column="task_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="teamId" column="team_id"/>
+        <result property="submitDate" column="submit_date"/>
+        <result property="fileAttributes.resourceId" column="resource_id"/>
+        <result property="fileAttributes.formerName" column="former_name"/>
+        <result property="fileAttributes.saveName" column="save_name"/>
+        <result property="fileAttributes.size" column="size"/>
+        <result property="fileAttributes.path" column="path"/>
+    </resultMap>
+
     <sql id="find_submission">
         SELECT *
         FROM submission_tab
     </sql>
-    <select id="findByUserId" resultType="top.kanetah.planhv2.api.entity.Submission">
+    <select id="findAllByUserId" resultMap="submission_result">
         <include refid="find_submission"/>
         <where>
             user_id = #{userId}

@@ -52,7 +52,7 @@ class SubjectServiceImpl @Autowired constructor(
                     recommendProcessorId = recommendProcessorId
             )) > 0
         }
-    }.let { false }
+    } ?: false
     
     override fun findSubject(
             id: Int

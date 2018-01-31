@@ -596,6 +596,7 @@
   teamId: null,
   submitDate: "2018/01/01 10:00:00",
   fileAttributes: {
+    resourceId: 1,
     formerName: "poi.mp3",
     saveName: "1521192255_某某.mp3",
     size: 1000000,
@@ -609,6 +610,7 @@
   teamId: null,
   submitDate: "2018/01/01 10:00:00",
   fileAttributes: {
+    resourceId: 2,
     formerName: "poi.jpg",
     saveName: "poi.jpg",
     size: 1000000,
@@ -619,12 +621,12 @@
 ]
 ```
 
-### `post` /submission 提交任务文件
+### `post` /submission 提交任务
 参数：
 - token `String` 用户Token
 - taskId `Int` 任务Id
-- file `File` 任务文件
 - teamId `Int?` 团队Id
+- file `File` 任务文件
 
 返回：
 提交结果  
@@ -635,7 +637,7 @@
 }
 ```
 
-### `delete` /submission 删除任务文件
+### `delete` /submission 删除提交
 参数：
 - token `String` 用户Token
 - taskId `Int` 任务Id
@@ -649,13 +651,32 @@
 }
 ```
 
-### `get` /submission 下载任务文件
+### `get` /submission 查询提交记录
 参数：
 - token `String` 用户Token
 - taskId `Int` 任务Id
 
 返回：
-任务文件
+提交记录
+例：
+```
+{
+  {
+    submissionId: 1,
+    taskId: 1,
+    userId: 55,
+    teamId: null,
+    submitDate: "2018/01/01 10:00:00",
+    fileAttributes: {
+      resourceId: 1,
+      formerName: "poi.mp3",
+      saveName: "1521192255_某某.mp3",
+      size: 1000000,
+      path: "/planHFile/音乐/音乐作业/poi.mp3",
+    },
+  }
+}
+```
 
 ---
 
@@ -711,7 +732,10 @@
 }
 ```
 
-### `get` /resource/:filename 下载资料
+### `get` /resource/:id 下载资料
+参数：
+- _fileName_ `String` 资料文档Id `PathVariable:filename`
+
 返回：
 资料文件
 

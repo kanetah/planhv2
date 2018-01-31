@@ -159,7 +159,7 @@
 - taskId `Int` 任务Id
 - userId `Int` 用户Id
 - teamId `Int?` 团队Id
-- submitData `Timestamp` 提交时间
+- submitDate `Timestamp` 提交时间
 - fileAttributes `SubmitFileAttributes` [提交文件属性](#提交文件属性)
 
 >#### 提交文件属性
@@ -167,6 +167,7 @@
 >`top.kanetah.planhv2.api.entity.SubmitFileAttributes`  
 >
 >属性：
+>- resourceId `Int` 转存资料文档Id
 >- formerName `String` 原文件名
 >- saveName `String` 保存文件名
 >- size `Double` 文件大小

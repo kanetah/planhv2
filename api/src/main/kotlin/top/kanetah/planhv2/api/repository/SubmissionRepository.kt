@@ -1,9 +1,7 @@
 package top.kanetah.planhv2.api.repository
 
-import org.apache.ibatis.annotations.Param
 import top.kanetah.planhv2.api.annotation.DataAccess
 import top.kanetah.planhv2.api.entity.Submission
-import java.sql.Timestamp
 
 /**
  * created by kane on 2018/1/24
@@ -11,29 +9,11 @@ import java.sql.Timestamp
 @DataAccess
 interface SubmissionRepository {
     
-    fun save(
-            @Param("taskId") taskId: Int,
-            @Param("userId") userId: Int,
-            @Param("teamId") teamId: Int?,
-            @Param("submitDate") submitDate: Timestamp,
-            @Param("formerName") formerName: String,
-            @Param("saveName") saveName: String,
-            @Param("size") size: Double,
-            @Param("path") path: String
-    ): Int
+    fun save(submission: Submission): Int
     
     fun delete(id: Int)
     
-    fun update(
-            @Param("taskId") taskId: Int,
-            @Param("userId") userId: Int,
-            @Param("teamId") teamId: Int?,
-            @Param("submitDate") submitDate: Timestamp,
-            @Param("formerName") formerName: String,
-            @Param("saveName") saveName: String,
-            @Param("size") size: Double,
-            @Param("path") path: String
-    )
+    fun update(submission: Submission)
     
-    fun findByUserId(userId: Int): Array<Submission>?
+    fun findAllByUserId(userId: Int): ArrayList<Submission>?
 }
