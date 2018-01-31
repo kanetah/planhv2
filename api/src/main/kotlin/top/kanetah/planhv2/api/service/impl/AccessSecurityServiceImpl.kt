@@ -29,9 +29,11 @@ class AccessSecurityServiceImpl @Autowired constructor(
     override fun tokenCheck(
             token: String?, id: Int?
     ) = check(token) {
-        repositoryService.tokenRepository.findByToken(it)?.userId === id
+        repositoryService.tokenRepository.findByToken(it).let {
+            if (id === null) it !== null else it?.userId === id
+        }
     }
-    
+
 //    override fun loadUserByUsername(username: String?): UserDetails {
 //        return User(username, "123", MutableList(1, { GrantedAuthority { "user" } }))
 //    }
