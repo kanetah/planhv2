@@ -6,9 +6,9 @@ import top.kanetah.planhv2.api.annotation.JsonValue
 import top.kanetah.planhv2.api.entity.Token
 import top.kanetah.planhv2.api.entity.User
 import top.kanetah.planhv2.api.entity.UserConfig
+import top.kanetah.planhv2.api.service.AccessSecurityService
 import top.kanetah.planhv2.api.service.RepositoryService
 import top.kanetah.planhv2.api.service.UserService
-import java.util.*
 import kotlin.collections.ArrayList
 
 /**
@@ -16,6 +16,7 @@ import kotlin.collections.ArrayList
  */
 @Service
 class UserServiceImpl @Autowired constructor(
+        private val accessSecurityService: AccessSecurityService,
         private val repositoryService: RepositoryService
 ) : UserService {
     
@@ -23,11 +24,11 @@ class UserServiceImpl @Autowired constructor(
             userCode: String, userName: String
     ) = repositoryService.userRepository.findByCode(userCode)?.let { user ->
         repositoryService.tokenRepository.deleteByUserId(user.userId)
-        val token = Date().hashCode().let {
-            "${user.userId}-planhII-${user.userCode.hashCode() + user.userName.hashCode()}-$it"
+        accessSecurityService.computeToken(user).let { token ->
+            if (repositoryService.tokenRepository.save(
+                            Token(userId = user.userId, token = token)) > 0
+            ) token else null
         }
-        val saved = repositoryService.tokenRepository.save(Token(userId = user.userId, token = token))
-        if (saved > 0) token else null
     }
     
     override fun logout(
@@ -44,7 +45,7 @@ class UserServiceImpl @Autowired constructor(
         val accessTokenFlag = it.userConfig.enableAccessToken != enableAccessToken && enableAccessToken
         val accessToken =
                 if (accessTokenFlag)
-                    "${it.userId}-planhII-${it.userCode.hashCode() + it.userName.hashCode()}-"
+                    accessSecurityService.computeAccessToken(it)
                 else null
         val saved = repositoryService.userRepository.update(it.copy(
                 userConfig = UserConfig(theme, enableAccessToken),

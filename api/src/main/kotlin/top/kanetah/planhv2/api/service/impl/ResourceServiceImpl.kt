@@ -27,22 +27,27 @@ class ResourceServiceImpl @Autowired constructor(
     val resourceControllerUrl = PropertyListener.getProperty("resource-controller-url")
     val resourcePath = PropertyListener.getProperty("resource-path")
     
-    override fun findAllResourceWithoutSubmissionResource() = repositoryService.resourceRepository.findAllWithoutForeignKeyWithSubmission()
+    override fun findAllResourceWithoutSubmissionResource(
+    ) = repositoryService.resourceRepository.findAllWithoutForeignKeyWithSubmission()
+    
+    override fun createResource(
+            name: String,
+            size: Double,
+            url: String
+    ) = Resource(
+            resourceName = name,
+            resourceSize = size / 100,
+            resourceUrl = resourceControllerUrl + url
+    ).let {
+        if (repositoryService.resourceRepository.save(it) > 0) it else null
+    }
     
     override fun createResource(
             file: MultipartFile
-    ): Resource? {
-        val target = File(resourcePath + file.originalFilename)
-        if (!target.exists())
-            if (!target.createNewFile())
-                return null
-        file.transferTo(target)
-        val resource = Resource(
-                resourceName = target.name,
-                resourceSize = target.length().toDouble() / 100,
-                resourceUrl = resourceControllerUrl + target.name
-        )
-        return if (repositoryService.resourceRepository.save(resource) > 0) resource else null
+    ) = with(File(resourcePath + file.originalFilename)) {
+        if (!exists()) createNewFile()
+        file.transferTo(this)
+        createResource(name, length().toDouble(), name)
     }
     
     override fun deleteResource(

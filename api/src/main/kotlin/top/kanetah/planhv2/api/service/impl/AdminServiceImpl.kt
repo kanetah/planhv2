@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service
 import top.kanetah.planhv2.api.annotation.JsonValue
 import top.kanetah.planhv2.api.entity.Admin
 import top.kanetah.planhv2.api.entity.Auth
+import top.kanetah.planhv2.api.service.AccessSecurityService
 import top.kanetah.planhv2.api.service.AdminService
 import top.kanetah.planhv2.api.service.RepositoryService
 import java.util.*
@@ -14,6 +15,7 @@ import java.util.*
  */
 @Service
 class AdminServiceImpl @Autowired constructor(
+        private val accessSecurityService: AccessSecurityService,
         private val repositoryService: RepositoryService
 ) : AdminService {
     
@@ -21,11 +23,11 @@ class AdminServiceImpl @Autowired constructor(
             password: String, validate: String
     ) = repositoryService.adminRepository.findByPassword(password)?.let { admin ->
         repositoryService.authRepository.deleteByAdminId(admin.adminId)
-        val auth = Date().hashCode().let {
-            "planhII${admin.adminId}-${password.hashCode()}-$it"
+        accessSecurityService.computeAuth(admin).let { auth ->
+            if (repositoryService.authRepository.save(
+                            Auth(adminId = admin.adminId, authorized = auth)) > 0
+            ) auth else null
         }
-        val saved = repositoryService.authRepository.save(Auth(adminId = admin.adminId, authorized = auth))
-        if (saved > 0) auth else null
     }
     
     override fun adminCrossOut(

@@ -9,6 +9,7 @@ import top.kanetah.planhv2.api.entity.Resource
  */
 interface ResourceService {
     fun findAllResourceWithoutSubmissionResource(): ArrayList<Resource>?
+    fun createResource(name: String, size: Double, url: String): Resource?
     fun createResource(file: MultipartFile): Resource?
     fun deleteResource(resourceId: Int): Boolean
     fun download(fileName: String): ResponseEntity<ByteArray>?
