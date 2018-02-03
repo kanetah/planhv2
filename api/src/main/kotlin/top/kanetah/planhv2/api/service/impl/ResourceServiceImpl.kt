@@ -39,7 +39,12 @@ class ResourceServiceImpl @Autowired constructor(
             resourceSize = size / 100,
             resourceUrl = resourceControllerUrl + url
     ).let {
-        if (repositoryService.resourceRepository.save(it) > 0) it else null
+        with(repositoryService.resourceRepository){
+            findByUrl(it.resourceUrl)?.let { deleteResource(it.resourceId) }
+            if (save(it).also { println(it) } > 0)
+                findByUrl(it.resourceUrl)
+            else null
+        }
     }
     
     override fun createResource(

@@ -15,9 +15,11 @@ interface ResourceRepository {
     
     fun update(resource: Resource): Int
     
+    fun findAllWithoutForeignKeyWithSubmission(): ArrayList<Resource>?
+    
     fun find(id: Int): Resource?
     
     fun findByNameLike(resourceName: String): Array<Resource>?
     
-    fun findAllWithoutForeignKeyWithSubmission(): ArrayList<Resource>?
+    fun findByUrl(resourceUrl: String): Resource?
 }

@@ -1,6 +1,7 @@
 package top.kanetah.planhv2.api.format
 
 import com.github.junrar.Archive
+import com.github.junrar.rarfile.FileHeader
 import org.springframework.web.multipart.MultipartFile
 import top.kanetah.planhv2.api.entity.SubmitFileAttributes
 import top.kanetah.planhv2.api.format.processor.OutsideFileNameFormatProcessor
@@ -45,34 +46,36 @@ interface FormatProcessorClass {
         Date("date");
         
         companion object {
-            operator fun get(key: String?) = key?.run {
-                values().filter { it.key === key }[0]
-            }
+            operator fun get(key: String?) = values().firstOrNull { it.key == key }
         }
     }
     
     fun getFormatName(
             user: User, task: Task, team: Team?, file: MultipartFile
     ) = if (task.format.isNullOrEmpty()) throw Exception("任务指定的格式化处理器不合适")
-    else StringBuilder(task.format).let { name ->
-        Regex("#\\{[\\w]*}").findAll(task.format!!).forEach {
-            it.value.let {
-                Regex(it).replace(name, when (FormatValue[Regex("[\\w]+").find(it)!!.value]) {
-                    Code -> user.userCode
-                    Code2 -> user.userCode.let { it.substring(it.length - 2) }
-                    Code3 -> user.userCode.let { it.substring(it.length - 3) }
-                    Name -> user.userName
-                    Title -> task.title
-                    Subject -> subjectRepository.find(task.subjectId)!!.subjectName
-                    Index -> team?.teamIndex.toString()
-                    TeamName -> team?.teamName.toString()
-                    Original -> file.originalFilename
-                    Date -> SimpleDateFormat("yyyy-MM-dd").format(java.util.Date())
-                    null -> it
-                })
-            }
+    else task.format!!.let {
+        fun replace(
+                source: String
+        ): String = Regex("\\[[\\w]*]").find(source).let { result ->
+            if (result == null || result.value.isEmpty()) source
+            else replace(source.replace(
+                    result.value, when (FormatValue[Regex("[\\w]+").find(result.value)!!.value]
+            ) {
+                Code -> user.userCode
+                Code2 -> user.userCode.let { it.substring(it.length - 2) }
+                Code3 -> user.userCode.let { it.substring(it.length - 3) }
+                Name -> user.userName
+                Title -> task.title
+                Subject -> subjectRepository.find(task.subjectId)!!.subjectName
+                Index -> team?.teamIndex.toString()
+                TeamName -> team?.teamName.toString()
+                Original -> file.originalFilename
+                Date -> SimpleDateFormat("yyyy-MM-dd").format(java.util.Date())
+                null -> result.value
+            }))
         }
-    }.toString()
+        replace(it)
+    }
     
     companion object {
         private val repositoryService by lazy {
@@ -99,7 +102,6 @@ infix fun MultipartFile.typeBy(
 }
 
 fun File.deleteAll(): Boolean {
-//    if (!isDirectory) return delete()
     listFiles()?.forEach {
         if (!it.deleteAll())
             return false
@@ -135,61 +137,51 @@ fun File.uncompress() {
 
 private fun unRar(file: File, descPath: String): String {
     val archive = Archive(file)
-    var fh = archive.nextFileHeader()
-    while (fh != null) {
-        val fileName = if (fh.fileNameW.isEmpty()) fh.fileNameString else fh.fileNameW
-        if (fh.isDirectory)
+    var fh: FileHeader? = null
+    while (null != archive.nextFileHeader().also { fh = it }) {
+        val fileName = if (fh!!.fileNameW.isEmpty()) fh!!.fileNameString else fh!!.fileNameW
+        if (fh!!.isDirectory)
             File(descPath + fileName).mkdirs()
         else {
-            val out = File(descPath + fileName.trim({ it <= ' ' }))
-            if (!out.exists()) {
-                if (!out.parentFile.exists())
-                    out.parentFile.mkdirs()
-                out.createNewFile()
+            val out = File(descPath + fileName.trim({ it <= ' ' })).apply {
+                parentFile.apply { if (!exists()) mkdirs() }
+                if (!exists()) createNewFile()
             }
             val os = FileOutputStream(out)
             archive.extractFile(fh, os)
             os.close()
         }
-        fh = archive.nextFileHeader()
     }
     archive.close()
     return descPath
 }
 
 private fun unZip(file: File, descPath: String, charSet: String = "utf-8") {
+    val zip = ZipFile(file, Charset.forName(charSet))
     try {
-        val zip = ZipFile(file, Charset.forName(charSet))
-        val name = with(zip.name) { substring(lastIndexOf("\\") + 1, lastIndexOf(".")) }
-        val pathFile = File(descPath + name)
-        if (!pathFile.exists()) pathFile.mkdirs()
+        File(descPath).apply { if (!exists()) mkdirs() }
         val entries = zip.entries()
-        while (entries.hasMoreElements()) {
-            val entry = entries.nextElement()
-            val zipEntryName = entry.name
-            val `in` = zip.getInputStream(entry)
-            val outPath = (descPath + name + "/" + zipEntryName)
+        entries.iterator().forEach {
+            val zipEntryName = it.name
+            val outPath = (descPath + zipEntryName)
                     .replace("\\*".toRegex(), "/")
-            val outputFile = File(outPath.substring(0, outPath.lastIndexOf('/')))
-            if (!outputFile.exists())
-                if (!outputFile.mkdirs())
-                    throw RuntimeException("can not mkdirs.")
-            if (File(outPath).isDirectory)
-                continue
+            File(outPath.substring(0, outPath.lastIndexOf('/'))).apply { if (!exists()) mkdirs() }
+            if (File(outPath).isDirectory) return@forEach
             val out = FileOutputStream(outPath)
-            val buf1 = ByteArray(1024)
-            var len = `in`.read(buf1)
-            while (len > 0) {
-                out.write(buf1, 0, len)
-                len = `in`.read(buf1)
+            val buff = ByteArray(1024)
+            zip.getInputStream(it).apply {
+                var len = 0
+                while (0 < read(buff).also { len = it })
+                    out.write(buff, 0, len)
+                close()
             }
-            `in`.close()
             out.close()
         }
-        zip.close()
     } catch (e: Exception) {
         if (charSet == "utf-8")
             unZip(file, descPath, "GBK")
+    } finally {
+        zip.close()
     }
 }
 
@@ -213,8 +205,4 @@ private fun un7z(file: File, descPath: String) {
         entry = sevenZFile.nextEntry
     }
     sevenZFile.close()
-}
-
-fun main(args: Array<String>) {
-    File("D:/planh/nico.zip").uncompress()
 }

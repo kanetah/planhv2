@@ -23,18 +23,24 @@
         </where>
     </delete>
 
+    <resultMap id="auth_result" type="top.kanetah.planhv2.api.entity.Auth">
+        <id property="authorizedId" column="id"/>
+        <result property="adminId" column="admin_id"/>
+        <result property="authorized" column="authorized"/>
+    </resultMap>
+
     <sql id="find_auth">
         SELECT
             *
         FROM auth_tab
     </sql>
-    <select id="find" resultType="top.kanetah.planhv2.api.entity.Auth">
+    <select id="find" resultMap="auth_result">
         <include refid="find_auth"/>
         <where>
             id = #{id}
         </where>
     </select>
-    <select id="findByAuthorized" resultType="top.kanetah.planhv2.api.entity.Auth">
+    <select id="findByAuthorized" resultMap="auth_result">
         <include refid="find_auth"/>
         <where>
             authorized = #{authorized}

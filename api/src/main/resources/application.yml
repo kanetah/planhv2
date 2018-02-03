@@ -8,5 +8,9 @@ spring:
     url: jdbc:mysql://localhost:3306/planhv2?useSSL=false
     username: root
     password: nicopoiduang
+  http:
+    multipart:
+      max-file-size: 1024Mb
+      max-request-size: 1056Mb
 server:
   port: 8080

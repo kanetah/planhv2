@@ -35,24 +35,36 @@
         </where>
     </update>
 
+    <resultMap id="task_result" type="top.kanetah.planhv2.api.entity.Task">
+        <id property="taskId" column="id"/>
+        <result property="subjectId" column="subject_id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="isTeamTask" column="is_team_task"/>
+        <result property="deadline" column="deadline"/>
+        <result property="type" column="type"/>
+        <result property="formatProcessorId" column="format_processor_id"/>
+        <result property="format" column="format"/>
+    </resultMap>
+
     <sql id="find_task">
         SELECT
             *
         FROM task_tab
     </sql>
-    <select id="find" resultType="top.kanetah.planhv2.api.entity.Task">
+    <select id="find" resultMap="task_result">
         <include refid="find_task"/>
         <where>
             id = #{id}
         </where>
     </select>
-    <select id="findByTitleLike" resultType="top.kanetah.planhv2.api.entity.Task">
+    <select id="findByTitleLike" resultMap="task_result">
         <include refid="find_task"/>
         <where>
             title LIKE "%"#{title}"%"
         </where>
     </select>
-    <select id="taskList" resultType="top.kanetah.planhv2.api.entity.Task">
+    <select id="taskList" resultMap="task_result">
         <include refid="find_task"/>
         <where>
             <if test="subjectId != null">

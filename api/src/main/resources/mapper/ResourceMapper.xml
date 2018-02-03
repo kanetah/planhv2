@@ -29,15 +29,28 @@
         </where>
     </update>
 
+    <resultMap id="resource_result" type="top.kanetah.planhv2.api.entity.Resource">
+        <id property="resourceId" column="id"/>
+        <result property="resourceName" column="resource_name"/>
+        <result property="resourceSize" column="resource_size"/>
+        <result property="resourceUrl" column="resource_url"/>
+    </resultMap>
+
     <sql id="find_resource">
         SELECT
             *
         FROM resource_tab
     </sql>
-    <select id="findByNameLike" resultType="top.kanetah.planhv2.api.entity.Resource">
+    <select id="findByNameLike" resultMap="resource_result">
         <include refid="find_resource"/>
         <where>
             resource_name LIKE "%"#{resourceName}"%"
+        </where>
+    </select>
+    <select id="findByUrl" resultMap="resource_result">
+        <include refid="find_resource"/>
+        <where>
+            resource_url = #{resourceUrl}
         </where>
     </select>
 

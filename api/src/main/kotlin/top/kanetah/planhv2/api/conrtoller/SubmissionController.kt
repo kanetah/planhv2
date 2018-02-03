@@ -27,9 +27,11 @@ class SubmissionController(
             @RequestParam teamId: Int?,
             @RequestPart file: MultipartFile
     ) = submissionService.takeIf { accessSecurityService.tokenCheck(token) }?.let {
-        object {
-            @JsonValue
-            val success = it.createSubmission(token, taskId, teamId, file)
+        it.createSubmission(token, taskId, teamId, file).let {
+            object {
+                @JsonValue
+                val success = it
+            }
         }
     }
 

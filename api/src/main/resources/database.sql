@@ -1,160 +1,217 @@
-CREATE TABLE admin_tab
+create table admin_tab
 (
-  id  INT AUTO_INCREMENT
-    PRIMARY KEY,
-  psd VARCHAR(32) NOT NULL,
-  CONSTRAINT admin_tab_id_uindex
-  UNIQUE (id),
-  CONSTRAINT admin_tab_psd_uindex
-  UNIQUE (psd)
+  id int auto_increment
+    primary key,
+  psd varchar(32) not null,
+  constraint admin_tab_id_uindex
+  unique (id),
+  constraint admin_tab_psd_uindex
+  unique (psd)
 )
-  ENGINE = InnoDB;
+  engine=InnoDB
+;
 
-CREATE TABLE format_processor_tab
+create table auth_tab
 (
-  id                          INT AUTO_INCREMENT
-    PRIMARY KEY,
-  format_processor_name       VARCHAR(64)  NOT NULL,
-  format_processor_class_name VARCHAR(256) NOT NULL,
-  CONSTRAINT format_processor_tab_id_uindex
-  UNIQUE (id),
-  CONSTRAINT format_processor_tab_format_processor_name_uindex
-  UNIQUE (format_processor_name),
-  CONSTRAINT format_processor_tab_format_processor_class_name_uindex
-  UNIQUE (format_processor_class_name)
+  id int auto_increment
+    primary key,
+  admin_id int not null,
+  authorized varchar(2048) not null,
+  constraint auth_intfo_tab_id_uindex
+  unique (id),
+  constraint auth_intfo_tab_admin_id_uindex
+  unique (admin_id),
+  constraint auth_intfo_tab_admin_tab_id_fk
+  foreign key (admin_id) references admin_tab (id)
+    on update cascade on delete cascade
 )
-  ENGINE = InnoDB;
+  engine=InnoDB
+;
 
-CREATE TABLE resource_tab
+create table format_processor_tab
 (
-  id            INT AUTO_INCREMENT
-    PRIMARY KEY,
-  resource_name VARCHAR(64)  NOT NULL,
-  resource_size DOUBLE       NOT NULL,
-  resource_url  VARCHAR(512) NOT NULL,
-  CONSTRAINT resource_tab_id_uindex
-  UNIQUE (id),
-  CONSTRAINT resource_tab_resource_name_uindex
-  UNIQUE (resource_name),
-  CONSTRAINT resource_tab_resource_url_uindex
-  UNIQUE (resource_url)
+  id int auto_increment
+    primary key,
+  format_processor_name varchar(64) not null,
+  format_processor_class_name varchar(256) not null,
+  constraint format_processor_tab_id_uindex
+  unique (id),
+  constraint format_processor_tab_format_processor_name_uindex
+  unique (format_processor_name),
+  constraint format_processor_tab_format_processor_class_name_uindex
+  unique (format_processor_class_name)
 )
-  ENGINE = InnoDB;
+  engine=InnoDB
+;
 
-CREATE TABLE subject_tab
+create table resource_tab
 (
-  id                     INT AUTO_INCREMENT
-    PRIMARY KEY,
-  subject_name           VARCHAR(64)  NOT NULL,
-  teacher_name           VARCHAR(32)  NOT NULL,
-  email_address          VARCHAR(128) NOT NULL,
-  recommend_processor_id INT          NOT NULL,
-  CONSTRAINT subject_tab_subject_id_uindex
-  UNIQUE (id),
-  CONSTRAINT subject_tab_subject_name_uindex
-  UNIQUE (subject_name)
+  id int auto_increment
+    primary key,
+  resource_name varchar(64) not null,
+  resource_size double not null,
+  resource_url varchar(512) not null,
+  constraint resource_tab_id_uindex
+  unique (id),
+  constraint resource_tab_resource_url_uindex
+  unique (resource_url)
 )
-  ENGINE = InnoDB;
+  engine=InnoDB
+;
 
-CREATE TABLE submission_tab
+create table subject_tab
 (
-  id          INT AUTO_INCREMENT
-    PRIMARY KEY,
-  task_id     INT          NOT NULL,
-  user_id     INT          NOT NULL,
-  team_id     INT          NULL,
-  submit_data DATETIME     NOT NULL,
-  former_name VARCHAR(128) NOT NULL,
-  save_name   VARCHAR(128) NOT NULL,
-  size        DOUBLE       NOT NULL,
-  path        VARCHAR(512) NOT NULL,
-  CONSTRAINT submission_tab_id_uindex
-  UNIQUE (id),
-  CONSTRAINT submission_tab_path_uindex
-  UNIQUE (path)
+  id int auto_increment
+    primary key,
+  subject_name varchar(64) not null,
+  teacher_name varchar(32) not null,
+  email_address varchar(128) not null,
+  team_limit varchar(32) null,
+  recommend_processor_id int not null,
+  constraint subject_tab_subject_id_uindex
+  unique (id),
+  constraint subject_tab_subject_name_uindex
+  unique (subject_name)
 )
-  ENGINE = InnoDB;
+  engine=InnoDB
+;
 
-CREATE INDEX submission_tab_task_tab_id_fk
-  ON submission_tab (task_id);
-
-CREATE INDEX submission_tab_user_tab_id_fk
-  ON submission_tab (user_id);
-
-CREATE INDEX submission_tab_team_tab_id_fk
-  ON submission_tab (team_id);
-
-CREATE TABLE task_tab
+create table submission_tab
 (
-  id                  INT AUTO_INCREMENT
-    PRIMARY KEY,
-  subject_id          INT             NOT NULL,
-  title               VARCHAR(128)    NOT NULL,
-  content             VARCHAR(2048)   NOT NULL,
-  is_team_task        TINYINT(1)      NOT NULL,
-  deadline            DATETIME        NOT NULL,
-  type                VARCHAR(32)     NOT NULL,
-  format_processor_id INT DEFAULT '1' NOT NULL,
-  format              VARCHAR(128)    NULL,
-  CONSTRAINT task_tab_id_uindex
-  UNIQUE (id),
-  CONSTRAINT task_tab_subject_tab_id_fk
-  FOREIGN KEY (subject_id) REFERENCES subject_tab (id)
-    ON UPDATE CASCADE
+  id int auto_increment
+    primary key,
+  task_id int not null,
+  user_id int not null,
+  team_id int null,
+  submit_date datetime not null,
+  resource_id int not null,
+  former_name varchar(128) not null,
+  save_name varchar(128) not null,
+  size double not null,
+  path varchar(512) not null,
+  constraint submission_tab_id_uindex
+  unique (id),
+  constraint submission_tab_resource_id_uindex
+  unique (resource_id),
+  constraint submission_tab_path_uindex
+  unique (path),
+  constraint submission_tab_resource_tab_id_fk
+  foreign key (resource_id) references resource_tab (id)
+    on update cascade
 )
-  ENGINE = InnoDB;
+  engine=InnoDB
+;
 
-CREATE INDEX task_tab_subject_tab_id_fk
-  ON task_tab (subject_id);
+create index submission_tab_task_tab_id_fk
+  on submission_tab (task_id)
+;
 
-ALTER TABLE submission_tab
-  ADD CONSTRAINT submission_tab_task_tab_id_fk
-FOREIGN KEY (task_id) REFERENCES task_tab (id)
-  ON UPDATE CASCADE;
+create index submission_tab_user_tab_id_fk
+  on submission_tab (user_id)
+;
 
-CREATE TABLE team_tab
+create index submission_tab_team_tab_id_fk
+  on submission_tab (team_id)
+;
+
+create table task_tab
 (
-  id                   INT AUTO_INCREMENT
-    PRIMARY KEY,
-  subject_id           INT         NOT NULL,
-  team_index           INT         NOT NULL,
-  team_name            VARCHAR(64) NULL,
-  member_user_id_array VARCHAR(64) NOT NULL,
-  leader_user_id_array VARCHAR(64) NOT NULL,
-  CONSTRAINT team_tab_id_uindex
-  UNIQUE (id),
-  CONSTRAINT team_tab_subject_tab_id_fk
-  FOREIGN KEY (subject_id) REFERENCES subject_tab (id)
-    ON UPDATE CASCADE
+  id int auto_increment
+    primary key,
+  subject_id int not null,
+  title varchar(128) not null,
+  content varchar(2048) not null,
+  is_team_task tinyint(1) not null,
+  deadline datetime not null,
+  type varchar(32) not null,
+  format_processor_id int default '1' not null,
+  format varchar(128) null,
+  constraint task_tab_id_uindex
+  unique (id),
+  constraint task_tab_subject_tab_id_fk
+  foreign key (subject_id) references subject_tab (id)
+    on update cascade
 )
-  ENGINE = InnoDB;
+  engine=InnoDB
+;
 
-CREATE INDEX team_tab_subject_tab_id_fk
-  ON team_tab (subject_id);
+create index task_tab_subject_tab_id_fk
+  on task_tab (subject_id)
+;
 
-ALTER TABLE submission_tab
-  ADD CONSTRAINT submission_tab_team_tab_id_fk
-FOREIGN KEY (team_id) REFERENCES team_tab (id)
-  ON UPDATE CASCADE;
+alter table submission_tab
+  add constraint submission_tab_task_tab_id_fk
+foreign key (task_id) references task_tab (id)
+  on update cascade
+;
 
-CREATE TABLE user_tab
+create table team_tab
 (
-  id              INT AUTO_INCREMENT
-    PRIMARY KEY,
-  user_code       VARCHAR(64)            NOT NULL,
-  user_name       VARCHAR(64)            NOT NULL,
-  theme           VARCHAR(32)            NULL,
-  access_by_token TINYINT(1) DEFAULT '0' NOT NULL,
-  access_token    VARCHAR(128)           NULL,
-  CONSTRAINT user_tab_id_uindex
-  UNIQUE (id),
-  CONSTRAINT user_tab_user_code_uindex
-  UNIQUE (user_code)
+  id int auto_increment
+    primary key,
+  subject_id int not null,
+  team_index int not null,
+  team_name varchar(64) null,
+  member_user_id_array varchar(128) not null,
+  leader_user_id_array varchar(64) not null,
+  constraint team_tab_id_uindex
+  unique (id),
+  constraint team_tab_subject_tab_id_fk
+  foreign key (subject_id) references subject_tab (id)
+    on update cascade
 )
-  ENGINE = InnoDB;
+  engine=InnoDB
+;
 
-ALTER TABLE submission_tab
-  ADD CONSTRAINT submission_tab_user_tab_id_fk
-FOREIGN KEY (user_id) REFERENCES user_tab (id)
-  ON UPDATE CASCADE;
+create index team_tab_subject_tab_id_fk
+  on team_tab (subject_id)
+;
+
+alter table submission_tab
+  add constraint submission_tab_team_tab_id_fk
+foreign key (team_id) references team_tab (id)
+  on update cascade
+;
+
+create table token_tab
+(
+  id int auto_increment
+    primary key,
+  user_id int not null,
+  token varchar(2048) not null,
+  constraint token_table_id_uindex
+  unique (id),
+  constraint token_table_user_id_uindex
+  unique (user_id)
+)
+  engine=InnoDB
+;
+
+create table user_tab
+(
+  id int auto_increment
+    primary key,
+  user_code varchar(64) not null,
+  user_name varchar(64) not null,
+  theme varchar(32) null,
+  enable_access_token tinyint(1) default '0' not null,
+  access_token varchar(128) null,
+  constraint user_tab_id_uindex
+  unique (id),
+  constraint user_tab_user_code_uindex
+  unique (user_code)
+)
+  engine=InnoDB
+;
+
+alter table submission_tab
+  add constraint submission_tab_user_tab_id_fk
+foreign key (user_id) references user_tab (id)
+  on update cascade
+;
+
+alter table token_tab
+  add constraint token_table_user_tab_id_fk
+foreign key (user_id) references user_tab (id)
+;
 

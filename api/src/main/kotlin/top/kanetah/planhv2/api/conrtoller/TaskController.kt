@@ -36,11 +36,14 @@ class TaskController @Autowired constructor(
             format: String?,
             formatProcessorId: Int
     ) = taskService.takeIf { accessSecurityService.authCheck(authorized) }?.let {
-        object {
-            @JsonValue
-            val success = it.create(
-                    subjectId, title, content, isTeamTask, Timestamp.valueOf(deadline), type, format, formatProcessorId
-            )
+        it.create(
+                subjectId, title, content, isTeamTask, Timestamp.valueOf(deadline),
+                type, format, formatProcessorId
+        ).let {
+            object {
+                @JsonValue
+                val success = it
+            }
         }
     }
     

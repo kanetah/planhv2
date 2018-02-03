@@ -29,16 +29,15 @@ object OutsideFileNameFormatProcessor : FormatProcessorClass {
     override fun saveFile(
             user: User, task: Task, team: Team?, file: MultipartFile
     ): SubmitFileAttributes {
-        val path = with(subjectRepository) {
-            File(
-                    "$storePath${find(task.subjectId)!!.subjectName}/${task.title}"
-            ).apply { if (!exists()) mkdirs() }.canonicalPath
-        }
+        val subjectName = subjectRepository.find(task.subjectId)!!.subjectName
+        val path = File(
+                "$storePath$subjectName/${task.title}"
+        ).apply { if (!exists()) mkdirs() }.canonicalPath
         val target = File(
                 "$path/${getFormatName(user, task, team, file)}${file typeBy task}"
         ).apply { if (!exists()) createNewFile(); file.transferTo(this); uncompress(); }
         return resourceService.createResource(
-                target.name, target.length().toDouble(), "task/${target.name}"
+                target.name, file.size.toDouble(), "task/$subjectName/${task.title}/${target.name}"
         )?.let {
             SubmitFileAttributes(
                     resourceId = it.resourceId,

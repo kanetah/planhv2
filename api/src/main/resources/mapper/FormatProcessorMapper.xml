@@ -28,12 +28,18 @@
         </where>
     </update>
 
+    <resultMap id="formatProcessor_result" type="top.kanetah.planhv2.api.entity.FormatProcessor">
+        <id property="formatProcessorId" column="id"/>
+        <result property="formatProcessorName" column="formatProcessor_name"/>
+        <result property="formatProcessorClassName" column="format_processor_class_name"/>
+    </resultMap>
+
     <sql id="find_format_processor">
         SELECT
             *
         FROM format_processor_tab
     </sql>
-    <select id="findByName" resultType="top.kanetah.planhv2.api.entity.FormatProcessor">
+    <select id="findByName" resultMap="formatProcessor_result">
         <include refid="find_format_processor"/>
         <where>
             format_processor_name = #{formatProcessorName}

@@ -23,12 +23,18 @@
         </where>
     </delete>
 
+    <resultMap id="token_result" type="top.kanetah.planhv2.api.entity.Token">
+        <id property="tokenId" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="token" column="token"/>
+    </resultMap>
+
     <sql id="find_token">
         SELECT
             *
         FROM token_tab
     </sql>
-    <select id="findByToken" resultType="top.kanetah.planhv2.api.entity.Token">
+    <select id="findByToken" resultMap="token_result">
         <include refid="find_token"/>
         <where>
             token = #{token}

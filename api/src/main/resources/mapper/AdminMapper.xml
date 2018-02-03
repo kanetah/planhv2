@@ -27,20 +27,25 @@
         </where>
     </update>
 
+    <resultMap id="admin_result" type="top.kanetah.planhv2.api.entity.Admin">
+        <id property="adminId" column="id" />
+        <result property="password" column="psd"/>
+    </resultMap>
+
     <sql id="select_admin">
         SELECT *
         FROM admin_tab
     </sql>
-    <select id="findAll" resultType="top.kanetah.planhv2.api.entity.Admin">
+    <select id="findAll" resultMap="admin_result">
         <include refid="select_admin"/>
     </select>
-    <select id="find" resultType="top.kanetah.planhv2.api.entity.Admin">
+    <select id="find" resultMap="admin_result">
         <include refid="select_admin"/>
         <where>
             id = #{id}
         </where>
     </select>
-    <select id="findByPassword" resultType="top.kanetah.planhv2.api.entity.Admin">
+    <select id="findByPassword" resultMap="admin_result">
         <include refid="select_admin"/>
         <where>
             psd = #{password}
