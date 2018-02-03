@@ -5,7 +5,7 @@ import top.kanetah.planhv2.api.annotation.FormatProcessorName
 import top.kanetah.planhv2.api.APP_CONTEXT
 import top.kanetah.planhv2.api.entity.*
 import top.kanetah.planhv2.api.format.FormatProcessorClass
-import top.kanetah.planhv2.api.format.compact
+import top.kanetah.planhv2.api.format.uncompress
 import top.kanetah.planhv2.api.format.typeBy
 import top.kanetah.planhv2.api.repository.SubjectRepository
 import top.kanetah.planhv2.api.service.ResourceService
@@ -36,7 +36,7 @@ object OutsideFileNameFormatProcessor : FormatProcessorClass {
         }
         val target = File(
                 "$path/${getFormatName(user, task, team, file)}${file typeBy task}"
-        ).apply { if (!exists()) createNewFile(); file.transferTo(this); compact(); }
+        ).apply { if (!exists()) createNewFile(); file.transferTo(this); uncompress(); }
         return resourceService.createResource(
                 target.name, target.length().toDouble(), "task/${target.name}"
         )?.let {

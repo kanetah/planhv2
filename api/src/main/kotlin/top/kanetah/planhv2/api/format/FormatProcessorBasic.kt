@@ -1,9 +1,6 @@
 package top.kanetah.planhv2.api.format
 
 import com.github.junrar.Archive
-import org.apache.commons.compress.archivers.ArchiveEntry
-import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream
-import org.apache.commons.compress.archivers.zip.ZipFile
 import org.springframework.web.multipart.MultipartFile
 import top.kanetah.planhv2.api.entity.SubmitFileAttributes
 import top.kanetah.planhv2.api.format.processor.OutsideFileNameFormatProcessor
@@ -18,15 +15,10 @@ import top.kanetah.planhv2.api.service.RepositoryService
 import java.io.*
 import java.text.SimpleDateFormat
 import java.io.FileOutputStream
-import java.io.FileInputStream
-import java.io.BufferedOutputStream
-import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
-import java.io.BufferedInputStream
-import java.util.ArrayList
-import java.io.File.separator
-import com.sun.org.apache.xerces.internal.util.DOMUtil.getParent
-import org.apache.commons.compress.utils.IOUtils
-import org.codehaus.plexus.util.StringUtils.isBlank
+import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry
+import org.apache.commons.compress.archivers.sevenz.SevenZFile
+import java.nio.charset.Charset
+import java.util.zip.ZipFile
 
 
 /**
@@ -107,7 +99,7 @@ infix fun MultipartFile.typeBy(
 }
 
 fun File.deleteAll(): Boolean {
-    if (!isDirectory) return delete()
+//    if (!isDirectory) return delete()
     listFiles()?.forEach {
         if (!it.deleteAll())
             return false
@@ -115,16 +107,16 @@ fun File.deleteAll(): Boolean {
     return delete()
 }
 
-fun File.compact() {
+fun File.uncompress() {
     val descPath = with(canonicalPath) {
-        (substring(0, lastIndexOf(".")) + java.io.File.separator).also {
+        (substring(0, lastIndexOf(".")) + File.separator).also {
             File(it).apply { if (!exists()) mkdirs() }
         }
     }
     when (name.substring(name.lastIndexOf("."))) {
         ".rar" -> unRar(this, descPath)
         ".zip" -> unZip(this, descPath)
-        ".7z" -> unZip(this, descPath)
+        ".7z" -> un7z(this, descPath)
         else -> return
     }
     File(descPath).listFiles()?.apply {
@@ -165,28 +157,64 @@ private fun unRar(file: File, descPath: String): String {
     return descPath
 }
 
-private fun unZip(file: File, descPath: String) {
-    val zipArchiveInputStream = ZipArchiveInputStream(BufferedInputStream(FileInputStream(file), 1024))
-    var entry = zipArchiveInputStream.nextZipEntry
-    File(descPath, entry.name).mkdirs()
-    while (entry != null) {
-        if (entry.isDirectory)
-            File(descPath, entry.name).mkdirs()
-        else
-            File(descPath, entry.name).apply {
-                createNewFile()
-            }.let {
-                BufferedOutputStream(FileOutputStream(it), 1024)
-                        .let {
-                            IOUtils.copy(zipArchiveInputStream, it)
-                            IOUtils.closeQuietly(it)
-                        }
+private fun unZip(file: File, descPath: String, charSet: String = "utf-8") {
+    try {
+        val zip = ZipFile(file, Charset.forName(charSet))
+        val name = with(zip.name) { substring(lastIndexOf("\\") + 1, lastIndexOf(".")) }
+        val pathFile = File(descPath + name)
+        if (!pathFile.exists()) pathFile.mkdirs()
+        val entries = zip.entries()
+        while (entries.hasMoreElements()) {
+            val entry = entries.nextElement()
+            val zipEntryName = entry.name
+            val `in` = zip.getInputStream(entry)
+            val outPath = (descPath + name + "/" + zipEntryName)
+                    .replace("\\*".toRegex(), "/")
+            val outputFile = File(outPath.substring(0, outPath.lastIndexOf('/')))
+            if (!outputFile.exists())
+                if (!outputFile.mkdirs())
+                    throw RuntimeException("can not mkdirs.")
+            if (File(outPath).isDirectory)
+                continue
+            val out = FileOutputStream(outPath)
+            val buf1 = ByteArray(1024)
+            var len = `in`.read(buf1)
+            while (len > 0) {
+                out.write(buf1, 0, len)
+                len = `in`.read(buf1)
             }
-        entry = zipArchiveInputStream.nextZipEntry
+            `in`.close()
+            out.close()
+        }
+        zip.close()
+    } catch (e: Exception) {
+        if (charSet == "utf-8")
+            unZip(file, descPath, "GBK")
     }
-    IOUtils.closeQuietly(zipArchiveInputStream)
+}
+
+private fun un7z(file: File, descPath: String) {
+    val sevenZFile = SevenZFile(file)
+    var entry: SevenZArchiveEntry? = sevenZFile.nextEntry
+    while (entry != null) {
+        if (entry.isDirectory) {
+            File((descPath + entry.name)).mkdirs()
+            entry = sevenZFile.nextEntry
+            continue
+        } else File((descPath + entry.name)).also {
+            if (!it.parentFile.exists()) it.parentFile.mkdirs()
+        }.createNewFile()
+        val out = FileOutputStream(descPath
+                + File.separator + entry.name)
+        val content = ByteArray(entry.size.toInt())
+        sevenZFile.read(content, 0, content.size)
+        out.write(content)
+        out.close()
+        entry = sevenZFile.nextEntry
+    }
+    sevenZFile.close()
 }
 
 fun main(args: Array<String>) {
-    File("D:/planh/nico.zip").compact()
+    File("D:/planh/nico.zip").uncompress()
 }
