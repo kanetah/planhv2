@@ -28,12 +28,13 @@ class TeamController @Autowired constructor(
             @RequestParam teamName: String?,
             @RequestParam memberUserIdArrayJsonString: String,
             @RequestParam leaderUserIdArrayJsonString: String
-    ) = teamService.takeIf { accessSecurityService.tokenCheck(token) }?.let {
+    ) = teamService.takeIf { accessSecurityService.tokenCheck(token) }
+            ?.createTeam(subjectId, teamName,
+                    memberUserIdArrayJsonString.toIntArray(),
+                    leaderUserIdArrayJsonString.toIntArray()).let {
         object {
             @JsonValue
-            val success = it.createTeam(subjectId, teamName,
-                    memberUserIdArrayJsonString.toIntArray(),
-                    leaderUserIdArrayJsonString.toIntArray())
+            val success = it
         }
     }
     
@@ -41,10 +42,11 @@ class TeamController @Autowired constructor(
     fun deleteTeam(
             @RequestParam token: String,
             @PathVariable("id") teamId: Int
-    ) = teamService.takeIf { accessSecurityService.tokenCheck(token) }?.let {
+    ) = teamService.takeIf { accessSecurityService.tokenCheck(token) }
+            ?.deleteTeam(token, teamId).let {
         object {
             @JsonValue
-            val success = it.deleteTeam(token, teamId)
+            val success = it
         }
     }
     
@@ -56,12 +58,13 @@ class TeamController @Autowired constructor(
             @RequestParam teamName: String?,
             @RequestParam memberUserIdArrayJsonString: String,
             @RequestParam leaderUserIdArrayJsonString: String
-    ) = teamService.takeIf { accessSecurityService.tokenCheck(token) }?.let {
+    ) = teamService.takeIf { accessSecurityService.tokenCheck(token) }
+            ?.updateTeam(token, teamId, subjectId, teamName,
+                    memberUserIdArrayJsonString.toIntArray(),
+                    leaderUserIdArrayJsonString.toIntArray()).let {
         object {
             @JsonValue
-            val success = it.updateTeam(token, teamId, subjectId, teamName,
-                    memberUserIdArrayJsonString.toIntArray(),
-                    leaderUserIdArrayJsonString.toIntArray())
+            val success = it
         }
     }
     

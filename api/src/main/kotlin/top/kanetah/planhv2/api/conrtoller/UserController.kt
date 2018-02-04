@@ -63,10 +63,11 @@ class UserController @Autowired constructor(
             @RequestParam authorized: String,
             @RequestParam userCode: String,
             @RequestParam userName: String
-    ) = takeIf { accessSecurityService.authCheck(authorized) }?.let {
+    ) = userService.takeIf { accessSecurityService.authCheck(authorized) }
+            ?.createUser(User(userCode = userCode, userName = userName)).let {
         object {
             @JsonValue
-            val success = userService.createUser(User(userCode = userCode, userName = userName))
+            val success = it
         }
     }
     
@@ -87,10 +88,11 @@ class UserController @Autowired constructor(
             @PathVariable("id") userId: Int,
             @RequestParam userCode: String?,
             @RequestParam userName: String?
-    ) = userService.takeIf { accessSecurityService.authCheck(authorized) }?.let {
+    ) = userService.takeIf { accessSecurityService.authCheck(authorized) }
+            ?.updateUser(userId, userCode, userName).let {
         object {
             @JsonValue
-            val success = it.updateUser(userId, userCode, userName)
+            val success = it
         }
     }
     

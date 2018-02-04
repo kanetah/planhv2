@@ -70,12 +70,14 @@ class TaskController @Autowired constructor(
             type: String,
             format: String?,
             formatProcessorId: Int
-    ) = taskService.takeIf { accessSecurityService.authCheck(authorized) }?.let {
+    ) = taskService.takeIf { accessSecurityService.authCheck(authorized) }
+            ?.updateTask(
+                    taskId, subjectId, title, content, isTeamTask,
+                    Timestamp.valueOf(deadline), type, format, formatProcessorId
+            ).let {
         object {
             @JsonValue
-            val success = it.updateTask(
-                    taskId, subjectId, title, content, isTeamTask, Timestamp.valueOf(deadline), type, format, formatProcessorId
-            )
+            val success = it
         }
     }
     

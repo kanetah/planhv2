@@ -27,12 +27,14 @@ class SubjectController @Autowired constructor(
             @RequestParam emailAddress: String,
             @RequestParam teamLimit: String?,
             @RequestParam recommendProcessorId: Int
-    ) = subjectService.takeIf { accessSecurityService.authCheck(authorized) }?.let {
+    ) = subjectService.takeIf { accessSecurityService.authCheck(authorized) }
+            ?.createSubject(
+                    subjectName, teacherName, emailAddress,
+                    teamLimit?.toIntArray(), recommendProcessorId
+            ).let {
         object {
             @JsonValue
-            val success = it.createSubject(
-                    subjectName, teacherName, emailAddress, teamLimit?.toIntArray(), recommendProcessorId
-            )
+            val success = it
         }
     }
     
@@ -56,12 +58,13 @@ class SubjectController @Autowired constructor(
             @RequestParam emailAddress: String,
             @RequestParam teamLimit: String?,
             @RequestParam recommendProcessorId: Int
-    ) = subjectService.takeIf { accessSecurityService.authCheck(authorized) }?.let {
+    ) = subjectService.takeIf { accessSecurityService.authCheck(authorized) }
+            ?.updateSubject(
+                    subjectId, subjectName, teacherName, emailAddress,
+                    teamLimit?.toIntArray(), recommendProcessorId).let {
         object {
             @JsonValue
-            val success = it.updateSubject(
-                    subjectId, subjectName, teacherName, emailAddress, teamLimit?.toIntArray(), recommendProcessorId
-            )
+            val success = it
         }
     }
     

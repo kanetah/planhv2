@@ -42,10 +42,11 @@ class AdminController @Autowired constructor(
     fun createAdmin(
             @RequestParam authorized: String,
             @RequestParam password: String
-    ) = takeIf { accessSecurityService.authCheck(authorized) }?.let {
+    ) = adminService.takeIf { accessSecurityService.authCheck(authorized) }
+            ?.createAdmin(password).let {
         object {
             @JsonValue
-            val success = adminService.createAdmin(password)
+            val success = it
         }
     }
     
