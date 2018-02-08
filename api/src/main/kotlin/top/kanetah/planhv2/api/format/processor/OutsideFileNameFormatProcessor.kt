@@ -49,7 +49,7 @@ object OutsideFileNameFormatProcessor : FormatProcessorClass {
         } ?: throw Exception("资源创建失败，无法下载、查看")
     }
     
-    override fun sendEMail(taskId: Int): Boolean {
+    override fun sendEMail(task: Task): Boolean {
         //TODO("not implemented")
         return false
     }

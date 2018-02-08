@@ -1,6 +1,7 @@
 package top.kanetah.planhv2.api.conrtoller
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import top.kanetah.planhv2.api.entity.*
@@ -11,6 +12,7 @@ import top.kanetah.planhv2.api.service.RepositoryService
  * created by kane on 2018/1/23
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/test")
 class TestController @Autowired constructor(
         private val repositoryService: RepositoryService
@@ -51,10 +53,10 @@ class TestController @Autowired constructor(
         return repositoryService.resourceRepository.findByNameLike("测")
     }
     
-    @RequestMapping("format")
-    fun format(): FormatProcessor? {
-        return repositoryService.formatProcessorRepository.findByName("Test")
-    }
+//    @RequestMapping("format")
+//    fun format(): FormatProcessor? {
+//        return repositoryService.formatProcessorRepository.findByName("Test")
+//    }
     
     @RequestMapping("/submission")
     fun submission(): ArrayList<Submission>? {

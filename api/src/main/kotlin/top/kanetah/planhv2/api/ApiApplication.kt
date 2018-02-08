@@ -5,6 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.ApplicationContext
 import top.kanetah.planhv2.api.property.PropertyListener
 
+/**
+ * created by kane on 2018/1/23
+ */
 @SpringBootApplication
 class ApiApplication {
     companion object {

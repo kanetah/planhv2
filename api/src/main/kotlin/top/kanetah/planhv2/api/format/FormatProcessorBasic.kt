@@ -31,7 +31,7 @@ interface FormatProcessorClass {
         get() = PropertyListener.getProperty("submission-path")!!
     
     fun saveFile(user: User, task: Task, team: Team?, file: MultipartFile): SubmitFileAttributes
-    fun sendEMail(taskId: Int): Boolean
+    fun sendEMail(task: Task): Boolean
     
     private enum class FormatValue(private val key: String) {
         Code("code"),

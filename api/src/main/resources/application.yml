@@ -13,4 +13,5 @@ spring:
       max-file-size: 1024Mb
       max-request-size: 1056Mb
 server:
-  port: 8080
+  port: 9713
+  max-http-header-size: 1024

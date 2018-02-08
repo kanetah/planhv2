@@ -15,5 +15,4 @@ interface RepositoryService {
     val taskRepository: TaskRepository
     val submissionRepository: SubmissionRepository
     val resourceRepository: ResourceRepository
-    val formatProcessorRepository: FormatProcessorRepository
 }

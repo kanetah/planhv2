@@ -1,6 +1,7 @@
 package top.kanetah.planhv2.api.entity
 
 import top.kanetah.planhv2.api.annotation.Entity
+import top.kanetah.planhv2.api.format.FormatProcessorClass
 import java.sql.Timestamp
 
 /**
@@ -18,3 +19,5 @@ data class Task(
         val formatProcessorId: Int,
         val format: String? = null
 )
+
+fun Task.send() = FormatProcessorClass[taskId].sendEMail(this)

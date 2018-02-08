@@ -18,6 +18,5 @@ class RepositoryServiceImpl @Autowired constructor(
         override val subjectRepository: SubjectRepository,
         override val taskRepository: TaskRepository,
         override val submissionRepository: SubmissionRepository,
-        override val resourceRepository: ResourceRepository,
-        override val formatProcessorRepository: FormatProcessorRepository
+        override val resourceRepository: ResourceRepository
 ) : RepositoryService
