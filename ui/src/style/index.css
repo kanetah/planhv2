@@ -6,7 +6,3 @@ html, body, #root {
     overflow: hidden;
     font-family: sans-serif;
 }
-
-#root {
-    display: flex;
-}
