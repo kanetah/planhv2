@@ -14,12 +14,12 @@ export default class Login extends Component {
     }
 
     onLoginAnimChange = () => {
-        const input = this.refs.codeInput;
+        const input = this.refs["codeInput"];
         input.focus();
     };
 
     enterCodeInput = () => {
-        const input = this.refs.nameInput;
+        const input = this.refs["nameInput"];
         input.focus();
     };
 

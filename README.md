@@ -7,11 +7,10 @@
 
 ### 关于前端
 代码位于 [planhv2/ui/](https://github.com/kanetah/planhv2/tree/master/ui) 目录下  
-暂定借助于蚂蚁家的 ant-design 进行开发。  
-（目前源码内只有大致的框架，具体开发将在后端完成后开始）
+借助于蚂蚁家的 ant-design 进行开发，正在逐步实现。
 
 ### 关于后端
 代码位于 [planhv2/api/](https://github.com/kanetah/planhv2/tree/master/api) 目录下  
-基础的设计见
+基础的设计见：
 - [PlanH V2 API 描述文档](https://github.com/kanetah/planhv2/blob/master/api/planH-api.md)
 - [PlanH V2 实体 描述文档](https://github.com/kanetah/planhv2/blob/master/api/planH-entity.md)
