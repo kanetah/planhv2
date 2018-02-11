@@ -1,43 +1,61 @@
 import React, {Component} from 'react';
 import banner from '../assets/banner.jpg';
+import TweenOne from "rc-tween-one";
 
 export default class Banner extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            paused: true,
             zIndex: 10,
-        }
+        };
+        this.animation = {
+            duration: 800,
+            opacity: 0,
+        };
     }
 
-    onMouseMove = e => {
+    onMouseEnter = () => {
+        if (this.state.paused === false)
+            return;
         this.setState({
-            zIndex: -1,
+            paused: false,
         });
-        console.log(e);
+        setTimeout(() => {
+            this.setState({
+                zIndex: -this.state.zIndex,
+            });
+            this.props.handleLoginAnim();
+        }, this.animation.duration);
     };
 
     render() {
         return (
-            <div onMouseMove={this.onMouseMove} style={{
-                width: "100%",
-                height: "100%",
-                background: `url(${banner}) no-repeat`,
-                backgroundSize: "cover",
-                color: "white",
-                display: "flex",
-                zIndex: this.state.zIndex,
-            }}>
-                <div style={{
+            <TweenOne
+                animation={this.animation}
+                paused={this.state.paused}
+                onMouseEnter={this.onMouseEnter}
+                className="FullPage"
+                style={{
+                    background: `url(${banner}) no-repeat`,
+                    backgroundSize: "cover",
+                    color: "white",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "flex-start",
+                    zIndex: this.state.zIndex,
+                }}
+            >
+                <span style={{
                     width: "auto",
                     height: "auto",
-                    justifyContent: "center",
-                    alignItems: "center",
+                    margin: "5em",
                 }}>
-                    <h1>PlanH V2</h1>
-                    <h3>厦理软15移春2班的作业提交平台</h3>
-                </div>
-            </div>
+                    <p style={{fontSize: "3em"}}>PlanH V2</p>
+                    <p style={{fontSize: "2em"}}>厦理软15移春2班的作业提交平台</p>
+                </span>
+            </TweenOne>
         )
     }
 }
