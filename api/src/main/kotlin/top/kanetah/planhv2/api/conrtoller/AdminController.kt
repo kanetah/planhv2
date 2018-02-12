@@ -3,13 +3,14 @@ package top.kanetah.planhv2.api.conrtoller
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import top.kanetah.planhv2.api.annotation.JsonValue
+import top.kanetah.planhv2.api.annotation.PlanHApiController
 import top.kanetah.planhv2.api.service.AccessSecurityService
 import top.kanetah.planhv2.api.service.AdminService
 
 /**
  * created by kane on 2018/1/26
  */
-@RestController
+@PlanHApiController
 class AdminController @Autowired constructor(
         private val adminService: AdminService,
         private val accessSecurityService: AccessSecurityService

@@ -1,9 +1,8 @@
 package top.kanetah.planhv2.api.conrtoller
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import top.kanetah.planhv2.api.annotation.PlanHApiController
 import top.kanetah.planhv2.api.entity.*
 import top.kanetah.planhv2.api.property.PropertyListener
 import top.kanetah.planhv2.api.service.RepositoryService
@@ -11,13 +10,12 @@ import top.kanetah.planhv2.api.service.RepositoryService
 /**
  * created by kane on 2018/1/23
  */
-@RestController
-@CrossOrigin
+@PlanHApiController
 @RequestMapping("/test")
 class TestController @Autowired constructor(
         private val repositoryService: RepositoryService
 ) {
-    
+
     @RequestMapping("/poi")
     fun poi() = "poi"
     
@@ -27,9 +25,7 @@ class TestController @Autowired constructor(
     }
     
     @RequestMapping("/user")
-    fun user()
-//            = repositoryService.userRepository.count()
-            : User? {
+    fun user(): User? {
         return repositoryService.userRepository.findByCode("1421162123")
     }
     

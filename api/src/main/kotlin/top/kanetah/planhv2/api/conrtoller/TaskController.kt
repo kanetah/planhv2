@@ -3,6 +3,7 @@ package top.kanetah.planhv2.api.conrtoller
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import top.kanetah.planhv2.api.annotation.JsonValue
+import top.kanetah.planhv2.api.annotation.PlanHApiController
 import top.kanetah.planhv2.api.service.AccessSecurityService
 import top.kanetah.planhv2.api.service.TaskService
 import java.sql.Timestamp
@@ -10,7 +11,7 @@ import java.sql.Timestamp
 /**
  * created by kane on 2018/1/30
  */
-@RestController
+@PlanHApiController
 class TaskController @Autowired constructor(
         private val taskService: TaskService,
         private val accessSecurityService: AccessSecurityService

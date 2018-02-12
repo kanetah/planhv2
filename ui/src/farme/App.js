@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import '../style/App.css';
+import axios from 'axios';
 import Banner from "../components/Banner";
 import Login from "../components/Login";
+
+axios.defaults.baseURL = "//planhapi.kanetah.top";
 
 class App extends Component {
 

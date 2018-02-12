@@ -4,13 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import top.kanetah.planhv2.api.annotation.JsonValue
+import top.kanetah.planhv2.api.annotation.PlanHApiController
 import top.kanetah.planhv2.api.service.AccessSecurityService
 import top.kanetah.planhv2.api.service.ResourceService
 
 /**
  * created by kane on 2018/1/31
  */
-@RestController
+@PlanHApiController
 class ResourceController @Autowired constructor(
         private val resourceService: ResourceService,
         private val accessSecurityService: AccessSecurityService

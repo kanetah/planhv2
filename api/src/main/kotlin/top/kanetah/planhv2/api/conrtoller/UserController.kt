@@ -3,6 +3,7 @@ package top.kanetah.planhv2.api.conrtoller
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import top.kanetah.planhv2.api.annotation.JsonValue
+import top.kanetah.planhv2.api.annotation.PlanHApiController
 import top.kanetah.planhv2.api.entity.User
 import top.kanetah.planhv2.api.service.AccessSecurityService
 import top.kanetah.planhv2.api.service.UserService
@@ -10,17 +11,16 @@ import top.kanetah.planhv2.api.service.UserService
 /**
  * created by kane on 2018/1/28
  */
-@RestController
+@PlanHApiController
 class UserController @Autowired constructor(
         private val userService: UserService,
         private val accessSecurityService: AccessSecurityService
 ) {
-    
-    @RequestMapping(value = ["/token"], method = [RequestMethod.POST])
+
+    @PostMapping("/token")
     fun login(
-            @RequestParam userCode: String,
-            @RequestParam userName: String
-    ) = userService.login(userCode, userName).let {
+            @RequestBody values: Map<String, String>
+    ) = userService.login("${values["userCode"]}", "${values["userName"]}").let {
         object {
             @JsonValue
             val success = it !== null
@@ -28,7 +28,7 @@ class UserController @Autowired constructor(
             val token = it
         }
     }
-    
+
     @RequestMapping(value = ["/token"], method = [RequestMethod.DELETE])
     fun logout(
             @RequestParam token: String
@@ -38,12 +38,12 @@ class UserController @Autowired constructor(
             val success = userService.logout(token)
         }
     }
-    
+
     @RequestMapping(value = ["/user"], method = [RequestMethod.GET])
     fun findUser(
             token: String
     ) = userService.findUserByToken(token)
-    
+
     @RequestMapping(value = ["/user/{id}"], method = [RequestMethod.PATCH])
     fun configUser(
             @RequestParam token: String,
@@ -52,12 +52,12 @@ class UserController @Autowired constructor(
             @RequestParam enableAccessToken: Boolean?
     ) = userService.takeIf { accessSecurityService.tokenCheck(token, userId) }
             ?.configUser(token, theme, enableAccessToken ?: false)
-    
+
     @RequestMapping(value = ["/users"], method = [RequestMethod.GET])
     fun users(
             @RequestParam token: String
     ) = userService.takeIf { accessSecurityService.tokenCheck(token) }?.getAllUser()
-    
+
     @RequestMapping(value = ["/user"], method = [RequestMethod.POST])
     fun createUser(
             @RequestParam authorized: String,
@@ -70,7 +70,7 @@ class UserController @Autowired constructor(
             val success = it
         }
     }
-    
+
     @RequestMapping(value = ["/user/{id}"], method = [RequestMethod.DELETE])
     fun deleteUser(
             @RequestParam authorized: String,
@@ -81,7 +81,7 @@ class UserController @Autowired constructor(
             val success = userService.deleteUser(id)
         }
     }
-    
+
     @RequestMapping(value = ["/user/{id}"], method = [RequestMethod.PUT])
     fun updateUser(
             @RequestParam authorized: String,
@@ -95,7 +95,7 @@ class UserController @Autowired constructor(
             val success = it
         }
     }
-    
+
     @RequestMapping(value = ["/user/{id}"], method = [RequestMethod.GET])
     fun findUser(
             @RequestParam authorized: String,

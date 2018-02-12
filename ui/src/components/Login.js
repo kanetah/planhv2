@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import axios from 'axios';
 import TweenOne from "rc-tween-one";
 import {Icon, Input, Button} from 'antd';
 
@@ -13,22 +14,26 @@ export default class Login extends Component {
         };
     }
 
-    onLoginAnimChange = () => {
-        const input = this.refs["codeInput"];
-        input.focus();
+    componentWillUpdate = (nextProps) => {
+        if (this.props.paused && !nextProps.paused)
+            this.refs["codeInput"].focus()
     };
 
     enterCodeInput = () => {
-        const input = this.refs["nameInput"];
-        input.focus();
+        this.refs["nameInput"].focus();
     };
 
     enterNameInput = () => {
         this.handleLogin();
     };
 
-    handleLogin = () => {
-        console.log("poi");
+    handleLogin = async () => {
+        const result = await axios.get("/test/poi")
+        // const result = await axios.post("/token", {
+        //     userCode: this.refs["codeInput"].input.value,
+        //     userName: this.refs["nameInput"].input.value,
+        // });
+        console.log(result.data);
     };
 
     render() {
@@ -45,7 +50,6 @@ export default class Login extends Component {
                 <TweenOne
                     animation={this.animation}
                     paused={this.props.paused}
-                    onChange={this.onLoginAnimChange}
                     ease="easeOutElastic"
                     className="CardShadow"
                     style={{

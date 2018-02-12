@@ -5,11 +5,12 @@ import top.kanetah.planhv2.api.service.AccessSecurityService
 import top.kanetah.planhv2.api.service.SubmissionService
 import org.springframework.web.multipart.MultipartFile
 import top.kanetah.planhv2.api.annotation.JsonValue
+import top.kanetah.planhv2.api.annotation.PlanHApiController
 
 /**
  * created by kane on 2018/1/31
  */
-@RestController
+@PlanHApiController
 class SubmissionController(
         private val submissionService: SubmissionService,
         private val accessSecurityService: AccessSecurityService
