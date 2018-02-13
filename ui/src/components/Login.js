@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import TweenOne from "rc-tween-one";
 import {Icon, Input, Button} from 'antd';
 
@@ -28,12 +29,18 @@ export default class Login extends Component {
     };
 
     handleLogin = async () => {
-        const result = await axios.get("/test/poi")
-        // const result = await axios.post("/token", {
-        //     userCode: this.refs["codeInput"].input.value,
-        //     userName: this.refs["nameInput"].input.value,
-        // });
-        console.log(result.data);
+        const result = await axios.post("/token", {
+            userCode: this.refs["codeInput"].input.value,
+            userName: this.refs["nameInput"].input.value,
+        });
+        Cookies.set("token", result.data, { expires: 7 * 18, path: '/' });
+        if(!result.data.success)
+            alert("error");
+        else this.hideLogin()
+    };
+
+    hideLogin = () => {
+        
     };
 
     render() {
