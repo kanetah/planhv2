@@ -29,7 +29,7 @@ class AccessSecurityServiceImpl @Autowired constructor(
     
     override fun computeAuth(
             admin: Admin
-    ) = "planhII${admin.adminId}-${admin.password.hashCode()}-${Date().hashCode()}"
+    ) = "\$planhII${admin.adminId}-${admin.password.hashCode()}-${Date().hashCode()}"
     
     override fun authCheck(
             authorized: String?
@@ -39,7 +39,7 @@ class AccessSecurityServiceImpl @Autowired constructor(
     
     override fun computeAccessToken(
             user: User
-    ) = "${user.userId}-planhII-${user.userCode.hashCode() + user.userName.hashCode()}-"
+    ) = "\$${user.userId}-planhII-${user.userCode.hashCode() + user.userName.hashCode()}-"
     
     override fun computeToken(
             user: User

@@ -20,4 +20,6 @@ interface TaskRepository {
     fun findByTitleLike(title: String): Array<Task>?
     
     fun taskList(userId: Int, subjectId: Int?, page: Int, limit: Int): ArrayList<Task>?
+
+    fun allTasks(userId: Int): ArrayList<Task>?
 }

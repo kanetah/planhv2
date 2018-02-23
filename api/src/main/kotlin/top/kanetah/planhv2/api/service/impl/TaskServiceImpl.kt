@@ -18,6 +18,10 @@ class TaskServiceImpl @Autowired constructor(
     override fun getTasks(
             userId: Int, subjectId: Int?, page: Int, limit: Int
     ) = repositoryService.taskRepository.taskList(userId, subjectId, page, limit)
+
+    override fun getAllTasks(
+            userId: Int
+    ) = repositoryService.taskRepository.allTasks(userId)
     
     override fun create(
             subjectId: Int,

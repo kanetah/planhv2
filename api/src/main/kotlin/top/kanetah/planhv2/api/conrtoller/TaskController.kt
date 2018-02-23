@@ -16,8 +16,14 @@ class TaskController @Autowired constructor(
         private val taskService: TaskService,
         private val accessSecurityService: AccessSecurityService
 ) {
+
+    @GetMapping("/tasks")
+    fun allTasks(
+            @RequestParam userId: Int
+    ) = taskService.getAllTasks(userId)
     
-    @RequestMapping(value = ["/tasks"], method = [RequestMethod.GET])
+//    @RequestMapping(value = ["/task"], method = [RequestMethod.GET])
+    @GetMapping("/task")
     fun tasks(
             @RequestParam userId: Int,
             @RequestParam subjectId: Int?,
@@ -25,7 +31,8 @@ class TaskController @Autowired constructor(
             @RequestParam limit: Int
     ) = taskService.getTasks(userId, subjectId, page, limit)
     
-    @RequestMapping(value = ["/task"], method = [RequestMethod.POST])
+//    @RequestMapping(value = ["/task"], method = [RequestMethod.POST])
+    @PostMapping("/task")
     fun createTask(
             authorized: String,
             subjectId: Int,

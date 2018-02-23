@@ -2,17 +2,25 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import TweenOne from "rc-tween-one";
-import {Icon, Input, Button} from 'antd';
+import {Icon, Input, Button, message} from 'antd';
+import EventEmitter from '../farme/EventEmitter';
 
 export default class Login extends Component {
 
     constructor(props) {
         super(props);
-        this.animation = {
+        this.loginModalAnimation = {
             duration: 600,
             top: "0",
             opacity: "1",
         };
+        this.loginBackgroundAnimation = {
+            duration: this.loginModalAnimation.duration,
+            opacity: "0",
+        };
+        this.state = {
+            reverse: false,
+        }
     }
 
     componentWillUpdate = (nextProps) => {
@@ -25,38 +33,57 @@ export default class Login extends Component {
     };
 
     enterNameInput = () => {
-        this.handleLogin();
+        this.handleLogin().catch(e => console.log(e));
     };
 
     handleLogin = async () => {
+        const codeInput = this.refs["codeInput"];
+        const nameInput = this.refs["nameInput"];
         const result = await axios.post("/token", {
-            userCode: this.refs["codeInput"].input.value,
-            userName: this.refs["nameInput"].input.value,
+            userCode: codeInput.input.value,
+            userName: nameInput.input.value,
         });
-        Cookies.set("token", result.data, { expires: 7 * 18, path: '/' });
-        if(!result.data.success)
-            alert("error");
-        else this.hideLogin()
+        Cookies.set("token", result.data, {expires: 7 * 18, path: '/'});
+        if (!result.data.success) {
+            message.error("登录失败");
+            codeInput.input.value = "";
+            nameInput.input.value = "";
+            codeInput.input.focus();
+        }
+        else this.onLoginSuccess(nameInput.input.value)
     };
 
-    hideLogin = () => {
-        
+    onLoginSuccess = (name) => {
+        this.setState({
+            reverse: true,
+        });
+        const loginComponent = this.refs["loginComponent"].dom;
+        setTimeout(() => {
+            loginComponent.style.zIndex = "-2"
+        }, this.loginBackgroundAnimation.duration);
+        message.success(`hi, ${name}`);
+        EventEmitter.emit("login");
     };
 
     render() {
         return (
-            <div
+            <TweenOne
+                animation={this.loginBackgroundAnimation}
+                paused={!this.state.reverse}
                 className="FullPage"
                 style={{
                     background: "rgba(153, 153, 153, 0.7)",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
+                    zIndex: 2
                 }}
+                ref="loginComponent"
             >
                 <TweenOne
-                    animation={this.animation}
-                    paused={this.props.paused}
+                    animation={this.loginModalAnimation}
+                    paused={!(!this.props.paused || this.state.reverse)}
+                    reverse={this.state.reverse}
                     ease="easeOutElastic"
                     className="CardShadow"
                     style={{
@@ -90,7 +117,7 @@ export default class Login extends Component {
                         </Button>
                     </div>
                 </TweenOne>
-            </div>
+            </TweenOne>
         )
     }
 }

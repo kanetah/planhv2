@@ -73,5 +73,9 @@
         </where>
         ORDER BY deadline DESC
     </select>
+    <select id="allTasks" resultMap="task_result">
+        <include refid="find_task"/>
+        ORDER BY deadline DESC
+    </select>
 
 </mapper>

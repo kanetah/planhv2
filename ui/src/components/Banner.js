@@ -10,7 +10,7 @@ export default class Banner extends Component {
             paused: true,
             zIndex: 10,
         };
-        this.animation = {
+        this.loginModalAnimation = {
             duration: 800,
             opacity: 0,
         };
@@ -27,13 +27,13 @@ export default class Banner extends Component {
                 zIndex: -this.state.zIndex,
             });
             this.props.handleLoginAnim();
-        }, this.animation.duration);
+        }, this.loginModalAnimation.duration);
     };
 
     render() {
         return (
             <TweenOne
-                animation={this.animation}
+                animation={this.loginModalAnimation}
                 paused={this.state.paused}
                 onMouseEnter={this.onMouseEnter}
                 className="FullPage"
