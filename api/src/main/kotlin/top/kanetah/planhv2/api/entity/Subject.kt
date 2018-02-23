@@ -30,7 +30,7 @@ data class Subject(
         
         return true
     }
-    
+
     override fun hashCode(): Int {
         var result = subjectId
         result = 31 * result + subjectName.hashCode()

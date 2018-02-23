@@ -29,7 +29,7 @@
             recommend_processor_id = #{recommendProcessorId}
         </set>
         <where>
-            id = #{id}
+            id = #{subjectId}
         </where>
     </update>
 

@@ -38,7 +38,7 @@ class AdminServiceImpl @Autowired constructor(
         repositoryService.adminRepository.findAll().forEach {
             list.add(object {
                 @JsonValue
-                val password = it.password
+                val adminId = it.adminId
             })
         }
     }

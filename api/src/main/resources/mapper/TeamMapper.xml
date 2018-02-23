@@ -29,7 +29,7 @@
             leader_user_id_array = #{leaderUserIdArray, typeHandler = top.kanetah.planhv2.api.typeHandler.IntArrayTypeHandler}
         </set>
         <where>
-            id = #{id}
+            id = #{teamId}
         </where>
     </update>
 

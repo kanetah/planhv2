@@ -6,7 +6,7 @@
         INSERT INTO resource_tab (
             resource_name, resource_size, resource_url
         ) VALUE (
-                #{resourceName}, #{resourceSize}, #{resourceUrl}
+            #{resourceName}, #{resourceSize}, #{resourceUrl}
         )
     </insert>
 
@@ -37,10 +37,22 @@
     </resultMap>
 
     <sql id="find_resource">
-        SELECT
-            *
+        SELECT *
         FROM resource_tab
     </sql>
+    <select id="findAllWithoutForeignKeyWithSubmission" resultMap="resource_result">
+        <include refid="find_resource"/>
+        LEFT JOIN
+        (SELECT resource_id FROM submission_tab) AS submit
+        ON resource_tab.id=submit.resource_id
+        WHERE submit.resource_id IS NULL
+    </select>
+    <select id="find" resultMap="resource_result">
+        <include refid="find_resource"/>
+        <where>
+            id = #{id}
+        </where>
+    </select>
     <select id="findByNameLike" resultMap="resource_result">
         <include refid="find_resource"/>
         <where>

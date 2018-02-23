@@ -15,12 +15,11 @@ class AdminController @Autowired constructor(
         private val adminService: AdminService,
         private val accessSecurityService: AccessSecurityService
 ) {
-    
-    @RequestMapping(value = ["/authorized"], method = [RequestMethod.POST])
+
+    @PostMapping("/authorized")
     fun writeIn(
-            @RequestParam password: String,
-            @RequestParam validate: String
-    ) = adminService.adminWriteIn(password, validate).let {
+            @RequestBody values: Map<String, String>
+    ) = adminService.adminWriteIn("${values["password"]}", "${values["validate"]}").let {
         object {
             @JsonValue
             val success = it !== null
@@ -28,50 +27,54 @@ class AdminController @Autowired constructor(
             val authorized = it
         }
     }
-    
-    @RequestMapping(value = ["/authorized"], method = [RequestMethod.DELETE])
+
+    @DeleteMapping("/authorized")
     fun crossOut(
-            @RequestParam authorized: String
+            @RequestBody values: Map<String, String>
     ) = adminService.takeIf {
-        accessSecurityService.authCheck(authorized)
-    }?.adminCrossOut(authorized)
-    
-    @RequestMapping(value = ["/admins"], method = [RequestMethod.GET])
+        accessSecurityService.authCheck("${values["authorized"]}")
+    }?.adminCrossOut("${values["authorized"]}")
+
+    @GetMapping("/admins")
     fun admins() = adminService.getAllAdmins()
-    
-    @RequestMapping(value = ["/admin"], method = [RequestMethod.POST])
+
+    @PostMapping("/admin")
     fun createAdmin(
-            @RequestParam authorized: String,
-            @RequestParam password: String
-    ) = adminService.takeIf { accessSecurityService.authCheck(authorized) }
-            ?.createAdmin(password).let {
+            @RequestBody values: Map<String, String>
+    ) = adminService.takeIf { accessSecurityService.authCheck("${values["authorized"]}") }
+            ?.createAdmin("${values["password"]}").let {
         object {
             @JsonValue
             val success = it
         }
     }
-    
-    @RequestMapping(value = ["/admin/{id}"], method = [RequestMethod.DELETE])
+
+    @DeleteMapping("/admin/{id}")
     fun deleteAdmin(
             @PathVariable id: Int
     ) = object {
         @JsonValue
         val success = adminService.deleteAdmin(id)
     }
-    
-    @RequestMapping(value = ["/admin/{id}"], method = [RequestMethod.GET])
+
+    @GetMapping("/admin/{id}")
     fun findAdmin(
-            @PathVariable id: Int
-    ) = object {
-        @JsonValue
-        val adminId = adminService.findAdmin(id)?.adminId ?: "null"
+            @PathVariable("id") id: Int,
+            @RequestHeader("authorized") authorized: String
+    ) = adminService.takeIf { accessSecurityService.authCheck(authorized) }?.findAdmin(id).let {
+        object {
+            @JsonValue
+            val adminId = it?.adminId
+            @JsonValue
+            val password = it?.password
+        }
     }
-    
-    @RequestMapping(value = ["/admin"], method = [RequestMethod.GET])
+
+    @GetMapping("/admin")
     fun findAdminByPassword(
-            @RequestParam password: String
+            @RequestHeader password: String
     ) = object {
         @JsonValue
-        val adminId = adminService.findAdmin(password)?.adminId ?: "null"
+        val adminId = adminService.findAdmin(password)?.adminId
     }
 }

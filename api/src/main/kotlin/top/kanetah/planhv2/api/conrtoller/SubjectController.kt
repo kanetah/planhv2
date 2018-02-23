@@ -16,60 +16,61 @@ class SubjectController @Autowired constructor(
         private val subjectService: SubjectService,
         private val accessSecurityService: AccessSecurityService
 ) {
-    
-    @RequestMapping(value = ["/subjects"], method = [RequestMethod.GET])
+
+    @GetMapping("/subjects")
     fun getAllSubject() = subjectService.getAllSubject()
-    
-    @RequestMapping(value = ["/subject"], method = [RequestMethod.POST])
+
+    @PostMapping("/subject")
     fun createSubject(
-            @RequestParam authorized: String,
-            @RequestParam subjectName: String,
-            @RequestParam teacherName: String,
-            @RequestParam emailAddress: String,
-            @RequestParam teamLimit: String?,
-            @RequestParam recommendProcessorId: Int
-    ) = subjectService.takeIf { accessSecurityService.authCheck(authorized) }
+            @RequestBody values: Map<String, String>
+    ) = subjectService.takeIf { accessSecurityService.authCheck("${values["authorized"]}") }
             ?.createSubject(
-                    subjectName, teacherName, emailAddress,
-                    teamLimit?.toIntArray(), recommendProcessorId
+                    "${values["subjectName"]}",
+                    "${values["teacherName"]}",
+                    "${values["emailAddress"]}",
+                    values["teamLimit"]?.toIntArray(),
+                    values["recommendProcessorId"]?.toInt()!!
             ).let {
         object {
             @JsonValue
             val success = it
         }
     }
-    
-    @RequestMapping(value = ["/subject/{id}"], method = [RequestMethod.DELETE])
+
+    @DeleteMapping("/subject/{id}")
     fun deleteSubject(
-            @RequestParam authorized: String,
+            @RequestBody values: Map<String, String>,
             @PathVariable("id") subjectId: Int
-    ) = subjectService.takeIf { accessSecurityService.authCheck(authorized) }?.let {
-        object {
-            @JsonValue
-            val success = it.deleteSubject(subjectId)
-        }
-    }
-    
-    @RequestMapping(value = ["/subject/{id}"], method = [RequestMethod.PUT])
-    fun updateSubject(
-            @RequestParam authorized: String,
-            @PathVariable subjectId: Int,
-            @RequestParam subjectName: String,
-            @RequestParam teacherName: String,
-            @RequestParam emailAddress: String,
-            @RequestParam teamLimit: String?,
-            @RequestParam recommendProcessorId: Int
-    ) = subjectService.takeIf { accessSecurityService.authCheck(authorized) }
-            ?.updateSubject(
-                    subjectId, subjectName, teacherName, emailAddress,
-                    teamLimit?.toIntArray(), recommendProcessorId).let {
+    ) = subjectService.takeIf {
+        accessSecurityService.authCheck("${values["authorized"]}")
+    }?.deleteSubject(subjectId).let {
         object {
             @JsonValue
             val success = it
         }
     }
-    
-    @RequestMapping(value = ["/subject/{id}"], method = [RequestMethod.GET])
+
+    @PutMapping("/subject/{id}")
+    fun updateSubject(
+            @PathVariable("id") subjectId: Int,
+            @RequestBody values: Map<String, String>
+    ) = subjectService.takeIf {
+        accessSecurityService.authCheck("${values["authorized"]}")
+    }?.updateSubject(
+                    subjectId,
+                    "${values["subjectName"]}",
+                    "${values["teacherName"]}",
+                    "${values["emailAddress"]}",
+                    values["teamLimit"]?.toIntArray(),
+                    values["recommendProcessorId"]?.toInt()!!
+            ).let {
+        object {
+            @JsonValue
+            val success = it
+        }
+    }
+
+    @GetMapping("/subject/{id}")
     fun findSubject(
             @PathVariable("id") subjectId: Int
     ) = subjectService.findSubject(subjectId)

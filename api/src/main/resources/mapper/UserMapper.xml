@@ -27,7 +27,7 @@
             access_token = #{accessToken}
         </set>
         <where>
-            id = #{id}
+            id = #{userId}
         </where>
     </update>
 
@@ -46,6 +46,12 @@
     </sql>
     <select id="findAll" resultMap="user_result">
         <include refid="find_user"/>
+    </select>
+    <select id="find" resultMap="user_result">
+        <include refid="find_user"/>
+        <where>
+            id = #{id}
+        </where>
     </select>
     <select id="findByCode" resultMap="user_result">
         <include refid="find_user"/>

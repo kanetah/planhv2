@@ -100,6 +100,20 @@
 ```
 {
   adminId: null,
+  password: null,
+}
+```
+
+### `get` /admin 查找管理员
+参数：
+- password `String` 管理员口令
+
+返回：
+查找结果  
+例：
+```
+{
+  adminId: null,
 }
 ```
 
@@ -461,7 +475,42 @@
 ---
 
 ## 任务
-### `get` /tasks 任务列表
+### `get` /tasks 所有任务
+参数：
+- userId `Int` 用户Id
+
+返回：
+所有任务内容详情列表  
+例：
+```
+[
+{
+  taskId: 1,
+  subjectId 1,
+  title: "音乐作业",
+  content: "录一首歌",
+  isTeamTask: false,
+  deadline: "2018/1/1 12:00:00",
+  type: ".mp3, .mp4",
+  format: "[code]_[name]",
+  formatProcessorId: 1,
+},
+{
+  taskId: 2,
+  subjectId 2,
+  title: "美术作业",
+  content: "画一幅画",
+  isTeamTask: false,
+  deadline: "2018/1/1 12:00:00",
+  type: ".jpg",
+  format: null,
+  formatProcessorId: 2,
+},
+...
+]
+```
+
+### `get` /task 任务列表
 参数：
 - userId `Int` 用户Id
 - subjectId `Int?` 科目Id

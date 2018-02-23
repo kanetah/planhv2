@@ -55,7 +55,7 @@ class UserServiceImpl @Autowired constructor(
         ))
         object {
             @JsonValue
-            val success = saved
+            val success = saved > 0
             @JsonValue
             val accessToken = accessToken
         }

@@ -10,5 +10,5 @@ import org.springframework.web.bind.annotation.RestController
  */
 @Target(AnnotationTarget.CLASS)
 @RestController
-@CrossOrigin("https://planh.kanetah.top")
+@CrossOrigin//("https://planh.kanetah.top")
 annotation class PlanHApiController

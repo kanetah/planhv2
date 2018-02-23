@@ -19,77 +19,101 @@ class TaskController @Autowired constructor(
 
     @GetMapping("/tasks")
     fun allTasks(
-            @RequestParam userId: Int
+            @RequestHeader userId: Int
     ) = taskService.getAllTasks(userId)
-    
-//    @RequestMapping(value = ["/task"], method = [RequestMethod.GET])
+
+    //    @RequestMapping(value = ["/task"], method = [RequestMethod.GET])
     @GetMapping("/task")
     fun tasks(
-            @RequestParam userId: Int,
-            @RequestParam subjectId: Int?,
-            @RequestParam page: Int,
-            @RequestParam limit: Int
+            @RequestHeader userId: Int,
+            @RequestHeader subjectId: Int?,
+            @RequestHeader page: Int,
+            @RequestHeader limit: Int
     ) = taskService.getTasks(userId, subjectId, page, limit)
-    
-//    @RequestMapping(value = ["/task"], method = [RequestMethod.POST])
+
+    //    @RequestMapping(value = ["/task"], method = [RequestMethod.POST])
     @PostMapping("/task")
     fun createTask(
-            authorized: String,
-            subjectId: Int,
-            title: String,
-            content: String,
-            isTeamTask: Boolean,
-            deadline: String,
-            type: String,
-            format: String?,
-            formatProcessorId: Int
-    ) = taskService.takeIf { accessSecurityService.authCheck(authorized) }?.let {
-        it.create(
-                subjectId, title, content, isTeamTask, Timestamp.valueOf(deadline),
-                type, format, formatProcessorId
-        ).let {
-            object {
-                @JsonValue
-                val success = it
+//            authorized: String,
+//            subjectId: Int,
+//            title: String,
+//            content: String,
+//            isTeamTask: Boolean,
+//            deadline: String,
+//            type: String,
+//            format: String?,
+//            formatProcessorId: Int
+            @RequestBody values: Map<String, String>
+    ) = taskService.takeIf {
+        accessSecurityService.authCheck(values["authorized"])
+    }?.let {
+                it.create(
+                        values["subjectId"]?.toInt()!!,
+                        "${values["title"]}",
+                        "${values["content"]}",
+                        values["isTeamTask"]?.toBoolean()!!,
+                        Timestamp.valueOf("${values["deadline"]}"),
+                        "${values["type"]}",
+                        "${values["format"]}",
+                        values["formatProcessorId"]?.toInt()!!
+                ).let {
+                    object {
+                        @JsonValue
+                        val success = it
+                    }
+                }
             }
-        }
-    }
-    
-    @RequestMapping(value = ["/task/{id}"], method = [RequestMethod.DELETE])
+
+    //    @RequestMapping(value = [], method = [RequestMethod.DELETE])
+    @DeleteMapping("/task/{id}")
     fun deleteTask(
-            authorized: String,
-            taskId: Int
-    ) = taskService.takeIf { accessSecurityService.authCheck(authorized) }?.let {
+//            authorized: String,
+            @RequestBody values: Map<String, String>,
+            @PathVariable("id") taskId: Int
+    ) = taskService.takeIf {
+        accessSecurityService.authCheck(values["authorized"])
+    }?.deleteTask(taskId).let {
         object {
             @JsonValue
-            val success = it.deleteTask(taskId)
+            val success = it
         }
     }
-    
-    @RequestMapping(value = ["/task/{id}"], method = [RequestMethod.PUT])
+
+    //    @RequestMapping(value = [""], method = [RequestMethod.PUT])
+    @PutMapping("/task/{id}")
     fun updateTask(
-            authorized: String,
-            taskId: Int,
-            subjectId: Int,
-            title: String,
-            content: String,
-            isTeamTask: Boolean,
-            deadline: String,
-            type: String,
-            format: String?,
-            formatProcessorId: Int
-    ) = taskService.takeIf { accessSecurityService.authCheck(authorized) }
-            ?.updateTask(
-                    taskId, subjectId, title, content, isTeamTask,
-                    Timestamp.valueOf(deadline), type, format, formatProcessorId
+//            authorized: String,
+            @PathVariable("id") taskId: Int,
+//            subjectId: Int,
+//            title: String,
+//            content: String,
+//            isTeamTask: Boolean,
+//            deadline: String,
+//            type: String,
+//            format: String?,
+//            formatProcessorId: Int
+            @RequestBody values: Map<String, String>
+    ) = taskService.takeIf {
+        accessSecurityService.authCheck(values["authorized"])
+    }?.updateTask(
+                    taskId,
+                    values["subjectId"]?.toInt()!!,
+                    "${values["title"]}",
+                    "${values["content"]}",
+                    values["isTeamTask"]?.toBoolean()!!,
+                    Timestamp.valueOf("${values["deadline"]}"),
+                    "${values["type"]}",
+                    "${values["format"]}",
+                    values["formatProcessorId"]?.toInt()!!
             ).let {
         object {
             @JsonValue
             val success = it
         }
     }
-    
-    @RequestMapping(value = ["/task/{id}"], method = [RequestMethod.GET])
+
+//    @RequestMapping(value = [], method = [RequestMethod.GET])
+    @GetMapping("/task/{id}")
     fun findTask(
             @PathVariable("id") taskId: Int
     ) = taskService.findTask(taskId)

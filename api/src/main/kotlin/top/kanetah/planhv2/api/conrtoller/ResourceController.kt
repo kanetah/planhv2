@@ -16,15 +16,17 @@ class ResourceController @Autowired constructor(
         private val resourceService: ResourceService,
         private val accessSecurityService: AccessSecurityService
 ) {
-    
-    @RequestMapping(value = ["/resources"], method = [RequestMethod.GET])
+
+    @GetMapping("/resources")
     fun resources() = resourceService.findAllResourceWithoutSubmissionResource()
-    
-    @RequestMapping(value = ["/resource"], method = [RequestMethod.POST])
+
+    @PostMapping("/resource")
     fun createResource(
-            @RequestParam token: String,
+            @RequestHeader token: String,
             @RequestPart file: MultipartFile
-    ) = resourceService.takeIf { accessSecurityService.tokenCheck(token) }?.createResource(file).let {
+    ) = resourceService.takeIf {
+        accessSecurityService.tokenCheck(token)
+    }?.createResource(file).let {
         object {
             @JsonValue
             val success = it !== null
@@ -32,19 +34,21 @@ class ResourceController @Autowired constructor(
             val resourceUrl = it?.resourceUrl
         }
     }
-    
-    @RequestMapping(value = ["/resource/{id}"], method = [RequestMethod.DELETE])
+
+    @DeleteMapping("/resource/{id}")
     fun deleteResource(
-            @RequestParam authorized: String,
+            @RequestBody values: Map<String, String>,
             @PathVariable("id") resourceId: Int
-    ) = resourceService.takeIf { accessSecurityService.authCheck(authorized) }?.let {
+    ) = resourceService.takeIf {
+        accessSecurityService.authCheck("${values["authorized"]}")
+    }?.deleteResource(resourceId).let {
         object {
             @JsonValue
-            val success = it.deleteResource(resourceId)
+            val success = it
         }
     }
-    
-    @RequestMapping(value = ["/resource/{filename:.+}"], method = [RequestMethod.GET])
+
+    @GetMapping("/resource/{filename:.+}")
     fun download(
             @PathVariable("filename") fileName: String
     ) = resourceService.download(fileName)

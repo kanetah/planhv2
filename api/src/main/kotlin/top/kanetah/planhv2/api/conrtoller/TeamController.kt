@@ -16,62 +16,62 @@ class TeamController @Autowired constructor(
         private val teamService: TeamService,
         private val accessSecurityService: AccessSecurityService
 ) {
-    
-    @RequestMapping(value = ["/teams"], method = [RequestMethod.GET])
+
+    @GetMapping("/teams")
     fun teams(
-            @RequestParam token: String?
+            @RequestHeader token: String?
     ) = teamService.getAllTeam(token)
-    
-    @RequestMapping(value = ["/team"], method = [RequestMethod.POST])
+
+    @PostMapping
     fun createTeam(
-            @RequestParam token: String,
-            @RequestParam subjectId: Int,
-            @RequestParam teamName: String?,
-            @RequestParam memberUserIdArrayJsonString: String,
-            @RequestParam leaderUserIdArrayJsonString: String
-    ) = teamService.takeIf { accessSecurityService.tokenCheck(token) }
-            ?.createTeam(subjectId, teamName,
-                    memberUserIdArrayJsonString.toIntArray(),
-                    leaderUserIdArrayJsonString.toIntArray()).let {
+            @RequestBody values: Map<String, String>
+    ) = teamService.takeIf { accessSecurityService.tokenCheck("${values["token"]}") }
+            ?.createTeam(
+                    values["subjectId"]?.toInt()!!,
+                    "${values["teamName"]}",
+                    values["memberUserIdArrayJsonString"]?.toIntArray()!!,
+                    values["leaderUserIdArrayJsonString"]?.toIntArray()!!
+            ).let {
         object {
             @JsonValue
             val success = it
         }
     }
-    
-    @RequestMapping(value = ["/team/{id}"], method = [RequestMethod.DELETE])
+
+    @DeleteMapping("/team/{id}")
     fun deleteTeam(
-            @RequestParam token: String,
+            @RequestBody values: Map<String, String>,
             @PathVariable("id") teamId: Int
-    ) = teamService.takeIf { accessSecurityService.tokenCheck(token) }
-            ?.deleteTeam(token, teamId).let {
+    ) = teamService.takeIf { accessSecurityService.tokenCheck("${values["token"]}") }
+            ?.deleteTeam("${values["token"]}", teamId).let {
         object {
             @JsonValue
             val success = it
         }
     }
-    
-    @RequestMapping(value = ["/team/{id}"], method = [RequestMethod.PUT])
+
+    @PutMapping("/team/{id}")
     fun updateTeam(
-            @RequestParam token: String,
             @PathVariable("id") teamId: Int,
-            @RequestParam subjectId: Int,
-            @RequestParam teamName: String?,
-            @RequestParam memberUserIdArrayJsonString: String,
-            @RequestParam leaderUserIdArrayJsonString: String
-    ) = teamService.takeIf { accessSecurityService.tokenCheck(token) }
-            ?.updateTeam(token, teamId, subjectId, teamName,
-                    memberUserIdArrayJsonString.toIntArray(),
-                    leaderUserIdArrayJsonString.toIntArray()).let {
+            @RequestBody values: Map<String, String>
+    ) = teamService.takeIf { accessSecurityService.tokenCheck("${values["token"]}") }
+            ?.updateTeam(
+                    "${values["token"]}",
+                    teamId,
+                    values["subjectId"]?.toInt()!!,
+                    "${values["teamName"]}",
+                    values["memberUserIdArrayJsonString"]?.toIntArray()!!,
+                    values["leaderUserIdArrayJsonString"]?.toIntArray()!!
+            ).let {
         object {
             @JsonValue
             val success = it
         }
     }
-    
-    @RequestMapping(value = ["/team/{id}"], method = [RequestMethod.GET])
+
+    @GetMapping("/team/{id}")
     fun findTeam(
-            @RequestParam token: String,
+            @RequestHeader values: Map<String, String>,
             @PathVariable("id") teamId: Int
-    ) = teamService.takeIf { accessSecurityService.tokenCheck(token) }?.find(teamId)
+    ) = teamService.takeIf { accessSecurityService.tokenCheck("${values["token"]}") }?.find(teamId)
 }

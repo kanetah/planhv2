@@ -16,16 +16,18 @@ class SubmissionController(
         private val accessSecurityService: AccessSecurityService
 ) {
     
-    @RequestMapping(value = ["/submissions"], method = [RequestMethod.GET])
+//    @RequestMapping(value = [], method = [RequestMethod.GET])
+    @GetMapping("/submissions")
     fun submissions(
-            @RequestParam token: String
+            @RequestHeader token: String
     ) = submissionService.takeIf { accessSecurityService.tokenCheck(token) }?.findAllSubmission(token)
     
-    @RequestMapping(value = ["/submission"], method = [RequestMethod.POST])
+//    @RequestMapping(value = [], method = [RequestMethod.POST])
+    @PostMapping("/submission")
     fun createSubmission(
-            @RequestParam token: String,
-            @RequestParam taskId: Int,
-            @RequestParam teamId: Int?,
+            @RequestHeader token: String,
+            @RequestHeader taskId: Int,
+            @RequestHeader teamId: Int?,
             @RequestPart file: MultipartFile
     ) = submissionService.takeIf { accessSecurityService.tokenCheck(token) }
             ?.createSubmission(token, taskId, teamId, file).let {
@@ -35,11 +37,12 @@ class SubmissionController(
         }
     }
     
-    @RequestMapping(value = ["/submission"], method = [RequestMethod.PUT])
+//    @RequestMapping(value = [], method = [RequestMethod.PUT])
+    @PutMapping("/submission")
     fun updateSubmission(
-            @RequestParam token: String,
-            @RequestParam taskId: Int,
-            @RequestParam teamId: Int?,
+            @RequestHeader token: String,
+            @RequestHeader taskId: Int,
+            @RequestHeader teamId: Int?,
             @RequestPart file: MultipartFile
     ) = submissionService.takeIf { accessSecurityService.tokenCheck(token) }
             ?.updateSubmission(token, taskId, teamId, file).let {
@@ -49,10 +52,11 @@ class SubmissionController(
         }
     }
     
-    @RequestMapping(value = ["/submission"], method = [RequestMethod.GET])
+//    @RequestMapping(value = [], method = [RequestMethod.GET])
+    @GetMapping("/submission")
     fun findSubmission(
-            @RequestParam token: String,
-            @RequestParam taskId: Int
+            @RequestHeader token: String,
+            @RequestHeader taskId: Int
     ) = submissionService.takeIf { accessSecurityService.tokenCheck(token) }
             ?.findByTokenAndTaskId(token, taskId)
 }

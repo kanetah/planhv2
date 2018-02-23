@@ -20,7 +20,10 @@ class UserController @Autowired constructor(
     @PostMapping("/token")
     fun login(
             @RequestBody values: Map<String, String>
-    ) = userService.login("${values["userCode"]}", "${values["userName"]}").let {
+    ) = userService.login(
+            "${values["userCode"]}",
+            "${values["userName"]}"
+    ).let {
         object {
             @JsonValue
             val success = it !== null
@@ -29,76 +32,87 @@ class UserController @Autowired constructor(
         }
     }
 
-    @RequestMapping(value = ["/token"], method = [RequestMethod.DELETE])
+    @DeleteMapping("/token")
     fun logout(
-            @RequestParam token: String
-    ) = takeIf { accessSecurityService.tokenCheck(token) }?.let {
+            @RequestBody values: Map<String, String>
+    ) = userService.takeIf {
+        accessSecurityService.tokenCheck("${values["token"]}")
+    }?.logout("${values["token"]}").let {
         object {
             @JsonValue
-            val success = userService.logout(token)
+            val success = it
         }
     }
 
-    @RequestMapping(value = ["/user"], method = [RequestMethod.GET])
+    @GetMapping("/user")
     fun findUser(
-            token: String
+            @RequestHeader token: String
     ) = userService.findUserByToken(token)
 
-    @RequestMapping(value = ["/user/{id}"], method = [RequestMethod.PATCH])
+    @PatchMapping("/user/{id}")
     fun configUser(
-            @RequestParam token: String,
             @PathVariable("id") userId: Int,
-            @RequestParam theme: String?,
-            @RequestParam enableAccessToken: Boolean?
-    ) = userService.takeIf { accessSecurityService.tokenCheck(token, userId) }
-            ?.configUser(token, theme, enableAccessToken ?: false)
+            @RequestBody values: Map<String, String>
+    ) = userService.takeIf {
+        accessSecurityService.tokenCheck("${values["token"]}", userId)
+    }?.configUser(
+                    "${values["token"]}",
+                    values["theme"],
+                    values["enableAccessToken"]?.toBoolean() ?: false
+            )
 
-    @RequestMapping(value = ["/users"], method = [RequestMethod.GET])
+    @GetMapping("/users")
     fun users(
-            @RequestParam token: String
+            @RequestHeader token: String
     ) = userService.takeIf { accessSecurityService.tokenCheck(token) }?.getAllUser()
 
-    @RequestMapping(value = ["/user"], method = [RequestMethod.POST])
+    @PostMapping("/user")
     fun createUser(
-            @RequestParam authorized: String,
-            @RequestParam userCode: String,
-            @RequestParam userName: String
-    ) = userService.takeIf { accessSecurityService.authCheck(authorized) }
-            ?.createUser(User(userCode = userCode, userName = userName)).let {
+            @RequestBody values: Map<String, String>
+    ) = userService.takeIf {
+        accessSecurityService.authCheck("${values["authorized"]}")
+    }?.createUser(
+                    User(userCode = "${values["userCode"]}", userName = "${values["userName"]}")
+            ).let {
         object {
             @JsonValue
             val success = it
         }
     }
 
-    @RequestMapping(value = ["/user/{id}"], method = [RequestMethod.DELETE])
+    @DeleteMapping("/user/{id}")
     fun deleteUser(
-            @RequestParam authorized: String,
+            @RequestBody values: Map<String, String>,
             @PathVariable id: Int
-    ) = takeIf { accessSecurityService.authCheck(authorized) }?.let {
-        object {
-            @JsonValue
-            val success = userService.deleteUser(id)
-        }
-    }
-
-    @RequestMapping(value = ["/user/{id}"], method = [RequestMethod.PUT])
-    fun updateUser(
-            @RequestParam authorized: String,
-            @PathVariable("id") userId: Int,
-            @RequestParam userCode: String?,
-            @RequestParam userName: String?
-    ) = userService.takeIf { accessSecurityService.authCheck(authorized) }
-            ?.updateUser(userId, userCode, userName).let {
+    ) = userService.takeIf {
+        accessSecurityService.authCheck("${values["authorized"]}")
+    }?.deleteUser(id).let {
         object {
             @JsonValue
             val success = it
         }
     }
 
-    @RequestMapping(value = ["/user/{id}"], method = [RequestMethod.GET])
+    @PutMapping("/user/{id}")
+    fun updateUser(
+            @PathVariable("id") userId: Int,
+            @RequestBody values: Map<String, String>
+    ) = userService.takeIf {
+        accessSecurityService.authCheck("${values["authorized"]}")
+    }?.updateUser(
+                    userId,
+                    "${values["userCode"]}",
+                    "${values["userName"]}"
+            ).let {
+        object {
+            @JsonValue
+            val success = it
+        }
+    }
+
+    @GetMapping("/user/{id}")
     fun findUser(
-            @RequestParam authorized: String,
+            @RequestHeader authorized: String,
             @PathVariable("id") userId: Int
     ) = userService.takeIf { accessSecurityService.authCheck(authorized) }?.findUser(userId)
 }
