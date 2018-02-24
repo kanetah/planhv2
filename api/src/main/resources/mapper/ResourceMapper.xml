@@ -44,8 +44,9 @@
         <include refid="find_resource"/>
         LEFT JOIN
         (SELECT resource_id FROM submission_tab) AS submit
-        ON resource_tab.id=submit.resource_id
+        ON resource_tab.id = submit.resource_id
         WHERE submit.resource_id IS NULL
+
     </select>
     <select id="find" resultMap="resource_result">
         <include refid="find_resource"/>

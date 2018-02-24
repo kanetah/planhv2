@@ -15,17 +15,21 @@ import top.kanetah.planhv2.api.service.SubmissionService
 class SubmissionServiceImpl @Autowired constructor(
         private val repositoryService: RepositoryService
 ) : SubmissionService {
-    
+
     override fun findAllSubmission(
             token: String
     ) = repositoryService.userRepository.findByToken(token)?.let {
         repositoryService.submissionRepository.findAllByUserId(it.userId)
     }
-    
+
     private fun handlerUserTaskTeam(
             token: String, taskId: Int, teamId: Int?, file: MultipartFile, block: (Submission) -> Int
     ) = repositoryService.userRepository.findByToken(token)?.let { user ->
         repositoryService.taskRepository.find(taskId)?.let { task ->
+            with(repositoryService.submissionRepository) {
+                val id = findByTokenAndTaskId(token, taskId)?.submissionId ?: return@with
+                delete(id)
+            }
             block(Submission(
                     user.userId,
                     task.taskId,
@@ -35,19 +39,17 @@ class SubmissionServiceImpl @Autowired constructor(
             ))
         }
     }.let { if (it === null) false else it > 0 }
-    
+
     override fun createSubmission(
             token: String, taskId: Int, teamId: Int?, file: MultipartFile
     ) = handlerUserTaskTeam(token, taskId, teamId, file) {
         repositoryService.submissionRepository.save(it)
     }
-    
+
     override fun updateSubmission(
             token: String, taskId: Int, teamId: Int?, file: MultipartFile
-    ) = handlerUserTaskTeam(token, taskId, teamId, file) {
-        repositoryService.submissionRepository.update(it)
-    }
-    
+    ) = createSubmission(token, taskId, teamId, file)
+
     override fun findByTokenAndTaskId(
             token: String, taskId: Int
     ) = repositoryService.submissionRepository.findByTokenAndTaskId(token, taskId)

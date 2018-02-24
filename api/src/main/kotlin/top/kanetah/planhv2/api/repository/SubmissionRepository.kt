@@ -1,5 +1,6 @@
 package top.kanetah.planhv2.api.repository
 
+import org.apache.ibatis.annotations.Param
 import top.kanetah.planhv2.api.annotation.DataAccess
 import top.kanetah.planhv2.api.entity.Submission
 
@@ -8,14 +9,14 @@ import top.kanetah.planhv2.api.entity.Submission
  */
 @DataAccess
 interface SubmissionRepository {
-    
+
     fun save(submission: Submission): Int
-    
+
     fun delete(id: Int): Int
-    
+
     fun update(submission: Submission): Int
-    
+
     fun findAllByUserId(userId: Int): ArrayList<Submission>?
-    
-    fun findByTokenAndTaskId(token: String, taskId: Int): Submission?
+
+    fun findByTokenAndTaskId(@Param("token") token: String, @Param("taskId") taskId: Int): Submission?
 }

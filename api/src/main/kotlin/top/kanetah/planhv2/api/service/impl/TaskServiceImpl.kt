@@ -14,15 +14,20 @@ import java.sql.Timestamp
 class TaskServiceImpl @Autowired constructor(
         private val repositoryService: RepositoryService
 ) : TaskService {
-    
+
     override fun getTasks(
             userId: Int, subjectId: Int?, page: Int, limit: Int
-    ) = repositoryService.taskRepository.taskList(userId, subjectId, page, limit)
+    ) = with(repositoryService.taskRepository) {
+        val allTask = taskList(subjectId, (page - 1) * limit, limit) ?: return@with null
+        val unsubmitted = unsubmitted(userId) ?: return@with allTask
+        allTask.removeAll(unsubmitted)
+        unsubmitted.addAll(allTask)
+        unsubmitted
+    }
 
     override fun getAllTasks(
-            userId: Int
-    ) = repositoryService.taskRepository.allTasks(userId)
-    
+    ) = repositoryService.taskRepository.allTasks()
+
     override fun create(
             subjectId: Int,
             title: String,
@@ -42,11 +47,11 @@ class TaskServiceImpl @Autowired constructor(
             format = format,
             formatProcessorId = formatProcessorId
     )) > 0
-    
+
     override fun deleteTask(
             id: Int
     ) = repositoryService.taskRepository.delete(id) > 0
-    
+
     override fun updateTask(
             id: Int,
             subjectId: Int,
@@ -58,7 +63,7 @@ class TaskServiceImpl @Autowired constructor(
             format: String?,
             formatProcessorId: Int
     ) = with(repositoryService.taskRepository) {
-        find(subjectId)?.let {
+        find(id)?.let {
             update(it.copy(
                     subjectId = subjectId,
                     title = title,
@@ -71,7 +76,7 @@ class TaskServiceImpl @Autowired constructor(
             )) > 0
         }
     } ?: false
-    
+
     override fun findTask(
             id: Int
     ) = repositoryService.taskRepository.find(id)

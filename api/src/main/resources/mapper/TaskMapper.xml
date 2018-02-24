@@ -31,7 +31,7 @@
             format = #{format}
         </set>
         <where>
-            id = #{id}
+            id = #{taskId}
         </where>
     </update>
 
@@ -48,8 +48,7 @@
     </resultMap>
 
     <sql id="find_task">
-        SELECT
-            *
+        SELECT *
         FROM task_tab
     </sql>
     <select id="find" resultMap="task_result">
@@ -65,12 +64,22 @@
         </where>
     </select>
     <select id="taskList" resultMap="task_result">
+        (
         <include refid="find_task"/>
         <where>
             <if test="subjectId != null">
                 subject_id = #{subjectId}
             </if>
         </where>
+        ORDER BY deadline DESC
+        )LIMIT #{start}, #{size}
+    </select>
+    <select id="unsubmitted" resultMap="task_result">
+        <include refid="find_task"/>
+        LEFT JOIN
+        (SELECT task_id FROM submission_tab WHERE user_id = #{userId}) AS submit
+        ON task_tab.id = submint.task_id
+        WHERE submit.task_id IS NULL
         ORDER BY deadline DESC
     </select>
     <select id="allTasks" resultMap="task_result">

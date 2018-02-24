@@ -52,4 +52,11 @@ class ResourceController @Autowired constructor(
     fun download(
             @PathVariable("filename") fileName: String
     ) = resourceService.download(fileName)
+
+    @GetMapping("/resource/task/{subject}/{title}/{filename:.+}")
+    fun downloadTaskResource(
+            @PathVariable("subject") subjectName: String,
+            @PathVariable("title") taskTitle: String,
+            @PathVariable("filename") fileName: String
+    ) = resourceService.download(subjectName, taskTitle, fileName)
 }

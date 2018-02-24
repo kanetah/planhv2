@@ -46,7 +46,7 @@ object OutsideFileNameFormatProcessor : FormatProcessorClass {
                     size = it.resourceSize,
                     path = target.canonicalPath
             )
-        } ?: throw Exception("资源创建失败，无法下载、查看")
+        } ?: throw Exception("资源创建失败")
     }
     
     override fun sendEMail(task: Task): Boolean {

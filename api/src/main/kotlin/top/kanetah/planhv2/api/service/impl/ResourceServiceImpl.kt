@@ -23,13 +23,14 @@ import java.nio.charset.Charset
 class ResourceServiceImpl @Autowired constructor(
         private val repositoryService: RepositoryService
 ) : ResourceService {
-    
+
     val resourceControllerUrl = PropertyListener.getProperty("resource-controller-url")
     val resourcePath = PropertyListener.getProperty("resource-path")
-    
+    val submissionPath = PropertyListener.getProperty("submission-path")
+
     override fun findAllResourceWithoutSubmissionResource(
     ) = repositoryService.resourceRepository.findAllWithoutForeignKeyWithSubmission()
-    
+
     override fun createResource(
             name: String,
             size: Double,
@@ -39,14 +40,17 @@ class ResourceServiceImpl @Autowired constructor(
             resourceSize = size / 100,
             resourceUrl = resourceControllerUrl + url
     ).let {
-        with(repositoryService.resourceRepository){
-            findByUrl(it.resourceUrl)?.let { deleteResource(it.resourceId) }
-            if (save(it).also { println(it) } > 0)
+        with(repositoryService.resourceRepository) {
+            findByUrl(it.resourceUrl)?.let {
+                if (!deleteResource(it.resourceId))
+                    throw Exception("resource delete exception.")
+            }
+            if (save(it) > 0)
                 findByUrl(it.resourceUrl)
             else null
         }
     }
-    
+
     override fun createResource(
             file: MultipartFile
     ) = with(File(resourcePath + file.originalFilename)) {
@@ -54,27 +58,34 @@ class ResourceServiceImpl @Autowired constructor(
         file.transferTo(this)
         createResource(name, length().toDouble(), name)
     }
-    
+
     override fun deleteResource(
             resourceId: Int
     ) = with(repositoryService.resourceRepository) {
         find(resourceId)?.let { resource ->
-            takeIf { File(resourcePath + resource.resourceName).delete() }
-                    ?.let { delete(resourceId) > 0 }
+            takeIf {
+                File(resourcePath + resource.resourceName).delete()
+            }.let { delete(resourceId) > 0 }
         }
     } ?: false
-    
-    override fun download(
-            fileName: String
+
+    private fun download(
+            file: File
     ) = ResponseEntity(
-            FileUtils.readFileToByteArray(File(
-                    resourcePath + fileName
-            )),
+            FileUtils.readFileToByteArray(file),
             HttpHeaders().apply {
                 setContentDispositionFormData("attachment",
-                        String(fileName.toByteArray(), Charset.forName("iso-8859-1")))
+                        String(file.name.toByteArray(), Charset.forName("iso-8859-1")))
                 contentType = MediaType.APPLICATION_OCTET_STREAM
             },
             HttpStatus.CREATED
     )
+
+    override fun download(
+            fileName: String
+    ) = download(File(resourcePath + fileName))
+
+    override fun download(
+            subjectName: String, taskTitle: String, fileName: String
+    ) = download(File("$submissionPath$subjectName/$taskTitle/$fileName"))
 }

@@ -13,4 +13,5 @@ interface ResourceService {
     fun createResource(file: MultipartFile): Resource?
     fun deleteResource(resourceId: Int): Boolean
     fun download(fileName: String): ResponseEntity<ByteArray>?
+    fun download(subjectName: String, taskTitle: String, fileName: String): ResponseEntity<ByteArray>?
 }
