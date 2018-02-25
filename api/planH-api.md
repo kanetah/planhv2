@@ -702,10 +702,10 @@
 }
 ```
 
-### `get` /submission 查询提交记录
+### `get` /submission/:id 查询提交记录
 参数：
 - token `String` 用户Token
-- taskId `Int` 任务Id
+- _taskId_ `Int` 任务Id `PathVariable:id`
 
 返回：
 提交记录

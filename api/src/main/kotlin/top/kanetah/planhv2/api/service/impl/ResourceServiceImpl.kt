@@ -24,7 +24,7 @@ class ResourceServiceImpl @Autowired constructor(
         private val repositoryService: RepositoryService
 ) : ResourceService {
 
-    val resourceControllerUrl = PropertyListener.getProperty("resource-controller-url")
+    val resourceDownloadUrl = PropertyListener.getProperty("resource-download-url")
     val resourcePath = PropertyListener.getProperty("resource-path")
     val submissionPath = PropertyListener.getProperty("submission-path")
 
@@ -37,8 +37,8 @@ class ResourceServiceImpl @Autowired constructor(
             url: String
     ) = Resource(
             resourceName = name,
-            resourceSize = size / 100,
-            resourceUrl = resourceControllerUrl + url
+            resourceSize = size / 1024,
+            resourceUrl = resourceDownloadUrl + url
     ).let {
         with(repositoryService.resourceRepository) {
             findByUrl(it.resourceUrl)?.let {
@@ -68,6 +68,10 @@ class ResourceServiceImpl @Autowired constructor(
             }.let { delete(resourceId) > 0 }
         }
     } ?: false
+
+    override fun find(
+            resourceId: Int
+    ) = repositoryService.resourceRepository.find(resourceId)
 
     private fun download(
             file: File

@@ -23,9 +23,9 @@ class SubmissionController(
 
     @PostMapping("/submission")
     fun createSubmission(
-            @RequestHeader token: String,
-            @RequestHeader taskId: Int,
-            @RequestHeader teamId: String,
+            @RequestParam token: String,
+            @RequestParam taskId: Int,
+            @RequestParam teamId: String,
             @RequestPart file: MultipartFile
     ) = submissionService.takeIf {
         accessSecurityService.tokenCheck(token)
@@ -59,10 +59,10 @@ class SubmissionController(
         }
     }
 
-    @GetMapping("/submission")
+    @GetMapping("/submission/{id}")
     fun findSubmission(
             @RequestHeader token: String,
-            @RequestHeader taskId: Int
+            @PathVariable("id") taskId: Int
     ) = submissionService.takeIf {
         accessSecurityService.tokenCheck(token)
     }?.findByTokenAndTaskId(token, taskId)

@@ -14,4 +14,5 @@ interface ResourceService {
     fun deleteResource(resourceId: Int): Boolean
     fun download(fileName: String): ResponseEntity<ByteArray>?
     fun download(subjectName: String, taskTitle: String, fileName: String): ResponseEntity<ByteArray>?
+    fun find(resourceId: Int): Resource?
 }

@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-import {Breadcrumb, Button, Col, Divider, Icon, Layout, Menu, Row} from "antd";
+import {Col, Layout, Row} from "antd";
 import TaskContent from "./TaskContent";
 
-const {Item, SubMenu} = Menu;
-const {Header, Content, Sider} = Layout;
+const {Header, Content} = Layout;
 
 export default class Index extends Component {
     render() {
