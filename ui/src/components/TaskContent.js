@@ -36,7 +36,7 @@ export default class TaskContent extends Component {
                 userId: userId
             }
         });
-        this.tasks = result.data;
+        this.tasks = result.data.filter(task => task.key = task["taskId"]);
         this.filter("processing");
     };
 
@@ -107,8 +107,7 @@ export default class TaskContent extends Component {
                             <TaskCard tasks={this.state.tasks}/>
                         </Content>
                     </Layout>
-                )
-                }
+                )}
             </div>
         );
     }
