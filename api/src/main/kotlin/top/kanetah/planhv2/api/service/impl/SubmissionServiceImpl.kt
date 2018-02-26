@@ -31,8 +31,8 @@ class SubmissionServiceImpl @Autowired constructor(
                 delete(id)
             }
             block(Submission(
-                    user.userId,
                     task.taskId,
+                    user.userId,
                     teamId,
                     FormatProcessorClass[taskId].saveFile(user, task,
                             teamId?.let { repositoryService.teamRepository.find(it) }, file)

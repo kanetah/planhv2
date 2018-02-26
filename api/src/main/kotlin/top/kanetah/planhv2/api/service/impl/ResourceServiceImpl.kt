@@ -73,6 +73,10 @@ class ResourceServiceImpl @Autowired constructor(
             resourceId: Int
     ) = repositoryService.resourceRepository.find(resourceId)
 
+    override fun findUrlByTokenAndTaskId(
+            token: String, taskId: Int
+    ) = repositoryService.resourceRepository.findByTokenAndTaskId(token, taskId)?.resourceUrl
+
     private fun download(
             file: File
     ) = ResponseEntity(

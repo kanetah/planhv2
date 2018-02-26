@@ -15,4 +15,5 @@ interface ResourceService {
     fun download(fileName: String): ResponseEntity<ByteArray>?
     fun download(subjectName: String, taskTitle: String, fileName: String): ResponseEntity<ByteArray>?
     fun find(resourceId: Int): Resource?
+    fun findUrlByTokenAndTaskId(token: String, taskId: Int): String?
 }

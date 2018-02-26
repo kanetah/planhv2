@@ -66,5 +66,18 @@
             resource_url = #{resourceUrl}
         </where>
     </select>
+    <select id="findByTokenAndTaskId" resultMap="resource_result">
+        <include refid="find_resource"/>
+        <where>
+            id = (
+            SELECT resource_id FROM submission_tab
+            <where>
+                user_id = (SELECT user_id FROM token_tab WHERE token = #{token})
+                AND
+                task_id = #{taskId}
+            </where>
+            )
+        </where>
+    </select>
 
 </mapper>

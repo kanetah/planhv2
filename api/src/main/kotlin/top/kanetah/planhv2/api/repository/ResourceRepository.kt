@@ -1,5 +1,6 @@
 package top.kanetah.planhv2.api.repository
 
+import org.apache.ibatis.annotations.Param
 import top.kanetah.planhv2.api.annotation.DataAccess
 import top.kanetah.planhv2.api.entity.Resource
 
@@ -22,4 +23,6 @@ interface ResourceRepository {
     fun findByNameLike(resourceName: String): Array<Resource>?
     
     fun findByUrl(resourceUrl: String): Resource?
+
+    fun findByTokenAndTaskId(@Param("token") token: String, @Param("taskId") taskId: Int): Resource?
 }

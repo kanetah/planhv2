@@ -20,8 +20,11 @@ async function getSubmission(taskId) {
     EventEmitter.emit(`submission`, taskId);
 }
 
-function isEmpty(obj) {
-    return obj === void(0) || obj === null
+let resources = {};
+
+async function getResource(resourceId, taskId) {
+    resources[resourceId] = (await axios.get(`/resource/${resourceId}`)).data;
+    EventEmitter.emit("resource", resourceId, taskId);
 }
 
 export default {
@@ -29,13 +32,26 @@ export default {
         return Cookies.getJSON("token")["token"].match(/\$(\d)*-/g)[0].match(/\d+/)[0];
     },
     subject: (subjectId) => {
-        if (isEmpty(subjects[subjectId]))
+        if(subjectId === void(0)) return;
+        if (subjects[subjectId] === void(0)) {
+            subjects[subjectId] = null;
             getSubjectFromServer(subjectId).catch(e => console.log(e));
+        }
     },
     submission: (taskId) => {
-        if (isEmpty(submissions[taskId]))
+        if(taskId === void(0)) return;
+        if (submissions[taskId] === void(0)) {
+            submissions[taskId] = null;
             getSubmission(taskId).catch(e => console.log(e));
+        }
+    },
+    resource: (resourceId, taskId) => {
+        if(resourceId === void(0)) return;
+        if(resources[resourceId] === void(0)) {
+            resources[resourceId] = null;
+            getResource(resourceId, taskId).catch(e => console.log(e));
+        }
     }
 }
 
-export {subjects, submissions};
+export {subjects, submissions, resources};

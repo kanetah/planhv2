@@ -6,6 +6,7 @@ import top.kanetah.planhv2.api.service.SubmissionService
 import org.springframework.web.multipart.MultipartFile
 import top.kanetah.planhv2.api.annotation.JsonValue
 import top.kanetah.planhv2.api.annotation.PlanHApiController
+import top.kanetah.planhv2.api.service.ResourceService
 
 /**
  * created by kane on 2018/1/31
@@ -13,6 +14,7 @@ import top.kanetah.planhv2.api.annotation.PlanHApiController
 @PlanHApiController
 class SubmissionController(
         private val submissionService: SubmissionService,
+        private val resourceService: ResourceService,
         private val accessSecurityService: AccessSecurityService
 ) {
 
@@ -37,6 +39,8 @@ class SubmissionController(
         object {
             @JsonValue
             val success = it
+            @JsonValue
+            val url = resourceService.findUrlByTokenAndTaskId(token, taskId)
         }
     }
 

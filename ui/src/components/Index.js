@@ -15,7 +15,7 @@ export default class Index extends Component {
                 </Header>
                 <Layout
                     style={{
-                        margin: "10px",
+                        margin: "0",
                         overflowY: "auto"
                     }}
                 >
