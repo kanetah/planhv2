@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import {Col, Layout, Row} from "antd";
 import TaskContent from "./TaskContent";
-
-const {Header, Content} = Layout;
+import UserInfo from "./UserInfo";
 
 export default class Index extends Component {
     render() {
@@ -10,39 +9,32 @@ export default class Index extends Component {
             <Layout
                 className="FullPage"
             >
-                <Header style={{backgroundColor: "transparent"}}>
-                    <h1>PlanH V2</h1>
-                </Header>
-                <Layout
+                <Row gutter={12} style={{backgroundColor: "transparent", padding: "6px"}}>
+                    <Col sm={24} md={18}>
+                        <h1>PlanH V2</h1>
+                    </Col>
+                    <Col sm={24} md={6}>
+                        <UserInfo/>
+                    </Col>
+                </Row>
+                <Row
+                    gutter={12}
                     style={{
-                        margin: "0",
-                        overflowY: "auto"
+                        padding: "0 6px 0",
+                        overflowY: "auto",
                     }}
                 >
-                    <Content
-                        style={{
-                            padding: 6,
-                            margin: 0,
-                            minHeight: 280,
-                        }}
-                        ref="indexContent"
-                    >
-                        <Row gutter={12}>
-                            <Col sm={24} md={18}>
-                                <TaskContent/>
-                            </Col>
-                            <Col sm={24} md={6}>
-                                <div
-                                    style={{
-                                        background: "yellow"
-                                    }}
-                                >
-                                    resource
-                                </div>
-                            </Col>
-                        </Row>
-                    </Content>
-                </Layout>
+                    <Col sm={24} md={18}>
+                        <TaskContent/>
+                    </Col>
+                    <Col sm={24} md={6}>
+                        <div>
+                            <p>poi</p>
+                            <p>poi</p>
+                            <p>poi</p>
+                        </div>
+                    </Col>
+                </Row>
             </Layout>
         );
     }

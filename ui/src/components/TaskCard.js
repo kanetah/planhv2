@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Card, Col, Row, Tooltip} from "antd";
+import {Card, Col, Popover, Row} from "antd";
 import "../farme/DateTranslate";
 import Global, {subjects, submissions} from "../farme/PlanHGlobal";
 import EventEmitter from '../farme/EventEmitter';
@@ -34,7 +34,7 @@ export default class TaskCard extends Component {
     }
 
     componentWillReceiveProps = nextProps => {
-        if(nextProps.tasks !== void(0))
+        if (nextProps.tasks !== void(0))
             this.setState({
                 tasks: nextProps.tasks,
             });
@@ -52,12 +52,11 @@ export default class TaskCard extends Component {
                                 <Col sm={24} md={12} key={task["taskId"]}>
                                     <Card
                                         title={
-                                            (task.title.length > 20) ?
-                                                <Tooltip placement="topLeft" title={
-                                                    <p style={{wordBreak: "break-all",}}>{task.title}</p>
-                                                }>
-                                                    {task.title}
-                                                </Tooltip> : task.title
+                                            <Popover placement="topLeft" title={
+                                                <p style={{wordBreak: "break-all",}}>{task.title}</p>
+                                            } trigger="click">
+                                                {task.title}
+                                            </Popover>
                                         }
                                         extra={
                                             <SubjectTag data-subject-id={task["subjectId"]}>
