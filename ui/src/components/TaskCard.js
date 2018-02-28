@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Card, Col, Popover, Row} from "antd";
+import {Card, Col, Divider, Icon, Popover, Row} from "antd";
 import "../farme/DateTranslate";
 import Global, {subjects, submissions} from "../farme/PlanHGlobal";
 import EventEmitter from '../farme/EventEmitter';
@@ -42,41 +42,49 @@ export default class TaskCard extends Component {
 
     render() {
         return (
-            <div>
-                <Row>
-                    {this.state.tasks.map(
-                        (task) => {
-                            Global.subject(task["subjectId"]);
-                            Global.submission(task["taskId"]);
-                            return (
-                                <Col sm={24} md={12} key={task["taskId"]}>
-                                    <Card
-                                        title={
-                                            <Popover placement="topLeft" title={
-                                                <p style={{wordBreak: "break-all",}}>{task.title}</p>
-                                            } trigger="click">
-                                                {task.title}
-                                            </Popover>
-                                        }
-                                        extra={
-                                            <SubjectTag data-subject-id={task["subjectId"]}>
-                                                {this.state[`subject${task["subjectId"]}`]}
-                                            </SubjectTag>
-                                        }
-                                        style={{margin: "6px"}}
-                                        hoverable={true}
-                                        bodyStyle={{padding: "0"}}
-                                    >
-                                        <FileDragger
-                                            task={task} submission={this.state[`submission${task["taskId"]}`]}
-                                        />
-                                    </Card>
-                                </Col>
-                            )
-                        }
-                    )}
-                </Row>
-            </div>
+            <Row>
+                {this.state.tasks.map((task) => {
+                    Global.subject(task["subjectId"]);
+                    Global.submission(task["taskId"]);
+                    const submissionState = this.state[`submission${task["taskId"]}`];
+                    return (
+                        <Col sm={24} md={12} key={task["taskId"]}>
+                            <Card
+                                title={
+                                    <Popover placement="topLeft" title={
+                                        <p style={{wordBreak: "break-all",}}>
+                                            题目：{task.title}
+                                            <Divider type="vertical"/>
+                                            {task["teamTask"] ? "团队作业" : "单人作业"}
+                                        </p>
+                                    } trigger="click">
+                                        <div style={{float: "left", display: "inline"}}>
+                                            {
+                                                task["teamTask"] ?
+                                                    <Icon type="usergroup-add" style={{color: "#1890ff"}}/>
+                                                    : <Icon type="user"/>
+                                            }
+                                            {task.title}
+                                        </div>
+                                    </Popover>
+                                }
+                                extra={
+                                    <SubjectTag data-subject-id={task["subjectId"]}>
+                                        {this.state[`subject${task["subjectId"]}`]}
+                                    </SubjectTag>
+                                }
+                                style={{margin: "6px"}}
+                                hoverable={true}
+                                bodyStyle={{padding: "0"}}
+                            >
+                                <FileDragger
+                                    task={task} submission={submissionState}
+                                />
+                            </Card>
+                        </Col>
+                    )
+                })}
+            </Row>
         );
     }
 }

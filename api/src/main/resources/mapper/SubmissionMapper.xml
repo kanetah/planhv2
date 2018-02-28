@@ -65,5 +65,13 @@
             task_id = #{taskId}
         </where>
     </select>
+    <select id="findByUserIdAndTaskId" resultMap="submission_result">
+        <include refid="find_submission"/>
+        <where>
+            user_id = #{userId}
+            AND
+            task_id = #{taskId}
+        </where>
+    </select>
 
 </mapper>

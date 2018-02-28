@@ -78,13 +78,13 @@
         <include refid="find_task"/>
         LEFT JOIN
         (SELECT task_id FROM submission_tab WHERE user_id = #{userId}) AS submit
-        ON task_tab.id = submint.task_id
+        ON task_tab.id = submit.task_id
         WHERE submit.task_id IS NULL
-        ORDER BY deadline DESC
+        ORDER BY deadline ASC
     </select>
     <select id="allTasks" resultMap="task_result">
         <include refid="find_task"/>
-        ORDER BY deadline DESC
+        ORDER BY deadline ASC
     </select>
 
 </mapper>

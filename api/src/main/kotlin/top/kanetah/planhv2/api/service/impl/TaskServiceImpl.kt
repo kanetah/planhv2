@@ -26,7 +26,14 @@ class TaskServiceImpl @Autowired constructor(
     }
 
     override fun getAllTasks(
-    ) = repositoryService.taskRepository.allTasks()
+            userId: Int
+    ) = with(repositoryService.taskRepository) {
+        val allTask = allTasks() ?: return@with null
+        val unsubmitted = unsubmitted(userId) ?: return@with allTask
+        allTask.removeAll(unsubmitted)
+        unsubmitted.addAll(allTask)
+        unsubmitted
+    }
 
     override fun create(
             subjectId: Int,

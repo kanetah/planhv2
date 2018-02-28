@@ -13,7 +13,7 @@ data class Task(
         val subjectId: Int,
         val title: String,
         val content: String,
-        val isTeamTask: Boolean = false,
+        val isTeamTask: Boolean,
         val deadline: Timestamp,
         val type: String,
         val formatProcessorId: Int,

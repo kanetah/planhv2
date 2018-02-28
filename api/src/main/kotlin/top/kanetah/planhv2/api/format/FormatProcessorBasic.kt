@@ -110,9 +110,11 @@ fun File.deleteAll(): Boolean {
 }
 
 fun File.uncompress() {
-    val descPath = with(canonicalPath) {
-        (substring(0, lastIndexOf(".")) + File.separator).also {
-            File(it).apply { if (!exists()) mkdirs() }
+    val descPath by lazy {
+        with(canonicalPath) {
+            (substring(0, lastIndexOf(".")) + File.separator).also {
+                File(it).apply { if (!exists()) mkdirs() }
+            }
         }
     }
     when (name.substring(name.lastIndexOf("."))) {

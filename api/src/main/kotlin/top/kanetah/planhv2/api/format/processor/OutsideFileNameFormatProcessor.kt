@@ -8,6 +8,7 @@ import top.kanetah.planhv2.api.format.FormatProcessorClass
 import top.kanetah.planhv2.api.format.uncompress
 import top.kanetah.planhv2.api.format.typeBy
 import top.kanetah.planhv2.api.repository.SubjectRepository
+import top.kanetah.planhv2.api.repository.SubmissionRepository
 import top.kanetah.planhv2.api.service.ResourceService
 import java.io.File
 
@@ -37,7 +38,9 @@ object OutsideFileNameFormatProcessor : FormatProcessorClass {
                 "$path/${getFormatName(user, task, team, file)}${file typeBy task}"
         ).apply { if (!exists()) createNewFile(); file.transferTo(this); uncompress(); }
         return resourceService.createResource(
-                target.name, file.size.toDouble(), "task/$subjectName/${task.title}/${target.name}"
+                target.name,
+                file.size.toDouble(),
+                "task/$subjectName/${task.title}/${target.name}"
         )?.let {
             SubmitFileAttributes(
                     resourceId = it.resourceId,

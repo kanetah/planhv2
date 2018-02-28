@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import {Menu, Layout, Input, Spin, Row, Col, Button, Popover} from 'antd';
-import EventEmitter from '../farme/EventEmitter';
+import {Menu, Layout, Input, Spin, Row, Col, Button, Popover, Icon} from 'antd';
 import Cookies from "js-cookie";
 import TaskCard from "./TaskCard";
-import Global from "../farme/PlanHGlobal";
+import Global, {asyncWhenLogin} from "../farme/PlanHGlobal";
+import EventEmitter from "../farme/EventEmitter";
 
 const {Header, Content} = Layout;
 const {Search} = Input;
@@ -12,27 +12,25 @@ const {Search} = Input;
 export default class TaskContent extends Component {
 
     tasks = [];
+    subjectSelect = {checked: false};
 
     constructor(props) {
         super(props);
         this.state = {
             tasks: []
         };
+        EventEmitter.on("filter-subject",
+            (subjectId, checked) => this.subjectSelect = {subjectId, checked});
     }
 
     componentWillMount = () => {
-        const token = Cookies.getJSON("token");
-        if (token == null || !token.success) {
-            EventEmitter.on("login", () => {
-                this.fetchTasks().catch(e => console.log(e));
-            })
-        } else this.fetchTasks().catch(e => console.log(e));
+        asyncWhenLogin(() => this.fetchTasks());
     };
 
     fetchTasks = async () => {
         const userId = Global.userId();
         const result = await axios.get("/tasks", {
-            params: {
+            headers: {
                 userId: userId
             }
         });
@@ -41,6 +39,8 @@ export default class TaskContent extends Component {
     };
 
     filter = (mode, keyWord) => {
+        if(this.subjectSelect.checked)
+            EventEmitter.emit("filter-subject", this.subjectSelect.subjectId, false);
         let taskArray;
         switch (mode) {
             default:
@@ -96,14 +96,16 @@ export default class TaskContent extends Component {
                                                     onSearch={value => this.filter("search", value)}
                                                 />
                                             } trigger="click">
-                                                <Button type="primary" shape="circle" icon="search"/>
+                                                <Button type="primary" shape="circle">
+                                                    <Icon type={"search"} style={{margin: "0"}}/>
+                                                </Button>
                                             </Popover>
                                         </Col>
                                     </Row>
                                 </Menu.Item>
                             </Menu>
                         </Header>
-                        <Content style={{padding: "6px"}}>
+                        <Content style={{padding: "0 6px 0", marginTop: "-6px"}}>
                             <TaskCard tasks={this.state.tasks}/>
                         </Content>
                     </Layout>

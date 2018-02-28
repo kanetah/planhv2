@@ -13,5 +13,5 @@ spring:
       max-file-size: 1024Mb
       max-request-size: 1056Mb
 server:
-  port: 9713
+#  port: 9713 or 9913, auto configuration on PortConfiguration.kt
   max-http-header-size: 1024

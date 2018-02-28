@@ -2,7 +2,10 @@ package top.kanetah.planhv2.api
 
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory
 import org.springframework.context.ApplicationContext
+import org.springframework.context.annotation.Bean
 import top.kanetah.planhv2.api.property.PropertyListener
 
 /**
@@ -13,7 +16,7 @@ class ApiApplication {
     companion object {
         private var context: ApplicationContext? = null
         internal fun context() = context!!
-        
+
         @JvmStatic
         fun main(args: Array<String>
         ) = SpringApplication(ApiApplication::class.java).run {

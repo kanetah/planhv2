@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile
 import top.kanetah.planhv2.api.entity.Submission
 import top.kanetah.planhv2.api.format.FormatProcessorClass
 import top.kanetah.planhv2.api.service.RepositoryService
+import top.kanetah.planhv2.api.service.ResourceService
 import top.kanetah.planhv2.api.service.SubmissionService
 
 /**
@@ -13,7 +14,8 @@ import top.kanetah.planhv2.api.service.SubmissionService
  */
 @Service
 class SubmissionServiceImpl @Autowired constructor(
-        private val repositoryService: RepositoryService
+        private val repositoryService: RepositoryService,
+        private val resourceService: ResourceService
 ) : SubmissionService {
 
     override fun findAllSubmission(
@@ -26,9 +28,9 @@ class SubmissionServiceImpl @Autowired constructor(
             token: String, taskId: Int, teamId: Int?, file: MultipartFile, block: (Submission) -> Int
     ) = repositoryService.userRepository.findByToken(token)?.let { user ->
         repositoryService.taskRepository.find(taskId)?.let { task ->
-            with(repositoryService.submissionRepository) {
-                val id = findByTokenAndTaskId(token, taskId)?.submissionId ?: return@with
-                delete(id)
+            findByTokenAndTaskId(token, taskId)?.apply {
+                repositoryService.submissionRepository.delete(submissionId)
+                resourceService.deleteResource(getResourceId())
             }
             block(Submission(
                     task.taskId,
@@ -49,6 +51,13 @@ class SubmissionServiceImpl @Autowired constructor(
     override fun updateSubmission(
             token: String, taskId: Int, teamId: Int?, file: MultipartFile
     ) = createSubmission(token, taskId, teamId, file)
+
+//    fun deleteSubmission(
+//            token: String, taskId: Int
+//    ) = findByTokenAndTaskId(token, taskId)?.let {
+//        repositoryService.submissionRepository.delete(it.submissionId) > 0 &&
+//                repositoryService.resourceRepository.delete(it.getResourceId()) > 0
+//    }
 
     override fun findByTokenAndTaskId(
             token: String, taskId: Int

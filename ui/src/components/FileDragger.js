@@ -57,36 +57,51 @@ export default class FileDragger extends Component {
         };
     };
 
+    uploadCheck = false;
+
     uploadProps = {
         name: 'file',
         multiple: true,
         action: "//planhapi.kanetah.top/submission",
         onChange: info => {
             const status = info.file.status;
-            if (status !== 'uploading') {
-                console.log(info.file, info.fileList);
-            }
             if (status === 'done') {
                 message.success(`${info.file.name} 文件上传成功.`);
                 this.setState({submitted: true});
             } else if (status === 'error') {
                 message.error(`${info.file.name} 文件上传失败`);
+                return;
             }
-            let fileList = info.fileList;
-            fileList = fileList.slice(-1);
-            fileList = fileList.map((file) => {
-                if (file.response) {
-                    file.url = file.response.url;
-                    file.name = "点击下载：" + file.name
-                }
-                return file;
-            });
-            this.setState({fileList});
+            if (this.uploadCheck) {
+                let fileList = info.fileList;
+                fileList = fileList.slice(-1);
+                fileList = fileList.map((file) => {
+                    if (file.response) {
+                        file.url = file.response.url;
+                        file.name = "点击下载：" + file.name
+                    }
+                    return file;
+                });
+                this.setState({fileList});
+            }
         },
         showUploadList: {
             showRemoveIcon: false,
         },
         style: {padding: "0 12px 0"},
+    };
+
+    beforeUpload = (accept) => ({name}) => {
+        const type = name.substr(name.lastIndexOf("."));
+        this.uploadCheck = accept.indexOf(type) > -1;
+        if (!this.uploadCheck)
+            message.error(
+                <div>
+                    <p>文件应是下列类型之一：</p>
+                    <p>{accept}</p>
+                </div>
+            );
+        return this.uploadCheck;
     };
 
     render() {
@@ -98,9 +113,9 @@ export default class FileDragger extends Component {
             <Dragger
                 {...this.uploadProps}
                 fileList={this.state.fileList}
-                accept={this.props["task"]["type"]}
                 data={this.uploadData}
                 disabled={timeout}
+                beforeUpload={this.beforeUpload(this.props["task"]["type"])}
             >
                 <Popover content={timeout ? "不可提交" : `要求文件类型：${task.type}`} trigger="hover">
                     <p style={{
@@ -118,8 +133,8 @@ export default class FileDragger extends Component {
                 <Row style={{marginTop: "6px"}}>
                     <Col sm={24} md={18}>截止时间：{deadline}</Col>
                     <Col sm={24} md={6}>
-                        <Tag color={timeout ? "#999" : submission ? "blue" : "red"}>
-                            {timeout ? "已过期" : submission ? "已提交" : "未提交"}
+                        <Tag color={timeout ? "#999" : this.state.submitted ? "blue" : "red"}>
+                            {timeout ? "已过期" : this.state.submitted ? "已提交" : "未提交"}
                         </Tag>
                     </Col>
                 </Row>

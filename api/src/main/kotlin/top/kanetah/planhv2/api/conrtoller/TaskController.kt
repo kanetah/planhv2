@@ -18,7 +18,9 @@ class TaskController @Autowired constructor(
 ) {
 
     @GetMapping("/tasks")
-    fun allTasks() = taskService.getAllTasks()
+    fun allTasks(
+            @RequestHeader userId: Int
+    ) = taskService.getAllTasks(userId)
 
     @GetMapping("/task")
     fun tasks(

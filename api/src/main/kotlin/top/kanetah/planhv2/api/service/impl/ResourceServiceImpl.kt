@@ -63,9 +63,12 @@ class ResourceServiceImpl @Autowired constructor(
             resourceId: Int
     ) = with(repositoryService.resourceRepository) {
         find(resourceId)?.let { resource ->
-            takeIf {
-                File(resourcePath + resource.resourceName).delete()
-            }.let { delete(resourceId) > 0 }
+            File(resource.resourceUrl.let {
+                if (it.contains("task"))
+                    submissionPath + it.substring(it.indexOf("task/") + 5)
+                else resourcePath + resource.resourceName
+            }).delete()
+            delete(resourceId) > 0
         }
     } ?: false
 

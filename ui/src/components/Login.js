@@ -49,11 +49,10 @@ export default class Login extends Component {
             codeInput.input.value = "";
             nameInput.input.value = "";
             codeInput.input.focus();
-        }
-        else this.onLoginSuccess(nameInput.input.value)
+        } else this.onLoginSuccess(nameInput.input.value, result.data["token"]);
     };
 
-    onLoginSuccess = (name) => {
+    onLoginSuccess = (name, token) => {
         this.setState({
             reverse: true,
         });
@@ -62,7 +61,7 @@ export default class Login extends Component {
             loginComponent.style.zIndex = "-2"
         }, this.loginBackgroundAnimation.duration);
         message.success(`hi, ${name}`);
-        EventEmitter.emit("login");
+        EventEmitter.emit("login", token);
     };
 
     render() {

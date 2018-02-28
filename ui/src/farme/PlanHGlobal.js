@@ -2,6 +2,26 @@ import {axios} from "./App";
 import Cookies from "js-cookie";
 import EventEmitter from '../farme/EventEmitter';
 
+const tokenCookie = Cookies.getJSON("token");
+let token = tokenCookie !== void(0) && tokenCookie !== null && tokenCookie["success"]
+    ? tokenCookie["token"] : null;
+
+EventEmitter.on("login", (newToken) => {token = newToken});
+
+let users = void(0);
+
+async function getUsers() {
+    users = {};
+    (await axios.get("/users", {
+        headers: {
+            token: token,
+        }
+    })).data.map(user => {
+        return users[user["userId"]] = user;
+    });
+    EventEmitter.emit(`users`, users);
+}
+
 let subjects = {};
 
 async function getSubjectFromServer(subjectId) {
@@ -27,31 +47,43 @@ async function getResource(resourceId, taskId) {
     EventEmitter.emit("resource", resourceId, taskId);
 }
 
+function asyncWhenLogin(callback) {
+    if (token == null)
+        EventEmitter.on("login", () => callback());
+    else callback();
+}
+
 export default {
     userId: () => {
-        return Cookies.getJSON("token")["token"].match(/\$(\d)*-/g)[0].match(/\d+/)[0];
+        return token.match(/\$(\d)*-/g)[0].match(/\d+/)[0];
+    },
+    users: () => {
+        if (users === void(0)) {
+            users = null;
+            asyncWhenLogin(() => getUsers());
+        }
     },
     subject: (subjectId) => {
-        if(subjectId === void(0)) return;
+        if (subjectId === void(0)) return;
         if (subjects[subjectId] === void(0)) {
             subjects[subjectId] = null;
-            getSubjectFromServer(subjectId).catch(e => console.log(e));
+            getSubjectFromServer(subjectId);
         }
     },
     submission: (taskId) => {
-        if(taskId === void(0)) return;
+        if (taskId === void(0)) return;
         if (submissions[taskId] === void(0)) {
             submissions[taskId] = null;
-            getSubmission(taskId).catch(e => console.log(e));
+            getSubmission(taskId);
         }
     },
     resource: (resourceId, taskId) => {
-        if(resourceId === void(0)) return;
-        if(resources[resourceId] === void(0)) {
+        if (resourceId === void(0)) return;
+        if (resources[resourceId] === void(0)) {
             resources[resourceId] = null;
-            getResource(resourceId, taskId).catch(e => console.log(e));
+            getResource(resourceId, taskId);
         }
     }
 }
 
-export {subjects, submissions, resources};
+export {subjects, submissions, resources, asyncWhenLogin};
