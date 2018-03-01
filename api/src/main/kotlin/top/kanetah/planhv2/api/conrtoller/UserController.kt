@@ -2,6 +2,7 @@ package top.kanetah.planhv2.api.conrtoller
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 import top.kanetah.planhv2.api.annotation.JsonValue
 import top.kanetah.planhv2.api.annotation.PlanHApiController
 import top.kanetah.planhv2.api.entity.User
@@ -77,6 +78,21 @@ class UserController @Autowired constructor(
         object {
             @JsonValue
             val success = it
+        }
+    }
+
+    @PostMapping("/users")
+    fun createUserBatch(
+            @RequestParam authorized: String,
+            @RequestPart file: MultipartFile
+    ) = userService.takeIf {
+        accessSecurityService.authCheck(authorized)
+    }?.createUserBatch(file).let {
+        object {
+            @JsonValue
+            val success = it !== null
+            @JsonValue
+            val count = it
         }
     }
 

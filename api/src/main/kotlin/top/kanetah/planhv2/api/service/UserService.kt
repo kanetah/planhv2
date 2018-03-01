@@ -1,5 +1,6 @@
 package top.kanetah.planhv2.api.service
 
+import org.springframework.web.multipart.MultipartFile
 import top.kanetah.planhv2.api.entity.User
 
 /**
@@ -16,4 +17,5 @@ UserService {
     fun deleteUser(id: Int): Boolean
     fun updateUser(id: Int, userCode: String?, userName: String?): Boolean
     fun findUser(id: Int): User?
+    fun createUserBatch(file: MultipartFile): Int?
 }

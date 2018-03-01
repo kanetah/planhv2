@@ -33,7 +33,7 @@ export default class SubjectTag extends Component {
                 {...this.props}
                 checked={this.state.checked}
                 onChange={this.handleChange}
-                style={{maxWidth: "15em", overflow: "hidden", textOverflow: "ellipsis"}}
+                style={{maxWidth: "10em", overflow: "hidden", textOverflow: "ellipsis"}}
             />
         );
     }

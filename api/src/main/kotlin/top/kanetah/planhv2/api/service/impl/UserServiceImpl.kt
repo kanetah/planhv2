@@ -2,6 +2,7 @@ package top.kanetah.planhv2.api.service.impl
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
 import top.kanetah.planhv2.api.annotation.JsonValue
 import top.kanetah.planhv2.api.entity.Token
 import top.kanetah.planhv2.api.entity.User
@@ -10,6 +11,9 @@ import top.kanetah.planhv2.api.service.AccessSecurityService
 import top.kanetah.planhv2.api.service.RepositoryService
 import top.kanetah.planhv2.api.service.UserService
 import kotlin.collections.ArrayList
+import org.apache.poi.hssf.usermodel.HSSFWorkbook
+import org.apache.poi.poifs.filesystem.POIFSFileSystem
+import org.apache.poi.ss.usermodel.CellType
 
 /**
  * created by kane on 2018/1/28
@@ -77,6 +81,30 @@ class UserServiceImpl @Autowired constructor(
     override fun createUser(
             user: User
     ) = repositoryService.userRepository.save(user) > 0
+
+    val userCodeMark = "学号"
+    val userNameMark = "姓名"
+    override fun createUserBatch(
+            file: MultipartFile
+    ) = with(HSSFWorkbook(POIFSFileSystem(file.inputStream)).getSheetAt(0)) {
+        fun getIndexByValue(value: String): Int {
+            getRow(0).forEach {
+                if (it.stringCellValue == value)
+                    return it.columnIndex
+            }
+            throw Exception("Column does not exist.")
+        }
+        (1..lastRowNum).count {
+            with(getRow(it)) {
+                createUser(User(
+                        userCode = with(getCell(getIndexByValue(userCodeMark))) {
+                            setCellType(CellType.STRING)
+                            stringCellValue
+                        }, userName = getCell(getIndexByValue(userNameMark)).stringCellValue
+                ))
+            }
+        }
+    }
 
     override fun deleteUser(
             id: Int

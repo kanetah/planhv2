@@ -224,6 +224,21 @@
 }
 ```
 
+### `post` /users 批量新建用户
+参数：
+- authorized `String` 管理员鉴权码
+- file `MultipartFile` 用户表格
+
+返回：
+新建结果  
+例：
+```
+{
+  success: true,
+  count: 3,
+}
+```
+
 ### `delete` /user/:id 删除用户
 参数：
 - authorized `String` 管理员鉴权码
