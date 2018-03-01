@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Card, Col, Row} from "antd";
+import {Button, Card, Col, Popover, Row} from "antd";
 import Cookies from "js-cookie";
 import EventEmitter from '../farme/EventEmitter';
 import Global from "../farme/PlanHGlobal";
@@ -24,25 +24,38 @@ export default class UserInfo extends Component {
         window.location.reload(false);
     };
 
+    getWeekIndex = () => {
+        const now = new Date();
+        let beginDate = new Date(2018, 2, 5);
+        return Math.floor(Math.floor((now.valueOf() - beginDate.valueOf()) / 86400000) / 7) + 1;
+    };
+
     render() {
         return (
-            <div>
-                <Card>
-                    <Row>
-                        <Col xs={12} md={0}>
+            <Card bodyStyle={{padding: "12px"}}>
+                <Row>
+                    <Col xs={12} md={0}>
+                        <Popover placement="bottom"
+                                 content={`第 ${this.getWeekIndex()} 周`}
+                        >
                             <h2>PlanH V2</h2>
-                        </Col>
-                        <Col xs={12} md={24}>
-                            <div style={{float: "right"}}>
-                                <section style={{display: "inline", padding: "6px"}}>
-                                    当前用户：{this.state.username}
-                                </section>
-                                <Button size={"small"} onClick={this.handleLogout}>注销</Button>
-                            </div>
-                        </Col>
-                    </Row>
-                </Card>
-            </div>
+                        </Popover>
+                    </Col>
+                    <Col xs={0} md={6}>
+                        <p style={{margin: "0"}}>第 {this.getWeekIndex()} 周</p>
+                    </Col>
+                    <Col xs={12} md={18}>
+                        <div style={{float: "right"}}>
+                            <section style={{display: "inline", padding: "6px"}}>
+                                当前用户：{this.state.username}
+                            </section>
+                            <Button size="small" type="danger" onClick={this.handleLogout}>
+                                注销
+                            </Button>
+                        </div>
+                    </Col>
+                </Row>
+            </Card>
         );
     }
 }

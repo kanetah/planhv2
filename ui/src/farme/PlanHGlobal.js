@@ -40,11 +40,18 @@ async function getSubmission(taskId) {
     EventEmitter.emit(`submission`, taskId);
 }
 
-let resources = {};
+let taskResources = {};
 
-async function getResource(resourceId, taskId) {
-    resources[resourceId] = (await axios.get(`/resource/${resourceId}`)).data;
+async function getTaskResource(resourceId, taskId) {
+    taskResources[resourceId] = (await axios.get(`/resource/${resourceId}`)).data;
     EventEmitter.emit("resource", resourceId, taskId);
+}
+
+let resources = void(0);
+
+async function getResources() {
+    resources = (await axios.get("/resources")).data.filter(resources => resources.key = resources["resourceId"]);
+    EventEmitter.emit("resources", resources);
 }
 
 function asyncWhenLogin(callback) {
@@ -77,13 +84,19 @@ export default {
             getSubmission(taskId);
         }
     },
-    resource: (resourceId, taskId) => {
+    taskResource: (resourceId, taskId) => {
         if (resourceId === void(0)) return;
-        if (resources[resourceId] === void(0)) {
-            resources[resourceId] = null;
-            getResource(resourceId, taskId);
+        if (taskResources[resourceId] === void(0)) {
+            taskResources[resourceId] = null;
+            getTaskResource(resourceId, taskId);
         }
-    }
+    },
+    resources: () => {
+        if(resources === void(0)) {
+            resources = null;
+            getResources();
+        }
+    },
 }
 
-export {subjects, submissions, resources, asyncWhenLogin};
+export {token, subjects, submissions, taskResources, asyncWhenLogin};

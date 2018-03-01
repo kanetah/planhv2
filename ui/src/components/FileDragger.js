@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import {Col, Row, Upload, message, Popover, Tag} from "antd";
 import DateTranslate from "../farme/DateTranslate";
 import EventEmitter from '../farme/EventEmitter';
-import Global, {resources} from "../farme/PlanHGlobal";
+import Global, {taskResources} from "../farme/PlanHGlobal";
 
 const {Dragger} = Upload;
 
@@ -24,7 +24,7 @@ export default class FileDragger extends Component {
 
     renderResource = (resourceId, taskId) => {
         if (taskId !== this.props["task"].taskId) return;
-        const resource = resources[resourceId];
+        const resource = taskResources[resourceId];
         if (resource === null) message.error(`找不到资源：${this.props["submission"]["formerName"]}`);
         else this.setState({
             fileList: [{
@@ -39,13 +39,13 @@ export default class FileDragger extends Component {
 
     componentWillReceiveProps = nextProps => {
         const submission = nextProps["submission"];
-        if (submission !== this.props["submission"] && resources[submission["resourceId"]] === void(0))
-            Global.resource(submission["resourceId"], this.props["task"]["taskId"]);
+        if (submission !== this.props["submission"] && taskResources[submission["resourceId"]] === void(0))
+            Global.taskResource(submission["resourceId"], this.props["task"]["taskId"]);
     };
 
     componentWillMount = () => {
         const submission = this.props["submission"];
-        if (submission !== void(0) && resources[submission["resourceId"]] !== void(0))
+        if (submission !== void(0) && taskResources[submission["resourceId"]] !== void(0))
             this.renderResource(submission["resourceId"], this.props["task"]["taskId"]);
     };
 

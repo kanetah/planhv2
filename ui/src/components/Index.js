@@ -12,7 +12,7 @@ export default class Index extends Component {
                     <Col xs={0} md={18}>
                         <h1 style={{margin: "6px"}}>PlanH V2</h1>
                     </Col>
-                    <Col xs={24} md={6}>
+                    <Col xs={24} md={6} style={{paddingRight: "16px", paddingTop: "6px"}}>
                         <UserInfo/>
                     </Col>
                 </Row>

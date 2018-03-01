@@ -51,7 +51,7 @@ export default class TaskCard extends Component {
                         <Col sm={24} md={12} key={task["taskId"]}>
                             <Card
                                 title={
-                                    <Popover placement="topLeft" title={
+                                    <Popover placement="topLeft" content={
                                         <p style={{wordBreak: "break-all",}}>
                                             题目：{task.title}
                                             <Divider type="vertical"/>

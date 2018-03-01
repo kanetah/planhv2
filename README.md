@@ -1,6 +1,6 @@
 # PlanH V2
 
-这是 [planH_BOOT](https://github.com/kanetah/planH_BOOT) 项目的彻底重构版本，目标是在寒假结束前上线新版的PlanH作业提交平台。  
+这是 [planH_BOOT](https://github.com/kanetah/planH_BOOT) 项目的彻底重构版本，目标是上线新版的PlanH作业提交平台。  
 项目采用前后端分离的方式进行，其中，后端使用 `Kotlin` + `Spring Boot` 编写，前端则主要用 `ES6` + `React` 编写。
 
 正在施工中... :construction: 

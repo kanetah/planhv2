@@ -22,7 +22,7 @@ class ResourceController @Autowired constructor(
 
     @PostMapping("/resource")
     fun createResource(
-            @RequestHeader token: String,
+            @RequestParam token: String,
             @RequestPart file: MultipartFile
     ) = resourceService.takeIf {
         accessSecurityService.tokenCheck(token)
