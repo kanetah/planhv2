@@ -14,3 +14,6 @@
 基础的设计见：
 - [PlanH V2 API 描述文档](https://github.com/kanetah/planhv2/blob/master/api/planH-api.md)
 - [PlanH V2 实体 描述文档](https://github.com/kanetah/planhv2/blob/master/api/planH-entity.md)
+
+### 部署
+![无法显示图片](https://github.com/kanetah/planhv2/raw/master/picture/planHV2架构.jpg)
