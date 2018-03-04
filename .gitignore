@@ -18,12 +18,15 @@ api/out/
 
 # dependencies
 ui/node_modules
+admin-ui/node_modules
 
 # testing
 ui/coverage
+admin-ui/coverage
 
 # production
 ui/build
+admin-ui/build
 
 # misc
 .DS_Store
