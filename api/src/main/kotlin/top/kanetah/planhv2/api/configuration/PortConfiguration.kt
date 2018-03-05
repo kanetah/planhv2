@@ -12,11 +12,7 @@ import java.net.Socket
  * created by kane on 2018/2/28
  */
 @Configuration
-class PortConfiguration : TomcatEmbeddedServletContainerFactory() {
-    init {
-        port = PORT
-    }
-    
+class PortConfiguration : TomcatEmbeddedServletContainerFactory(PortConfiguration.PORT) {
     companion object {
         val PORT by lazy {
             if (try {
