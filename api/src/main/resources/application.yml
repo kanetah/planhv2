@@ -15,3 +15,10 @@ spring:
 server:
 #  port: 9713 or 9913, auto configuration by PortConfiguration.kt
   max-http-header-size: 1024
+endpoints:
+  shutdown:
+    enabled: true
+management:
+  context-path: /super
+  security:
+    enabled: true

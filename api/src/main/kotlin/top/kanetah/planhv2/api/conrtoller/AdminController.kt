@@ -1,9 +1,11 @@
 package top.kanetah.planhv2.api.conrtoller
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.actuate.endpoint.ShutdownEndpoint
 import org.springframework.web.bind.annotation.*
 import top.kanetah.planhv2.api.annotation.JsonValue
 import top.kanetah.planhv2.api.annotation.PlanHApiController
+import top.kanetah.planhv2.api.configuration.PortConfiguration
 import top.kanetah.planhv2.api.service.AccessSecurityService
 import top.kanetah.planhv2.api.service.AdminService
 
@@ -15,7 +17,7 @@ class AdminController @Autowired constructor(
         private val adminService: AdminService,
         private val accessSecurityService: AccessSecurityService
 ) {
-
+    
     @PostMapping("/authorized")
     fun writeIn(
             @RequestBody values: Map<String, String>
@@ -27,17 +29,29 @@ class AdminController @Autowired constructor(
             val authorized = it
         }
     }
-
+    
     @DeleteMapping("/authorized")
     fun crossOut(
             @RequestBody values: Map<String, String>
     ) = adminService.takeIf {
         accessSecurityService.authCheck("${values["authorized"]}")
     }?.adminCrossOut("${values["authorized"]}")
-
+    
+    @PostMapping("/shutdown")
+    fun shutdown(
+            @RequestBody values: Map<String, String>
+    ) = adminService.takeIf {
+        accessSecurityService.authCheck("${values["authorized"]}")
+    }?.shutdown(values["port"]?.toInt()).let {
+        object {
+            @JsonValue
+            val success = it
+        }
+    }
+    
     @GetMapping("/admins")
     fun admins() = adminService.getAllAdmins()
-
+    
     @PostMapping("/admin")
     fun createAdmin(
             @RequestBody values: Map<String, String>
@@ -48,7 +62,7 @@ class AdminController @Autowired constructor(
             val success = it
         }
     }
-
+    
     @DeleteMapping("/admin/{id}")
     fun deleteAdmin(
             @PathVariable id: Int
@@ -56,7 +70,7 @@ class AdminController @Autowired constructor(
         @JsonValue
         val success = adminService.deleteAdmin(id)
     }
-
+    
     @GetMapping("/admin/{id}")
     fun findAdmin(
             @PathVariable("id") id: Int,
@@ -69,7 +83,7 @@ class AdminController @Autowired constructor(
             val password = it?.password
         }
     }
-
+    
     @GetMapping("/admin")
     fun findAdminByPassword(
             @RequestHeader password: String

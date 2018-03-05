@@ -14,6 +14,7 @@
 ---
 
 ## 管理员
+
 ### `post` /authorized 管理员鉴权
 参数：
 - password `String` 管理员口令
@@ -39,6 +40,20 @@
 ```
 {
   success: true,
+}
+```
+
+### `post` /shutdown 关闭服务器
+参数：
+- authorized `String` 管理员鉴权码
+- port `Int` 服务器端口号
+
+返回：
+关闭结果
+例：
+```
+{
+    success: true,
 }
 ```
 

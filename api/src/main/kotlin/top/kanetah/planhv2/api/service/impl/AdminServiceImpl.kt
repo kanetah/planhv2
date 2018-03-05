@@ -1,8 +1,10 @@
 package top.kanetah.planhv2.api.service.impl
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.actuate.endpoint.ShutdownEndpoint
 import org.springframework.stereotype.Service
 import top.kanetah.planhv2.api.annotation.JsonValue
+import top.kanetah.planhv2.api.configuration.PortConfiguration
 import top.kanetah.planhv2.api.entity.Admin
 import top.kanetah.planhv2.api.entity.Auth
 import top.kanetah.planhv2.api.service.AccessSecurityService
@@ -16,8 +18,12 @@ import java.util.*
 @Service
 class AdminServiceImpl @Autowired constructor(
         private val accessSecurityService: AccessSecurityService,
-        private val repositoryService: RepositoryService
+        private val repositoryService: RepositoryService,
+        private val shutdownEndpoint: ShutdownEndpoint
 ) : AdminService {
+    override fun shutdown(port: Int?) = (PortConfiguration.PORT == port).also {
+        if (it) shutdownEndpoint.invoke()
+    }
     
     override fun adminWriteIn(
             password: String, validate: String

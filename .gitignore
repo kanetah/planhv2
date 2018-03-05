@@ -4,6 +4,7 @@
 *.iml
 *.ipr
 *.pfx
+*.out
 
 
 ### Kotlin ignore ###
