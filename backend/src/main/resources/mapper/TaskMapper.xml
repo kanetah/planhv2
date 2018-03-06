@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.kanetah.planhv2.backend.repository.TaskRepository">
+
+    <insert id="save">
+        INSERT INTO task_tab (
+            subject_id, title, content, is_team_task, deadline, type, format_processor_id, format
+        ) VALUE (
+            #{subjectId}, #{title}, #{content}, #{isTeamTask},
+            #{deadline}, #{type}, #{formatProcessorId}, #{format}
+        )
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM task_tab
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+
+    <update id="update">
+        UPDATE task_tab
+        <set>
+            subject_id = #{subjectId},
+            title = #{title},
+            content = #{content},
+            is_team_task = #{isTeamTask},
+            deadline = #{deadline},
+            type = #{type},
+            format_processor_id = #{formatProcessorId},
+            format = #{format}
+        </set>
+        <where>
+            id = #{taskId}
+        </where>
+    </update>
+
+    <resultMap id="task_result" type="top.kanetah.planhv2.backend.entity.Task">
+        <id property="taskId" column="id"/>
+        <result property="subjectId" column="subject_id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="isTeamTask" column="is_team_task"/>
+        <result property="deadline" column="deadline"/>
+        <result property="type" column="type"/>
+        <result property="formatProcessorId" column="format_processor_id"/>
+        <result property="format" column="format"/>
+    </resultMap>
+
+    <sql id="find_task">
+        SELECT *
+        FROM task_tab
+    </sql>
+    <select id="find" resultMap="task_result">
+        <include refid="find_task"/>
+        <where>
+            id = #{id}
+        </where>
+    </select>
+    <select id="findByTitleLike" resultMap="task_result">
+        <include refid="find_task"/>
+        <where>
+            title LIKE "%"#{title}"%"
+        </where>
+    </select>
+    <select id="taskList" resultMap="task_result">
+        (
+        <include refid="find_task"/>
+        <where>
+            <if test="subjectId != null">
+                subject_id = #{subjectId}
+            </if>
+        </where>
+        ORDER BY deadline DESC
+        )LIMIT #{start}, #{size}
+    </select>
+    <select id="unsubmitted" resultMap="task_result">
+        <include refid="find_task"/>
+        LEFT JOIN
+        (SELECT task_id FROM submission_tab WHERE user_id = #{userId}) AS submit
+        ON task_tab.id = submit.task_id
+        WHERE submit.task_id IS NULL
+        ORDER BY deadline ASC
+    </select>
+    <select id="allTasks" resultMap="task_result">
+        <include refid="find_task"/>
+        ORDER BY deadline ASC
+    </select>
+
+</mapper>

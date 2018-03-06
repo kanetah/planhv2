@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.kanetah.planhv2.backend.repository.SubjectRepository">
+
+    <insert id="save">
+        INSERT INTO subject_tab (
+            subject_name, teacher_name, email_address, team_limit, recommend_processor_id
+        ) VALUE (
+            #{subjectName}, #{teacherName}, #{emailAddress},
+            #{teamLimit, typeHandler = top.kanetah.planhv2.backend.typeHandler.IntArrayTypeHandler},
+            #{recommendProcessorId}
+        )
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM subject_tab
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+
+    <update id="update">
+        UPDATE subject_tab
+        <set>
+            subject_name = #{subjectName},
+            teacher_name = #{teacherName},
+            email_address = #{emailAddress},
+            team_limit = #{teamLimit, typeHandler = top.kanetah.planhv2.api.typeHandler.IntArrayTypeHandler},
+            recommend_processor_id = #{recommendProcessorId}
+        </set>
+        <where>
+            id = #{subjectId}
+        </where>
+    </update>
+
+    <resultMap id="subject_result" type="top.kanetah.planhv2.backend.entity.Subject">
+        <id property="subjectId" column="id"/>
+        <result property="subjectName" column="subject_name"/>
+        <result property="teacherName" column="teacher_name"/>
+        <result property="emailAddress" column="email_address"/>
+        <result property="teamLimit" column="team_limit" typeHandler="top.kanetah.planhv2.backend.typeHandler.IntArrayTypeHandler"/>
+        <result property="recommendProcessorId" column="recommend_processor_id"/>
+    </resultMap>
+
+    <sql id="find_subject">
+        SELECT *
+        FROM subject_tab
+    </sql>
+    <select id="findAll" resultMap="subject_result">
+        <include refid="find_subject"/>
+    </select>
+    <select id="find" resultMap="subject_result">
+        <include refid="find_subject"/>
+        <where>
+            id = #{id}
+        </where>
+    </select>
+    <select id="findBySubjectName" resultMap="subject_result">
+        <include refid="find_subject"/>
+        <where>
+            subject_name = #{subjectName}
+        </where>
+    </select>
+
+</mapper>
