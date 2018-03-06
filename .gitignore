@@ -18,16 +18,16 @@ api/out/
 ### React ignore ###
 
 # dependencies
-ui/node_modules
-admin-ui/node_modules
+frontend/user/node_modules
+frontend/admin/node_modules
 
 # testing
-ui/coverage
-admin-ui/coverage
+frontend/user/coverage
+frontend/admin/coverage
 
 # production
-ui/build
-admin-ui/build
+frontend/user/build
+frontend/admin/build
 
 # misc
 .DS_Store
