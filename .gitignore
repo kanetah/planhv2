@@ -8,10 +8,9 @@
 
 
 ### Kotlin ignore ###
-api/.gradle/
-api/gradle/
-api/build/
-api/out/
+backend/.gradle/
+backend/build/
+backend/out/
 *.jar
 
 
