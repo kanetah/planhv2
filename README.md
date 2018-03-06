@@ -6,14 +6,14 @@
 正在施工中... :construction: 
 
 ### 关于前端
-代码位于 [planhv2/ui/](https://github.com/kanetah/planhv2/tree/master/ui) 目录下  
+代码位于 [planhv2/frontend/](https://github.com/kanetah/planhv2/tree/master/frontend) 目录下  
 借助于蚂蚁家的 ant-design 进行开发，正在逐步实现。
 
 ### 关于后端
-代码位于 [planhv2/api/](https://github.com/kanetah/planhv2/tree/master/api) 目录下  
+代码位于 [planhv2/backend/](https://github.com/kanetah/planhv2/tree/master/backend) 目录下  
 基础的设计见：
-- [PlanH V2 API 描述文档](https://github.com/kanetah/planhv2/blob/master/api/planH-api.md)
-- [PlanH V2 实体 描述文档](https://github.com/kanetah/planhv2/blob/master/api/planH-entity.md)
+- [PlanH V2 API 描述文档](https://github.com/kanetah/planhv2/blob/master/backend/planH-api.md)
+- [PlanH V2 实体 描述文档](https://github.com/kanetah/planhv2/blob/master/backend/planH-entity.md)
 
 ### 部署
 ![无法显示图片](https://github.com/kanetah/planhv2/raw/master/picture/planHV2架构.jpg)
