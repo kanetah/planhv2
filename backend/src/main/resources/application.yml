@@ -4,8 +4,8 @@ mybatis:
   config-location: classpath:mybatis-config.xml
 spring:
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/planhv2?useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://60.205.227.77:3306/planhv2?useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=GMT
     username: root
     password: nicopoiduang
   http:
@@ -14,7 +14,7 @@ spring:
       max-request-size: 1056Mb
 server:
 #  port: 9713 or 9913, auto configuration by PortConfiguration.kt
-  max-http-header-size: 1024
+  max-http-header-size: 8192
 endpoints:
   shutdown:
     enabled: true

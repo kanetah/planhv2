@@ -25,10 +25,8 @@ async function getUsers() {
         });
     } catch (e) {
         Cookies.set("token", null);
-        message.error({
-            content: "用户校验失败，请重新登录", onClose: () => {
-                window.location.reload(false);
-            }
+        message.error("用户校验失败，请重新登录", 0, () => {
+            // window.location.reload(false);
         });
     }
     EventEmitter.emit(`users`, users);

@@ -6,8 +6,7 @@ import Banner from "../components/Banner";
 import Login from "../components/Login";
 import Index from "../components/Index";
 
-// axios.defaults.baseURL = "//planhapi.kanetah.top";
-axios.defaults.baseURL = "http://localhost:9713"; // 开发环境
+axios.defaults.baseURL = "https://planhapi.kanetah.top";
 
 class App extends Component {
 

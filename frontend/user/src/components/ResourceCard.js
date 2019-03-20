@@ -17,7 +17,7 @@ export default class ResourceCard extends Component {
     uploadProps = {
         name: "file",
         multiple: true,
-        action: "//planhapi.kanetah.top/resource",
+        action: "https://planhapi.kanetah.top/resource",
         data: {token},
         onChange: info => {
             if (info.file.status === 'done') {

@@ -53,7 +53,7 @@ interface FormatProcessorClass {
     fun getFormatName(
             user: User, task: Task, team: Team?, file: MultipartFile
     ) = if (task.format.isNullOrEmpty()) throw Exception("任务指定的格式化处理器不合适")
-    else task.format!!.let {
+    else task.format!!.let { format ->
         fun replace(
                 source: String
         ): String = Regex("\\[[\\w]*]").find(source).let { result ->
@@ -74,7 +74,7 @@ interface FormatProcessorClass {
                 null -> result.value
             }))
         }
-        replace(it)
+        replace(format)
     }
     
     companion object {

@@ -62,7 +62,7 @@ export default class FileDragger extends Component {
     uploadProps = {
         name: 'file',
         multiple: true,
-        action: "//planhapi.kanetah.top/submission",
+        action: "https://planhapi.kanetah.top/submission",
         onChange: info => {
             const status = info.file.status;
             if (status === 'done') {
