@@ -3,7 +3,6 @@ import {Breadcrumb, Icon, Layout, Menu, Tag} from 'antd';
 import ContentTask from "./ContentTask";
 import ContentSubject from "./ContentSubject";
 import ContentUser from "./ContentUser";
-import ContentTeam from "./ContentTeam";
 import ContentAdmin from "./ContentAdmin";
 
 const {Content, Sider} = Layout;
@@ -34,9 +33,17 @@ class MainContent extends Component {
         });
     };
 
-    setComponentTitle = title => {
+    setTitle = title => {
         this.setState({
             componentTitle: title,
+        });
+    };
+
+    component = null;
+    setContent = component => {
+        this.component = component;
+        this.setState({
+            selectedKey: component ? this.state.selectedKey + 100 : this.state.selectedKey - 100,
         });
     };
 
@@ -65,10 +72,12 @@ class MainContent extends Component {
                     background: '#fff', padding: 24, margin: 0, minHeight: 280,
                 }}
                 >
-                    {this.state.selectedKey === 0 ? <ContentTask setTitle={this.setComponentTitle}/> : null}
-                    {this.state.selectedKey === 1 ? <ContentSubject setTitle={this.setComponentTitle}/> : null}
-                    {this.state.selectedKey === 2 ? <ContentUser setTitle={this.setComponentTitle}/> : null}
-                    {this.state.selectedKey === 3 ? <ContentAdmin setTitle={this.setComponentTitle}/> : null}
+                    {this.state.selectedKey === 0 ? <ContentTask
+                        setTitle={this.setTitle} setContent={this.setContent}/> : null}
+                    {this.state.selectedKey === 1 ? <ContentSubject setTitle={this.setTitle}/> : null}
+                    {this.state.selectedKey === 2 ? <ContentUser setTitle={this.setTitle}/> : null}
+                    {this.state.selectedKey === 3 ? <ContentAdmin setTitle={this.setTitle}/> : null}
+                    {this.state.selectedKey >= 100 ? this.component : null}
                 </Content>
             </Layout>
         </Layout>

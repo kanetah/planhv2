@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Card, Form, Input, Checkbox, DatePicker, Button, message, Select, Mention, Tooltip} from "antd";
+import {Button, Card, DatePicker, Form, Input, message, Select, Tooltip} from "antd";
 import {axios} from "../index";
 import EventEmitter from '../frame/EventEmitter';
 

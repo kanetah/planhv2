@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
-import {Icon, Table} from "antd";
+import {Button, Table} from "antd";
 import axios from "axios";
 import Global, {subjects} from "../frame/PlanHGlobal";
 import EventEmitter from '../frame/EventEmitter';
+import TaskDetails from "./TaskDetails";
 
-const columns = [{
+const columns = that => [{
     title: '标题',
     dataIndex: 'title',
     key: 'title',
@@ -29,6 +30,11 @@ const columns = [{
     title: '命名格式',
     dataIndex: 'format',
     key: 'format',
+}, {
+    title: '',
+    dataIndex: '',
+    render: (_, record) => <Button shape="circle" icon="bars" onClick={that.handleRowClick(record)}/>,
+    key: 'action',
 }];
 
 class ContentTask extends Component {
@@ -78,8 +84,16 @@ class ContentTask extends Component {
         this.request();
     };
 
+    handleRowClick = record => () => {
+        this.props.setContent(
+            <TaskDetails task={record}
+                setTitle={this.props.setTitle} setContent={this.props.setContent}/>
+        );
+        console.warn(record);
+    };
+
     render = () => <div>
-        <Table dataSource={this.state.dataSource} columns={columns}/>
+        <Table dataSource={this.state.dataSource} columns={columns(this)}/>
     </div>
 }
 
