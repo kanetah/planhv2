@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Card, Col, Icon, Row, Upload, message, List, Divider} from "antd";
-import Global, {token} from "../farme/PlanHGlobal";
-import EventEmitter from '../farme/EventEmitter';
+import Global, {token} from "../frame/PlanHGlobal";
+import EventEmitter from '../frame/EventEmitter';
 
 export default class ResourceCard extends Component {
 

@@ -16,10 +16,10 @@ class TaskServiceImpl @Autowired constructor(
 ) : TaskService {
 
     override fun getTasks(
-            userId: Int, subjectId: Int?, page: Int, limit: Int
+            userId: Int?, subjectId: Int?, page: Int, limit: Int
     ) = with(repositoryService.taskRepository) {
         val allTask = taskList(subjectId, (page - 1) * limit, limit) ?: return@with null
-        val unsubmitted = unsubmitted(userId) ?: return@with allTask
+        val unsubmitted = userId?.let { unsubmitted(it) } ?: return@with allTask
         allTask.removeAll(unsubmitted)
         unsubmitted.addAll(allTask)
         unsubmitted

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Card, Col, Divider, Icon, Popover, Row} from "antd";
-import "../farme/DateTranslate";
-import Global, {subjects, submissions} from "../farme/PlanHGlobal";
-import EventEmitter from '../farme/EventEmitter';
+import "../frame/DateTranslate";
+import Global, {subjects, submissions} from "../frame/PlanHGlobal";
+import EventEmitter from '../frame/EventEmitter';
 import FileDragger from "./FileDragger";
 import SubjectTag from "./SubjectTag";
 

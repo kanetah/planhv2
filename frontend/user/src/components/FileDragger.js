@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import Cookies from "js-cookie";
 import {Col, Row, Upload, message, Popover, Tag} from "antd";
-import DateTranslate from "../farme/DateTranslate";
-import EventEmitter from '../farme/EventEmitter';
-import Global, {taskResources} from "../farme/PlanHGlobal";
+import DateTranslate from "../frame/DateTranslate";
+import EventEmitter from '../frame/EventEmitter';
+import Global, {taskResources} from "../frame/PlanHGlobal";
 
 const {Dragger} = Upload;
 

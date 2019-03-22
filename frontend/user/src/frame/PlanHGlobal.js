@@ -1,6 +1,6 @@
 import {axios} from "./App";
 import Cookies from "js-cookie";
-import EventEmitter from '../farme/EventEmitter';
+import EventEmitter from './EventEmitter';
 import {message} from "antd";
 
 const tokenCookie = Cookies.getJSON("token");

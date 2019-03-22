@@ -542,7 +542,7 @@
 
 ### `get` /task 任务列表
 参数：
-- userId `Int` 用户Id
+- userId `Int?` 用户Id
 - subjectId `Int?` 科目Id
 - page `Int` 页码
 - limit `Int` 每一页的任务数量

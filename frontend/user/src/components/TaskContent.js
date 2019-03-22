@@ -3,8 +3,8 @@ import axios from 'axios';
 import {Menu, Layout, Input, Spin, Row, Col, Button, Popover, Icon} from 'antd';
 import Cookies from "js-cookie";
 import TaskCard from "./TaskCard";
-import Global, {asyncWhenLogin} from "../farme/PlanHGlobal";
-import EventEmitter from "../farme/EventEmitter";
+import Global, {asyncWhenLogin} from "../frame/PlanHGlobal";
+import EventEmitter from "../frame/EventEmitter";
 
 const {Header, Content} = Layout;
 const {Search} = Input;

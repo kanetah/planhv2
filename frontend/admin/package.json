@@ -5,6 +5,7 @@
   "dependencies": {
     "antd": "^3.2.3",
     "axios": "^0.18.0",
+    "events": "^2.0.0",
     "immutable": "3.7.4",
     "react": "^16.2.0",
     "react-app-rewire-less": "^2.1.0",

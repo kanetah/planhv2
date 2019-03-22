@@ -3,7 +3,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import TweenOne from "rc-tween-one";
 import {Icon, Input, Button, message} from 'antd';
-import EventEmitter from '../farme/EventEmitter';
+import EventEmitter from '../frame/EventEmitter';
 
 export default class Login extends Component {
 

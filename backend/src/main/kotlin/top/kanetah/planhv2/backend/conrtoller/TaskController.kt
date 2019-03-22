@@ -24,12 +24,12 @@ class TaskController @Autowired constructor(
 
     @GetMapping("/task")
     fun tasks(
-            @RequestHeader userId: Int,
-            @RequestHeader subjectId: String,
+            @RequestHeader(required = false) userId: Int?,
+            @RequestHeader(required = false) subjectId: String?,
             @RequestHeader page: Int,
             @RequestHeader limit: Int
     ) = taskService.getTasks(userId, try {
-        subjectId.toInt()
+        subjectId?.toInt()
     } catch (e: NumberFormatException) {
         null
     }, page, limit)
@@ -37,18 +37,20 @@ class TaskController @Autowired constructor(
     @PostMapping("/task")
     fun createTask(
             @RequestBody values: Map<String, String>
-    ) = taskService.takeIf {
-        accessSecurityService.authCheck(values["authorized"])
-    }?.create(
-                    values["subjectId"]?.toInt()!!,
-                    "${values["title"]}",
-                    "${values["content"]}",
-                    values["isTeamTask"]?.toBoolean()!!,
-                    Timestamp.valueOf("${values["deadline"]}"),
-                    "${values["type"]}",
-                    "${values["format"]}",
-                    values["formatProcessorId"]?.toInt()!!
-            ).let {
+    ) = taskService
+//            .takeIf {
+//        accessSecurityService.authCheck(values["authorized"])
+//    }?.create(
+//                    values["subjectId"]?.toInt()!!,
+//                    "${values["title"]}",
+//                    "${values["content"]}",
+//                    values["isTeamTask"]?.toBoolean()!!,
+//                    Timestamp.valueOf("${values["deadline"]}"),
+//                    "${values["type"]}",
+//                    "${values["format"]}",
+//                    values["formatProcessorId"]?.toInt()!!
+//            )
+            .let {
         object {
             @JsonValue
             val success = it

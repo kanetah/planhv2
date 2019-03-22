@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Tag, message} from 'antd';
-import EventEmitter from '../farme/EventEmitter';
+import EventEmitter from '../frame/EventEmitter';
 
 const {CheckableTag} = Tag;
 

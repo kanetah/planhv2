@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Button, Card, Col, Popover, Row} from "antd";
 import Cookies from "js-cookie";
-import EventEmitter from '../farme/EventEmitter';
-import Global from "../farme/PlanHGlobal";
+import EventEmitter from '../frame/EventEmitter';
+import Global from "../frame/PlanHGlobal";
 
 export default class UserInfo extends Component {
 
