@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Card, Form, Input, Checkbox, DatePicker, Button, message, Select, Mention} from "antd";
+import {Card, Form, Input, Checkbox, DatePicker, Button, message, Select, Mention, Tooltip} from "antd";
 import {axios} from "../index";
 import EventEmitter from '../frame/EventEmitter';
 
@@ -102,22 +102,12 @@ class TaskForm extends Component {
                         {getFieldDecorator("format", {
                             rules: [{required: true, message: "命名格式"}],
                         })(
-                            <Input style={{maxWidth: "30em", width: "14vw"}}/>
+                            <Tooltip trigger={"focus"} title="code[23]? | name | title | subject | index | original | date">
+                                <Input style={{maxWidth: "30em", width: "14vw"}}/>
+                            </Tooltip>
                         )}
                     </Item>
-                    {/*<Item label="格式处理">*/}
-                    {/*{getFieldDecorator("formatProcessorId", {*/}
-                    {/*rules: [{required: true, message: "格式处理器Id"}]*/}
-                    {/*})(*/}
-                    {/*<Input style={{maxWidth: "30em", width: "14vw"}} size={"small"}/>*/}
-                    {/*)}*/}
-                    {/*</Item>*/}
                     <Item>
-                        {getFieldDecorator("isTeamTask", {
-                            rules: [{required: false, message: "是否团队任务？"}]
-                        })(
-                            <Checkbox defaultChecked={false} size={"small"}>团队任务</Checkbox>
-                        )}
                         <Button type="primary" htmlType="submit">发布</Button>
                     </Item>
                 </Form>

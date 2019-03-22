@@ -13,7 +13,7 @@ export default class Sider extends Component {
                     <TabPane tab={"资料文档"} key={1}>
                         <ResourceCard/>
                     </TabPane>
-                    <TabPane tab={"组队"} key={2}>
+                    <TabPane tab={"链接"} key={2}>
                         <TeamCard/>
                     </TabPane>
                 </Tabs>

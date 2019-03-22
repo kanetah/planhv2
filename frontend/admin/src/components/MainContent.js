@@ -12,7 +12,6 @@ const items = [
     "任务列表",
     "科目列表",
     "用户列表",
-    "团队列表",
     "管理操作",
 ];
 
@@ -69,8 +68,7 @@ class MainContent extends Component {
                     {this.state.selectedKey === 0 ? <ContentTask setTitle={this.setComponentTitle}/> : null}
                     {this.state.selectedKey === 1 ? <ContentSubject setTitle={this.setComponentTitle}/> : null}
                     {this.state.selectedKey === 2 ? <ContentUser setTitle={this.setComponentTitle}/> : null}
-                    {this.state.selectedKey === 3 ? <ContentTeam setTitle={this.setComponentTitle}/> : null}
-                    {this.state.selectedKey === 4 ? <ContentAdmin setTitle={this.setComponentTitle}/> : null}
+                    {this.state.selectedKey === 3 ? <ContentAdmin setTitle={this.setComponentTitle}/> : null}
                 </Content>
             </Layout>
         </Layout>

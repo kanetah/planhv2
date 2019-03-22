@@ -29,13 +29,6 @@ const columns = [{
     title: '命名格式',
     dataIndex: 'format',
     key: 'format',
-}, {
-    title: '团队',
-    dataIndex: 'teamTask',
-    render: teamTask => teamTask ?
-        <Icon type="check-square" style={{color: "#66CC66"}}/> :
-        <Icon type="minus-square" style={{color: "#CC6666"}}/>,
-    key: 'teamTask',
 }];
 
 class ContentTask extends Component {
