@@ -6,7 +6,7 @@ class ContentAdmin extends Component {
         this.props.setTitle("预览");
     };
 
-    render = () => <div>
+    render = () => <div style={{width: "100%", height: "100%", overflow: "auto"}}>
         ContentAdmin
     </div>
 }

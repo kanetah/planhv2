@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Table} from "antd";
+import {Button, Pagination, Table} from "antd";
 import axios from "axios";
 import Global, {subjects} from "../frame/PlanHGlobal";
 import EventEmitter from '../frame/EventEmitter';
@@ -87,13 +87,14 @@ class ContentTask extends Component {
     handleRowClick = record => () => {
         this.props.setContent(
             <TaskDetails task={record}
-                setTitle={this.props.setTitle} setContent={this.props.setContent}/>
+                         setTitle={this.props.setTitle} setContent={this.props.setContent}/>
         );
         console.warn(record);
     };
 
     render = () => <div style={{width: "100%", height: "100%", overflow: "auto"}}>
-        <Table dataSource={this.state.dataSource} columns={columns(this)}/>
+        <Table dataSource={this.state.dataSource} columns={columns(this)}
+               pagination={{defaultCurrent: 1, pageSize:5, total: this.state.dataSource.length}}/>
     </div>
 }
 

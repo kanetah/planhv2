@@ -20,7 +20,7 @@ const columns = that => [{
     dataIndex: '',
     render: (_, record) => <span>
         <a onClick={that.handleEdit(record)}>编辑</a>
-        <Divider type="vertical" />
+        <Divider type="vertical"/>
         <a onClick={that.handleDelete(record.subjectId)}>删除</a>
     </span>,
     key: 'action',
@@ -58,8 +58,9 @@ class ContentSubject extends Component {
         console.warn(subjectId);
     };
 
-    render = () => <div>
-        <Table dataSource={this.state.subjects ? this.state.subjects : []} columns={columns(this)}/>
+    render = () => <div style={{width: "100%", height: "100%", overflow: "auto"}}>
+        <Table dataSource={this.state.subjects ? this.state.subjects : []} columns={columns(this)}
+               pagination={{defaultCurrent: 1, pageSize: 10, total: this.state.subjects.length}}/>
     </div>
 }
 
