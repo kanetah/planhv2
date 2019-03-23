@@ -65,7 +65,7 @@ export default class ShutdownCard extends Component {
     };
 
     render = () =>
-        <Card style={{overflowY: "auto"}} bodyStyle={{padding: "8px"}}>
+        <Card style={{overflowY: "hidden"}} bodyStyle={{padding: "8px"}}>
             <h1 style={{display: "inline"}}>PlanH V2 - Admin</h1>
             <span style={{float: "right"}}>
                 <Button type="danger" onClick={this.handleShutdown(9713)} disabled={this.state.disabled9713}>

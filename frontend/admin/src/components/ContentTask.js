@@ -92,7 +92,7 @@ class ContentTask extends Component {
         console.warn(record);
     };
 
-    render = () => <div>
+    render = () => <div style={{width: "100%", height: "100%", overflow: "auto"}}>
         <Table dataSource={this.state.dataSource} columns={columns(this)}/>
     </div>
 }

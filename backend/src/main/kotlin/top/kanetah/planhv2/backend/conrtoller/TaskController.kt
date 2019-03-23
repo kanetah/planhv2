@@ -37,20 +37,17 @@ class TaskController @Autowired constructor(
     @PostMapping("/task")
     fun createTask(
             @RequestBody values: Map<String, String>
-    ) = taskService
-//            .takeIf {
-//        accessSecurityService.authCheck(values["authorized"])
-//    }?.create(
-//                    values["subjectId"]?.toInt()!!,
-//                    "${values["title"]}",
-//                    "${values["content"]}",
-//                    values["isTeamTask"]?.toBoolean()!!,
-//                    Timestamp.valueOf("${values["deadline"]}"),
-//                    "${values["type"]}",
-//                    "${values["format"]}",
-//                    values["formatProcessorId"]?.toInt()!!
-//            )
-            .let {
+    ) = taskService.takeIf {
+        accessSecurityService.authCheck(values["authorized"])
+    }?.create(
+            values["subjectId"]?.toInt()!!,
+            "${values["title"]}",
+            "${values["content"]}",
+            values["isTeamTask"]?.toBoolean()!!,
+            Timestamp.valueOf("${values["deadline"]}"),
+            "${values["type"]}",
+            "${values["format"]}"
+    ).let {
         object {
             @JsonValue
             val success = it
@@ -77,16 +74,16 @@ class TaskController @Autowired constructor(
     ) = taskService.takeIf {
         accessSecurityService.authCheck(values["authorized"])
     }?.updateTask(
-                    taskId,
-                    values["subjectId"]?.toInt()!!,
-                    "${values["title"]}",
-                    "${values["content"]}",
-                    values["isTeamTask"]?.toBoolean()!!,
-                    Timestamp.valueOf("${values["deadline"]}"),
-                    "${values["type"]}",
-                    "${values["format"]}",
-                    values["formatProcessorId"]?.toInt()!!
-            ).let {
+            taskId,
+            values["subjectId"]?.toInt()!!,
+            "${values["title"]}",
+            "${values["content"]}",
+            values["isTeamTask"]?.toBoolean()!!,
+            Timestamp.valueOf("${values["deadline"]}"),
+            "${values["type"]}",
+            "${values["format"]}",
+            values["formatProcessorId"]?.toInt()!!
+    ).let {
         object {
             @JsonValue
             val success = it

@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Button, Card, DatePicker, Form, Input, message, Select, Tooltip} from "antd";
+import {Button, Card, DatePicker, Form, Icon, Input, message, Select, Tooltip, notification, Divider} from "antd";
 import {axios} from "../index";
 import EventEmitter from '../frame/EventEmitter';
 
@@ -16,29 +16,62 @@ class TaskForm extends Component {
         EventEmitter.on("subjects", subjects => {
             this.setState({
                 subjects,
+                formatTooltipVisible: false,
             });
         });
     }
 
+    handleFormatTooltip = () => {
+        this.setState({
+            formatTooltipVisible: !this.state.formatTooltipVisible,
+        });
+    };
+
     handleSubmit = e => {
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields(async (err, values) => {
             if (err) {
-                message.error("error");
+                message.error("校验失败");
                 return;
             }
-            console.warn("format", values["format"]);
-            axios.post("/task", {
-                authorized: window.auth,
-                subjectId: values["subjectId"],
-                title: values["title"],
-                content: values["content"],
-                isTeamTask: values["isTeamTask"] === true,
-                deadline: values["deadline"].format("YYYY-MM-DD HH:mm:ss"),
-                type: values["type"],
-                format: values["format"],
-                formatProcessorId: values["formatProcessorId"],
-            });
+            try {
+                const result = await axios.post("/task", {
+                    authorized: window.auth,
+                    subjectId: values["subjectId"],
+                    title: values["title"],
+                    content: values["content"],
+                    isTeamTask: values["isTeamTask"] === true,
+                    deadline: values["deadline"].format("YYYY-MM-DD HH:mm:ss"),
+                    type: values["type"],
+                    format: values["format"],
+                    formatProcessorId: values["formatProcessorId"],
+                });
+                console.warn(result);
+                if (result.status === 200) {
+                    if (result.data.success) {
+                        notification.open({
+                            message: '任务发布',
+                            description: <div>
+                                <h3>
+                                    {values["title"]}
+                                    <Divider type="vertical" />
+                                    {this.state.subjects[values["subjectId"]].subjectName}
+                                </h3>
+                                <p>{values["content"]}</p>
+                            </div>,
+                            icon: <Icon type="smile" style={{color: '#108ee9'}}/>,
+                        });
+                        this.props.form.resetFields();
+                    } else {
+                        message.error("发布失败");
+                    }
+                } else {
+                    message.error("网络错误");
+                }
+            } catch (e) {
+                console.warn("发布异常", e);
+                message.error("发布异常");
+            }
         });
     };
 
@@ -72,7 +105,7 @@ class TaskForm extends Component {
                             </Select>
                         )}
                     </Item>
-                    <Item className={"task-content-input"} label="任务内容">
+                    <Item className={"task-content-input"} label="内容">
                         {getFieldDecorator("content", {
                             rules: [{required: true, message: "输入内容"}]
                         })(
@@ -93,18 +126,23 @@ class TaskForm extends Component {
                     </Item>
                     <Item label="文件类型">
                         {getFieldDecorator("type", {
-                            rules: [{required: true, message: "文件类型"}]
+                            rules: [{required: true, message: "输入文件类型"}]
                         })(
                             <Input style={{maxWidth: "30em", width: "14vw"}}/>
                         )}
                     </Item>
                     <Item label="命名格式">
                         {getFieldDecorator("format", {
-                            rules: [{required: true, message: "命名格式"}],
+                            rules: [{required: true, message: "输入命名格式"}],
                         })(
-                            <Tooltip trigger={"focus"} title="code[23]? | name | title | subject | index | original | date">
-                                <Input style={{maxWidth: "30em", width: "14vw"}}/>
-                            </Tooltip>
+                            <Input style={{maxWidth: "30em", width: "14vw"}}
+                                   addonAfter={
+                                       <Tooltip visible={this.state.formatTooltipVisible}
+                                                title="提示：code[23]? | name | title | subject | index | original | date">
+                                           <Icon type="exclamation-circle" onClick={this.handleFormatTooltip}/>
+                                       </Tooltip>
+                                   }
+                            />
                         )}
                     </Item>
                     <Item>

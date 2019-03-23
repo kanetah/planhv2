@@ -59,8 +59,8 @@ class MainContent extends Component {
                     {items.map((e, i) => <Menu.Item key={i}>{e}</Menu.Item>)}
                 </Menu>
             </Sider>
-            <Layout style={{padding: '0 24px 24px'}}>
-                <Breadcrumb style={{margin: '16px 0'}}>
+            <Layout style={{padding: '0 24px 4px', textAlign: "center"}}>
+                <Breadcrumb style={{margin: '16px 0', textAlign: "left"}}>
                     <Breadcrumb.Item>
                         <Tag color="geekblue">{window.admin}</Tag>
                         <Icon type="user" style={{transform: "scale(1.5)"}}/>
@@ -69,9 +69,9 @@ class MainContent extends Component {
                     <Breadcrumb.Item>{this.state.componentTitle}</Breadcrumb.Item>
                 </Breadcrumb>
                 <Content style={{
-                    background: '#fff', padding: 24, margin: 0, minHeight: 280,
-                }}
-                >
+                    background: '#fff', padding: 12, margin: 0,
+                    height: '70vh', textAlign: "left", overflow: "hidden"
+                }}>
                     {this.state.selectedKey === 0 ? <ContentTask
                         setTitle={this.setTitle} setContent={this.setContent}/> : null}
                     {this.state.selectedKey === 1 ? <ContentSubject setTitle={this.setTitle}/> : null}
@@ -79,6 +79,7 @@ class MainContent extends Component {
                     {this.state.selectedKey === 3 ? <ContentAdmin setTitle={this.setTitle}/> : null}
                     {this.state.selectedKey >= 100 ? this.component : null}
                 </Content>
+                <span style={{fontSize: "10px", color: "#999"}}>Coding By Kane</span>
             </Layout>
         </Layout>
 }
