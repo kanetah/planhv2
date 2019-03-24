@@ -62,6 +62,7 @@ class TaskForm extends Component {
                             icon: <Icon type="smile" style={{color: '#108ee9'}}/>,
                         });
                         this.props.form.resetFields();
+                        EventEmitter.emit("refresh-tasks");
                     } else {
                         message.error("发布失败");
                     }

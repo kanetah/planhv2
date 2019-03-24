@@ -59,6 +59,9 @@ class ContentTask extends Component {
                 dataSource,
             });
         });
+        EventEmitter.on("refresh-tasks", () => {
+            this.request();
+        });
     }
 
     request = async () => {
