@@ -203,7 +203,8 @@
 
 ### `get` /users 用户列表
 参数：
-- token `String` 用户Token
+- authorized `String?` 管理员鉴权码
+- token `String?` 用户Token
 
 返回：
 所有用户（不包括config与accessToken）  
@@ -303,6 +304,48 @@
   },
   accessToken: null,
 }
+```
+
+### `get` /user/submission/:id 用户提交
+参数：
+- authorized `String` 管理员鉴权码
+- _userId_ `Int` 用户Id `PathVariable:id`
+
+返回：
+用户提交内容列表  
+例：
+```
+[
+{
+  submissionId: 1,
+  taskId: 1,
+  userId: 55,
+  teamId: null,
+  submitDate: "2018/01/01 10:00:00",
+  fileAttributes: {
+    resourceId: 1,
+    formerName: "poi.mp3",
+    saveName: "1521192255_某某.mp3",
+    size: 1000000,
+    path: "/planHFile/音乐/音乐作业/poi.mp3",
+  },
+},
+{
+  submissionId: 2,
+  taskId: 2,
+  userId: 55,
+  teamId: null,
+  submitDate: "2018/01/01 10:00:00",
+  fileAttributes: {
+    resourceId: 2,
+    formerName: "poi.jpg",
+    saveName: "poi.jpg",
+    size: 1000000,
+    path: "/planHFile/美术/美术作业/poi.jpg",
+  },
+},
+...
+]
 ```
 
 ---

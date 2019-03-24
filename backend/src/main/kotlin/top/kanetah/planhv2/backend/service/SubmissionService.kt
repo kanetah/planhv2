@@ -11,4 +11,5 @@ interface SubmissionService {
     fun createSubmission(token: String, taskId: Int, teamId: Int?, file: MultipartFile): Boolean
     fun updateSubmission(token: String, taskId: Int, teamId: Int?, file: MultipartFile): Boolean
     fun findByTokenAndTaskId(token: String, taskId: Int): Submission?
+    fun findByUserId(userId: Int): ArrayList<Submission>?
 }

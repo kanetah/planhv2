@@ -7,6 +7,7 @@ import top.kanetah.planhv2.backend.annotation.JsonValue
 import top.kanetah.planhv2.backend.annotation.PlanHApiController
 import top.kanetah.planhv2.backend.entity.User
 import top.kanetah.planhv2.backend.service.AccessSecurityService
+import top.kanetah.planhv2.backend.service.SubmissionService
 import top.kanetah.planhv2.backend.service.UserService
 
 /**
@@ -15,7 +16,8 @@ import top.kanetah.planhv2.backend.service.UserService
 @PlanHApiController
 class UserController @Autowired constructor(
         private val userService: UserService,
-        private val accessSecurityService: AccessSecurityService
+        private val accessSecurityService: AccessSecurityService,
+        private val submissionService: SubmissionService
 ) {
 
     @PostMapping("/token")
@@ -66,15 +68,19 @@ class UserController @Autowired constructor(
     fun users(
             @RequestHeader(required = false) authorized: String?,
             @RequestHeader(required = false) token: String?
-    ) = userService.takeIf {
+    ) = userService.let {
         accessSecurityService.run {
             when {
-                !authorized.isNullOrBlank() -> { authCheck(authorized) }
-                !token.isNullOrBlank() -> { tokenCheck(token) }
+                !authorized.isNullOrBlank() -> {
+                    it.takeIf { authCheck(authorized) }?.getAllUserWithLastSubmission()
+                }
+                !token.isNullOrBlank() -> {
+                    it.takeIf { tokenCheck(token) }?.getAllUser()
+                }
                 else -> throw RuntimeException("security check fail")
             }
         }
-    }?.getAllUser()
+    }
 
     @PostMapping("/user")
     fun createUser(
@@ -140,4 +146,12 @@ class UserController @Autowired constructor(
             @RequestHeader authorized: String,
             @PathVariable("id") userId: Int
     ) = userService.takeIf { accessSecurityService.authCheck(authorized) }?.findUser(userId)
+
+    @GetMapping("/user/submission/{id}")
+    fun findSubmissionFroAdmin(
+            @RequestHeader authorized: String,
+            @PathVariable("id") userId: Int
+    ) = submissionService.takeIf {
+        accessSecurityService.authCheck(authorized)
+    }?.findByUserId(userId)
 }

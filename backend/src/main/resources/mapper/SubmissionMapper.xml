@@ -65,12 +65,18 @@
             task_id = #{taskId}
         </where>
     </select>
-    <select id="findByUserIdAndTaskId" resultMap="submission_result">
+    <select id="findLastByUserId" resultMap="submission_result">
         <include refid="find_submission"/>
         <where>
             user_id = #{userId}
-            AND
-            task_id = #{taskId}
+        </where>
+        ORDER BY submit_date DESC
+        LIMIT 1
+    </select>
+    <select id="findByUserId" resultMap="submission_result">
+        <include refid="find_submission"/>
+        <where>
+            user_id = #{userId}
         </where>
     </select>
 

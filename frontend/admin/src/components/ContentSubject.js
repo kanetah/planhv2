@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 import Global, {subjects} from "../frame/PlanHGlobal";
 import EventEmitter from '../frame/EventEmitter';
-import {Button, Divider, Input, message, Modal, Table} from "antd";
+import {Button, Divider, Input, message, Modal, Popconfirm, Table} from "antd";
 import {axios} from "../index";
 
-const confirm = Modal.confirm;
 const columns = that => [{
     title: '科目',
     dataIndex: 'subjectName',
@@ -25,7 +24,10 @@ const columns = that => [{
     render: (_, record) => <span>
         <a onClick={that.handleEdit(record)}>编辑</a>
         <Divider type="vertical"/>
-        <a onClick={that.handleDelete(record)}>删除</a>
+        <Popconfirm title={`确认删除科目"${record.subjectName}"?`} onConfirm={that.handleDelete(record)}
+                    okText="确认" okType="danger" cancelText="取消">
+            <a>删除</a>
+        </Popconfirm>
     </span>,
     key: 'action',
 }];
@@ -96,37 +98,29 @@ class ContentSubject extends Component {
         })
     };
 
-    handleDelete = subject => () => {
-        confirm({
-            title: '确认删除',
-            content: `科目：${subject.subjectName}`,
-            okText: '删除',
-            onOk: async () => {
-                try {
-                    const result = await axios.delete(`/subject/${subject.subjectId}`, {
-                        data: {
-                            authorized: window.auth,
-                        },
-                    });
-                    if (result.status === 200) {
-                        if (result.data.success) {
-                            message.success("删除成功");
-                            this.setState({
-                                subjectEditModalVisible: false,
-                            }, Global.getSubjectsFromServer);
-                        } else {
-                            message.error("删除失败");
-                        }
-                    } else {
-                        message.error("网络错误");
-                    }
-                } catch (e) {
-                    console.warn("删除异常", e);
-                    message.error("删除异常");
+    handleDelete = subject => async () => {
+        try {
+            const result = await axios.delete(`/subject/${subject.subjectId}`, {
+                data: {
+                    authorized: window.auth,
+                },
+            });
+            if (result.status === 200) {
+                if (result.data.success) {
+                    message.success("删除成功");
+                    this.setState({
+                        subjectEditModalVisible: false,
+                    }, Global.getSubjectsFromServer);
+                } else {
+                    message.error("删除失败");
                 }
-            },
-            cancelText: '取消',
-        });
+            } else {
+                message.error("网络错误");
+            }
+        } catch (e) {
+            console.warn("删除异常", e);
+            message.error("删除异常");
+        }
     };
 
     handleSave = async () => {

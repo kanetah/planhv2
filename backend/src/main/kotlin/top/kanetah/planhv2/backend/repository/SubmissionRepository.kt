@@ -20,5 +20,7 @@ interface SubmissionRepository {
 
     fun findByTokenAndTaskId(@Param("token") token: String, @Param("taskId") taskId: Int): Submission?
 
-    fun findByUserIdAndTaskId(@Param("userId")userId: Int, @Param("taskId")taskId: Int): Submission?
+    fun findLastByUserId(userId: Int): Submission?
+
+    fun findByUserId(userId: Int): ArrayList<Submission>?
 }

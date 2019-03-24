@@ -62,4 +62,8 @@ class SubmissionServiceImpl @Autowired constructor(
     override fun findByTokenAndTaskId(
             token: String, taskId: Int
     ) = repositoryService.submissionRepository.findByTokenAndTaskId(token, taskId)
+
+    override fun findByUserId(
+            userId: Int
+    ) = repositoryService.submissionRepository.findByUserId(userId)
 }

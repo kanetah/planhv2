@@ -78,6 +78,22 @@ class UserServiceImpl @Autowired constructor(
         }
     }
 
+    override fun getAllUserWithLastSubmission() = ArrayList<Any>().also { list ->
+        repositoryService.userRepository.findAll()?.forEach {
+            list.add(object {
+                @JsonValue
+                val userId = it.userId
+                @JsonValue
+                val userCode = it.userCode
+                @JsonValue
+                val userName = it.userName
+                @JsonValue
+                val lastSubmit = repositoryService.submissionRepository
+                        .findLastByUserId(it.userId)?.submitDate ?: ""
+            })
+        }
+    }
+
     override fun createUser(
             user: User
     ) = repositoryService.userRepository.save(user) > 0

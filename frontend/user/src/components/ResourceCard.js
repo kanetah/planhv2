@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Card, Col, Icon, Row, Upload, message, List, Divider} from "antd";
+import {Button, Card, Col, Icon, Row, Upload, message, List, Divider, Tooltip} from "antd";
 import Global, {token} from "../frame/PlanHGlobal";
 import EventEmitter from '../frame/EventEmitter';
 
@@ -58,24 +58,26 @@ export default class ResourceCard extends Component {
                 renderItem={item => {
                     const size = Math.round(item["resourceSize"]);
                     return (
-                    <List.Item>
-                        <div style={{width: "100%", textAlign: "left"}}>
-                            <p style={{
-                                display: "inline",
-                                maxWidth: "15em",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                            }}>
-                                {item["resourceName"]}
-                            </p>
-                            <Divider type="vertical"/>
-                            {size > 0 ? size : "小于 1"} KB
-                            <Button size="small" style={{float: "right"}}>
-                                <a href={item["resourceUrl"]}>下载</a>
-                            </Button>
-                        </div>
-                    </List.Item>
-                )}}
+                        <List.Item className="resource-item">
+                            <div style={{width: "100%", textAlign: "left"}}>
+                                {/*<Tooltip title={item["resourceName"]} overlayStyle={{*/}
+                                {/*}}>*/}
+                                    <p style={{
+                                        display: "inline",
+                                        wordBreak: "break-all",
+                                    }}>
+                                        {item["resourceName"]}
+                                    </p>
+                                {/*</Tooltip>*/}
+                                <Divider type="vertical"/>
+                                {size > 0 ? size : "小于 1"} KB
+                                <Button size="small" style={{float: "right"}}>
+                                    <a href={item["resourceUrl"]}>下载</a>
+                                </Button>
+                            </div>
+                        </List.Item>
+                    )
+                }}
             />
         </Card>
 }
