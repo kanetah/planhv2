@@ -46,8 +46,6 @@ class ContentTask extends Component {
         }
         this.state = {
             dataSource: [],
-            page: 1,
-            limit: 20,
         };
         this.subjectListener = subjects => {
             const dataSource = (Object.assign([], this.state.dataSource).map(e => {
@@ -62,8 +60,10 @@ class ContentTask extends Component {
             });
         };
         EventEmitter.on("subjects", this.subjectListener);
-        EventEmitter.on("refresh-tasks", () => {
-            this.request();
+        EventEmitter.on("tasks", tasks => {
+            this.setState({
+                dataSource: tasks,
+            });
         });
     }
 
@@ -71,27 +71,9 @@ class ContentTask extends Component {
         EventEmitter.removeListener("subjects", this.subjectListener);
     };
 
-    request = async () => {
-        const result = await axios.get("/task", {
-            headers: {
-                page: this.state.page,
-                limit: this.state.limit,
-            }
-        });
-        this.setState({
-            dataSource: result.data.map(e => {
-                e.key = e.taskId;
-                if (subjects && subjects[e.subjectId]) {
-                    e.subjectName = subjects[e.subjectId].subjectName;
-                }
-                return e;
-            }),
-        });
-    };
-
     componentDidMount = () => {
         this.props.setTitle("预览");
-        this.request();
+        Global.getTaskFromServer();
     };
 
     handleRowClick = record => () => {

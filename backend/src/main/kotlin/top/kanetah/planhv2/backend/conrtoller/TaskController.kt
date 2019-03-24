@@ -19,7 +19,7 @@ class TaskController @Autowired constructor(
 
     @GetMapping("/tasks")
     fun allTasks(
-            @RequestHeader userId: Int
+            @RequestHeader(required = false) userId: Int?
     ) = taskService.getAllTasks(userId)
 
     @GetMapping("/task")

@@ -550,7 +550,7 @@
 ## 任务
 ### `get` /tasks 所有任务
 参数：
-- userId `Int` 用户Id
+- userId `Int?` 用户Id
 
 返回：
 所有任务内容详情列表  

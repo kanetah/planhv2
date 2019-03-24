@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {Button, Card, DatePicker, Form, Icon, Input, message, Select, Tooltip, notification, Divider} from "antd";
+import Global from "../frame/PlanHGlobal";
 import {axios} from "../index";
 import EventEmitter from '../frame/EventEmitter';
 
@@ -61,7 +62,7 @@ class TaskForm extends Component {
                             icon: <Icon type="smile" style={{color: '#108ee9'}}/>,
                         });
                         this.props.form.resetFields();
-                        EventEmitter.emit("refresh-tasks");
+                        Global.getTaskFromServer();
                     } else {
                         message.error("发布失败");
                     }

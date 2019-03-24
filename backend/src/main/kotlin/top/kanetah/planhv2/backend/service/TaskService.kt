@@ -8,7 +8,7 @@ import java.sql.Timestamp
  */
 interface TaskService {
     fun getTasks(userId: Int?, subjectId: Int?, page: Int, limit: Int): ArrayList<Task>?
-    fun getAllTasks(userId: Int): ArrayList<Task>?
+    fun getAllTasks(userId: Int?): ArrayList<Task>?
     fun create(subjectId: Int, title: String, content: String, isTeamTask: Boolean, deadline: Timestamp, type: String, format: String?, formatProcessorId: Int = 0): Boolean
     fun deleteTask(id: Int): Boolean
     fun updateTask(id: Int, subjectId: Int, title: String, content: String, isTeamTask: Boolean, deadline: Timestamp, type: String, format: String?, formatProcessorId: Int): Boolean
