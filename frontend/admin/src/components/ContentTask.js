@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Table} from "antd";
-import axios from "axios";
-import Global, {subjects} from "../frame/PlanHGlobal";
+import Global, {subjects, tasks} from "../frame/PlanHGlobal";
 import EventEmitter from '../frame/EventEmitter';
 import TaskDetails from "./TaskDetails";
 
@@ -44,10 +43,13 @@ class ContentTask extends Component {
         if (!subjects || subjects.length === 0) {
             Global.getSubjectsFromServer();
         }
+        if (!tasks || tasks.length === 0) {
+            Global.getTaskFromServer();
+        }
         this.state = {
             dataSource: [],
         };
-        this.subjectListener = subjects => {
+        this.subjectsListener = subjects => {
             const dataSource = (Object.assign([], this.state.dataSource).map(e => {
                     if (subjects[e.subjectId]) {
                         e.subjectName = subjects[e.subjectId].subjectName;
@@ -59,21 +61,22 @@ class ContentTask extends Component {
                 dataSource,
             });
         };
-        EventEmitter.on("subjects", this.subjectListener);
-        EventEmitter.on("tasks", tasks => {
+        this.tasksListener = tasks => {
             this.setState({
                 dataSource: tasks,
             });
-        });
+        };
+        EventEmitter.on("subjects", this.subjectsListener);
+        EventEmitter.on("tasks", this.tasksListener);
     }
 
     componentWillUnmount = () => {
-        EventEmitter.removeListener("subjects", this.subjectListener);
+        EventEmitter.removeListener("subjects", this.subjectsListener);
+        EventEmitter.removeListener("tasks", this.tasksListener);
     };
 
     componentDidMount = () => {
         this.props.setTitle("预览");
-        Global.getTaskFromServer();
     };
 
     handleRowClick = record => () => {
@@ -85,7 +88,7 @@ class ContentTask extends Component {
 
     render = () => <div style={{width: "100%", height: "100%", overflow: "auto"}}>
         <Table dataSource={this.state.dataSource} columns={columns(this)}
-               pagination={{defaultCurrent: 1, pageSize:5, total: this.state.dataSource.length}}/>
+               pagination={{defaultCurrent: 1, pageSize: 5, total: this.state.dataSource.length}}/>
     </div>
 }
 

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Global, {users} from "../frame/PlanHGlobal";
+import Global, {subjects, tasks, users} from "../frame/PlanHGlobal";
 import EventEmitter from '../frame/EventEmitter';
 import {Button, Divider, Input, message, Modal, Popconfirm, Table} from "antd";
 import {axios} from "../index";
@@ -42,6 +42,12 @@ const columns = that => [{
 const submissionColumns = [{
     title: '任务',
     dataIndex: 'taskId',
+    render: taskId => tasks.filter(e => e.taskId === taskId)[0].title,
+    key: 'taskId',
+}, {
+    title: '科目',
+    dataIndex: 'taskId',
+    render: taskId => subjects[tasks.filter(e => e.taskId === taskId)[0].subjectId].subjectName,
     key: 'taskId',
 }, {
     title: '文件',
@@ -60,6 +66,9 @@ class ContentUser extends Component {
         super(props);
         if (!users || users.length === 0) {
             Global.getUsersFromServer();
+        }
+        if (!tasks || tasks.length === 0) {
+            Global.getTaskFromServer();
         }
         this.state = {
             userSubmissionModalVisible: false,
@@ -114,10 +123,8 @@ class ContentUser extends Component {
                 authorized: window.auth,
             }
         });
-        console.warn(result);
         if (result.status === 200) {
             if (result.data) {
-                console.warn(result.data);
                 this.setState({
                     userSubmissionModalData: result.data,
                 });
