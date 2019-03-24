@@ -70,7 +70,7 @@ class TaskForm extends Component {
                     message.error("网络错误");
                 }
             } catch (e) {
-                console.warn("发布异常", e);
+                console.error("发布异常", e);
                 message.error("发布异常");
             }
         });

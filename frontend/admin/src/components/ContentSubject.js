@@ -46,7 +46,7 @@ class ContentSubject extends Component {
                 e.key = e.subjectId;
                 return e;
             }),
-            editSubjectId: false,
+            subjectId: false,
             subjectName: "",
             teacherName: "",
             emailAddress: "",
@@ -68,13 +68,16 @@ class ContentSubject extends Component {
 
     componentDidMount = () => {
         this.props.setTitle("详情");
+        if (!this.state.subjects || this.state.subjects.length === 0) {
+            Global.getTaskFromServer();
+        }
     };
 
     handleCreate = () => {
         this.setState({
             subjectEditModalVisible: true,
             subjectEditModalTitle: "新增科目",
-            editSubjectId: false,
+            subjectId: false,
             subjectName: "",
             teacherName: "",
             emailAddress: "",
@@ -85,7 +88,7 @@ class ContentSubject extends Component {
         this.setState({
             subjectEditModalVisible: true,
             subjectEditModalTitle: "编辑科目",
-            editSubjectId: record.editSubjectId,
+            subjectId: record.subjectId,
             subjectName: record.subjectName,
             teacherName: record.teacherName,
             emailAddress: record.emailAddress,
@@ -118,7 +121,7 @@ class ContentSubject extends Component {
                 message.error("网络错误");
             }
         } catch (e) {
-            console.warn("删除异常", e);
+            console.error("删除异常", e);
             message.error("删除异常");
         }
     };
@@ -126,8 +129,8 @@ class ContentSubject extends Component {
     handleSave = async () => {
         try {
             let result;
-            if (this.state.editSubjectId) {
-                result = await axios.put(`/subject/${this.state.editSubjectId}`, {
+            if (this.state.subjectId) {
+                result = await axios.put(`/subject/${this.state.subjectId}`, {
                     authorized: window.auth,
                     subjectName: this.state.subjectName,
                     teacherName: this.state.teacherName,
@@ -154,7 +157,7 @@ class ContentSubject extends Component {
                 message.error("网络错误");
             }
         } catch (e) {
-            console.warn("保存异常", e);
+            console.error("保存异常", e);
             message.error("保存异常");
         }
     };

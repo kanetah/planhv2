@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Global, {subjects, tasks, users} from "../frame/PlanHGlobal";
 import EventEmitter from '../frame/EventEmitter';
-import {Button, Divider, Input, message, Modal, Popconfirm, Table} from "antd";
+import {Button, Divider, Input, message, Modal, notification, Popconfirm, Table, Upload} from "antd";
 import {axios} from "../index";
 
 const columns = that => [{
@@ -22,9 +22,12 @@ const columns = that => [{
         <Button type="dashed" icon="plus" onClick={that.handleCreate}>
             添加
         </Button>
-        <Button type="dashed" icon="file-add" onClick={that.handlePatchCreate}>
-            快速添加
-        </Button>
+        <Upload name="file" action={`https:${Global.backendDomain}/users`}
+                headers={{authorized: window.auth}} onChange={that.handlePatchCreate}>
+            <Button type="dashed" icon="file-add">
+                快速添加
+            </Button>
+        </Upload>
     </Button.Group>,
     dataIndex: '',
     render: (_, record) => <span>
@@ -101,6 +104,9 @@ class ContentUser extends Component {
 
     componentDidMount = () => {
         this.props.setTitle("详情");
+        if (!this.state.users || this.state.users.length === 0) {
+            Global.getTaskFromServer();
+        }
     };
 
     handleCreate = () => {
@@ -190,7 +196,7 @@ class ContentUser extends Component {
                 message.error("网络错误");
             }
         } catch (e) {
-            console.warn("删除异常", e);
+            console.error("删除异常", e);
             message.error("删除异常");
         }
     };
@@ -224,13 +230,29 @@ class ContentUser extends Component {
                 message.error("网络错误");
             }
         } catch (e) {
-            console.warn("保存异常", e);
+            console.error("保存异常", e);
             message.error("保存异常");
         }
     };
 
-    handlePatchCreate = () => {
-        console.warn("patch save");
+    handlePatchCreate = ({file}) => {
+        if (file.response) {
+            if (file.response.status === 200) {
+                notification.success({
+                    message: "导入用户成功",
+                    description: `共导入用户${file.response.count}个`,
+                });
+                Global.getUsersFromServer();
+            } else {
+                message.error("导入失败");
+                notification.error({
+                    message: `${file.response.status}: ${file.response.error}`,
+                    description: file.response.message,
+                    duration: null,
+                });
+                console.error("导入失败", file.response);
+            }
+        }
     };
 
     handleCancel = () => {

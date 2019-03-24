@@ -77,6 +77,9 @@ class ContentTask extends Component {
 
     componentDidMount = () => {
         this.props.setTitle("预览");
+        if (!this.state.dataSource || this.state.dataSource.length === 0) {
+            Global.getTaskFromServer();
+        }
     };
 
     handleRowClick = record => () => {

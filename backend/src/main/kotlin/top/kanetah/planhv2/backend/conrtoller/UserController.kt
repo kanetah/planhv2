@@ -98,7 +98,7 @@ class UserController @Autowired constructor(
 
     @PostMapping("/users")
     fun createUserBatch(
-            @RequestParam authorized: String,
+            @RequestHeader authorized: String,
             @RequestPart file: MultipartFile
     ) = userService.takeIf {
         accessSecurityService.authCheck(authorized)

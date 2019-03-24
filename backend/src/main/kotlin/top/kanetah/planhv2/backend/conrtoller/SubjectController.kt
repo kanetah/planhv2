@@ -60,8 +60,7 @@ class SubjectController @Autowired constructor(
                     "${values["subjectName"]}",
                     "${values["teacherName"]}",
                     "${values["emailAddress"]}",
-                    values["teamLimit"]?.toIntArray(),
-                    values["recommendProcessorId"]?.toInt()!!
+                    values["teamLimit"]?.toIntArray()
             ).let {
         object {
             @JsonValue

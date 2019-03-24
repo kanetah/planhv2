@@ -9,6 +9,6 @@ interface SubjectService {
     fun getAllSubject(): ArrayList<Subject>?
     fun createSubject(subjectName: String, teacherName: String, emailAddress: String, teamLimit: IntArray?, recommendProcessorId: Int = 0): Boolean
     fun deleteSubject(id: Int): Boolean
-    fun updateSubject(id: Int, subjectName: String, teacherName: String, emailAddress: String, teamLimit: IntArray?, recommendProcessorId: Int): Boolean
+    fun updateSubject(id: Int, subjectName: String, teacherName: String, emailAddress: String, teamLimit: IntArray?, recommendProcessorId: Int = 0): Boolean
     fun findSubject(id: Int): Subject?
 }
