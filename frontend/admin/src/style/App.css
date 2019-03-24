@@ -23,7 +23,8 @@
     width: 100%;
 }
 
-.subject-edit .ant-input-group-wrapper {
+.subject-edit .ant-input-group-wrapper,
+.user-edit .ant-input-group-wrapper {
     margin: 12px;
 }
 

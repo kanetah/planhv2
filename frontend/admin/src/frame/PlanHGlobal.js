@@ -10,9 +10,25 @@ async function getSubjectsFromServer() {
     EventEmitter.emit(`subjects`, subjects);
 }
 
+let users = [];
+
+async function getUsersFromServer() {
+    users = [];
+    const result = await axios.get("/users", {
+        headers: {
+            authorized: window.auth,
+        }
+    });
+    result.data.forEach(user => {
+        users[user["userId"]] = user;
+    });
+    EventEmitter.emit("users", users);
+}
+
 export default {
     backendDomain: "//planhapi.kanetah.top",
     getSubjectsFromServer,
+    getUsersFromServer,
 }
 
-export {subjects};
+export {subjects, users};

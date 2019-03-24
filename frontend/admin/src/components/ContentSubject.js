@@ -19,7 +19,7 @@ const columns = that => [{
     key: 'emailAddress',
 }, {
     title: <Button type="dashed" icon="plus" onClick={that.handleCreate}>
-        新增
+        添加
     </Button>,
     dataIndex: '',
     render: (_, record) => <span>
@@ -44,11 +44,12 @@ class ContentSubject extends Component {
                 e.key = e.subjectId;
                 return e;
             }),
+            editSubjectId: false,
             subjectName: "",
             teacherName: "",
             emailAddress: "",
         };
-        this.subjectListener = subjects => {
+        this.subjectsListener = subjects => {
             this.setState({
                 subjects: subjects.filter(e => e).map(e => {
                     e.key = e.subjectId;
@@ -56,11 +57,11 @@ class ContentSubject extends Component {
                 }),
             });
         };
-        EventEmitter.on("subjects", this.subjectListener);
+        EventEmitter.on("subjects", this.subjectsListener);
     }
 
     componentWillUnmount = () => {
-        EventEmitter.removeListener("subjects", this.subjectListener);
+        EventEmitter.removeListener("subjects", this.subjectsListener);
     };
 
     componentDidMount = () => {
@@ -71,6 +72,7 @@ class ContentSubject extends Component {
         this.setState({
             subjectEditModalVisible: true,
             subjectEditModalTitle: "新增科目",
+            editSubjectId: false,
             subjectName: "",
             teacherName: "",
             emailAddress: "",
@@ -81,6 +83,7 @@ class ContentSubject extends Component {
         this.setState({
             subjectEditModalVisible: true,
             subjectEditModalTitle: "编辑科目",
+            editSubjectId: record.editSubjectId,
             subjectName: record.subjectName,
             teacherName: record.teacherName,
             emailAddress: record.emailAddress,
@@ -128,12 +131,22 @@ class ContentSubject extends Component {
 
     handleSave = async () => {
         try {
-            const result = await axios.post("/subject", {
-                authorized: window.auth,
-                subjectName: this.state.subjectName,
-                teacherName: this.state.teacherName,
-                emailAddress: this.state.emailAddress,
-            });
+            let result;
+            if (this.state.editSubjectId) {
+                result = await axios.put(`/subject/${this.state.editSubjectId}`, {
+                    authorized: window.auth,
+                    subjectName: this.state.subjectName,
+                    teacherName: this.state.teacherName,
+                    emailAddress: this.state.emailAddress,
+                });
+            } else {
+                result = await axios.post("/subject", {
+                    authorized: window.auth,
+                    subjectName: this.state.subjectName,
+                    teacherName: this.state.teacherName,
+                    emailAddress: this.state.emailAddress,
+                });
+            }
             if (result.status === 200) {
                 if (result.data.success) {
                     message.success("保存成功");

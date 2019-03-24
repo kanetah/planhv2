@@ -57,15 +57,24 @@ class UserController @Autowired constructor(
     ) = userService.takeIf {
         accessSecurityService.tokenCheck("${values["token"]}", userId)
     }?.configUser(
-                    "${values["token"]}",
-                    values["theme"],
-                    values["enableAccessToken"]?.toBoolean() ?: false
-            )
+            "${values["token"]}",
+            values["theme"],
+            values["enableAccessToken"]?.toBoolean() ?: false
+    )
 
     @GetMapping("/users")
     fun users(
-            @RequestHeader token: String
-    ) = userService.takeIf { accessSecurityService.tokenCheck(token) }?.getAllUser()
+            @RequestHeader(required = false) authorized: String?,
+            @RequestHeader(required = false) token: String?
+    ) = userService.takeIf {
+        accessSecurityService.run {
+            when {
+                !authorized.isNullOrBlank() -> { authCheck(authorized) }
+                !token.isNullOrBlank() -> { tokenCheck(token) }
+                else -> throw RuntimeException("security check fail")
+            }
+        }
+    }?.getAllUser()
 
     @PostMapping("/user")
     fun createUser(
@@ -73,8 +82,8 @@ class UserController @Autowired constructor(
     ) = userService.takeIf {
         accessSecurityService.authCheck("${values["authorized"]}")
     }?.createUser(
-                    User(userCode = "${values["userCode"]}", userName = "${values["userName"]}")
-            ).let {
+            User(userCode = "${values["userCode"]}", userName = "${values["userName"]}")
+    ).let {
         object {
             @JsonValue
             val success = it
@@ -116,10 +125,10 @@ class UserController @Autowired constructor(
     ) = userService.takeIf {
         accessSecurityService.authCheck("${values["authorized"]}")
     }?.updateUser(
-                    userId,
-                    "${values["userCode"]}",
-                    "${values["userName"]}"
-            ).let {
+            userId,
+            "${values["userCode"]}",
+            "${values["userName"]}"
+    ).let {
         object {
             @JsonValue
             val success = it
