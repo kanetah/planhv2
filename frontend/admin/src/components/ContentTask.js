@@ -47,7 +47,7 @@ class ContentTask extends Component {
             Global.getTaskFromServer();
         }
         this.state = {
-            dataSource: [],
+            dataSource: tasks ? tasks : [],
         };
         this.subjectsListener = subjects => {
             const dataSource = (Object.assign([], this.state.dataSource).map(e => {

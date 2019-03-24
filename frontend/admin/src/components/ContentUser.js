@@ -62,6 +62,7 @@ const submissionColumns = [{
     render: date => (new Date(date)).toLocaleString(),
     key: 'submitDate',
 }];
+const uploadFiles = [];
 
 class ContentUser extends Component {
 
@@ -237,7 +238,12 @@ class ContentUser extends Component {
 
     handlePatchCreate = ({file}) => {
         if (file.response) {
-            if (file.response.status === 200) {
+            if (uploadFiles[file.timestamp]) {
+                return;
+            } else {
+                uploadFiles[file.timestamp] = file;
+            }
+            if (file.response.success) {
                 notification.success({
                     message: "导入用户成功",
                     description: `共导入用户${file.response.count}个`,
