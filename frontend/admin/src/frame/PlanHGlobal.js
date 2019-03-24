@@ -5,6 +5,7 @@ let subjects = [];
 
 async function getSubjectsFromServer() {
     const result = await axios.get("/subjects");
+    subjects = [];
     result.data.map(e => subjects[e.subjectId] = e);
     EventEmitter.emit(`subjects`, subjects);
 }

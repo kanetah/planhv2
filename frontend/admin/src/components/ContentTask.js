@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Pagination, Table} from "antd";
+import {Button, Table} from "antd";
 import axios from "axios";
 import Global, {subjects} from "../frame/PlanHGlobal";
 import EventEmitter from '../frame/EventEmitter';
@@ -41,13 +41,15 @@ class ContentTask extends Component {
 
     constructor(props) {
         super(props);
-        Global.getSubjectsFromServer();
+        if (!subjects || subjects.length === 0) {
+            Global.getSubjectsFromServer();
+        }
         this.state = {
             dataSource: [],
             page: 1,
             limit: 20,
         };
-        EventEmitter.on("subjects", subjects => {
+        this.subjectListener = subjects => {
             const dataSource = (Object.assign([], this.state.dataSource).map(e => {
                     if (subjects[e.subjectId]) {
                         e.subjectName = subjects[e.subjectId].subjectName;
@@ -58,11 +60,16 @@ class ContentTask extends Component {
             this.setState({
                 dataSource,
             });
-        });
+        };
+        EventEmitter.on("subjects", this.subjectListener);
         EventEmitter.on("refresh-tasks", () => {
             this.request();
         });
     }
+
+    componentWillUnmount = () => {
+        EventEmitter.removeListener("subjects", this.subjectListener);
+    };
 
     request = async () => {
         const result = await axios.get("/task", {
@@ -92,7 +99,6 @@ class ContentTask extends Component {
             <TaskDetails task={record}
                          setTitle={this.props.setTitle} setContent={this.props.setContent}/>
         );
-        console.warn(record);
     };
 
     render = () => <div style={{width: "100%", height: "100%", overflow: "auto"}}>

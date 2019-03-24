@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import {subjects} from "../frame/PlanHGlobal";
+import Global, {subjects} from "../frame/PlanHGlobal";
 import EventEmitter from '../frame/EventEmitter';
-import {Button, Divider, Input, Modal, Table} from "antd";
-import Global from "../frame/PlanHGlobal";
+import {Button, Divider, Input, message, Modal, Table} from "antd";
+import {axios} from "../index";
 
+const confirm = Modal.confirm;
 const columns = that => [{
     title: '科目',
     dataIndex: 'subjectName',
@@ -24,7 +25,7 @@ const columns = that => [{
     render: (_, record) => <span>
         <a onClick={that.handleEdit(record)}>编辑</a>
         <Divider type="vertical"/>
-        <a onClick={that.handleDelete(record.subjectId)}>删除</a>
+        <a onClick={that.handleDelete(record)}>删除</a>
     </span>,
     key: 'action',
 }];
@@ -33,7 +34,9 @@ class ContentSubject extends Component {
 
     constructor(props) {
         super(props);
-        Global.getSubjectsFromServer();
+        if (!subjects || subjects.length === 0) {
+            Global.getSubjectsFromServer();
+        }
         this.state = {
             subjectEditModalVisible: false,
             subjectEditModalTitle: "",
@@ -45,18 +48,23 @@ class ContentSubject extends Component {
             teacherName: "",
             emailAddress: "",
         };
-        EventEmitter.on("subjects", subjects => {
+        this.subjectListener = subjects => {
             this.setState({
-                subject: subjects.filter(e => e).map(e => {
+                subjects: subjects.filter(e => e).map(e => {
                     e.key = e.subjectId;
                     return e;
                 }),
             });
-        });
+        };
+        EventEmitter.on("subjects", this.subjectListener);
     }
 
+    componentWillUnmount = () => {
+        EventEmitter.removeListener("subjects", this.subjectListener);
+    };
+
     componentDidMount = () => {
-        this.props.setTitle("预览");
+        this.props.setTitle("详情");
     };
 
     handleCreate = () => {
@@ -70,7 +78,6 @@ class ContentSubject extends Component {
     };
 
     handleEdit = record => () => {
-        console.warn(record);
         this.setState({
             subjectEditModalVisible: true,
             subjectEditModalTitle: "编辑科目",
@@ -86,16 +93,66 @@ class ContentSubject extends Component {
         })
     };
 
-    handleDelete = subjectId => () => {
-        console.warn(subjectId);
+    handleDelete = subject => () => {
+        confirm({
+            title: '确认删除',
+            content: `科目：${subject.subjectName}`,
+            okText: '删除',
+            onOk: async () => {
+                try {
+                    const result = await axios.delete(`/subject/${subject.subjectId}`, {
+                        data: {
+                            authorized: window.auth,
+                        },
+                    });
+                    if (result.status === 200) {
+                        if (result.data.success) {
+                            message.success("删除成功");
+                            this.setState({
+                                subjectEditModalVisible: false,
+                            }, Global.getSubjectsFromServer);
+                        } else {
+                            message.error("删除失败");
+                        }
+                    } else {
+                        message.error("网络错误");
+                    }
+                } catch (e) {
+                    console.warn("删除异常", e);
+                    message.error("删除异常");
+                }
+            },
+            cancelText: '取消',
+        });
     };
 
-    handleSave = () => {
-        console.warn("save");
+    handleSave = async () => {
+        try {
+            const result = await axios.post("/subject", {
+                authorized: window.auth,
+                subjectName: this.state.subjectName,
+                teacherName: this.state.teacherName,
+                emailAddress: this.state.emailAddress,
+            });
+            if (result.status === 200) {
+                if (result.data.success) {
+                    message.success("保存成功");
+                    this.setState({
+                        subjectEditModalVisible: false,
+                    }, Global.getSubjectsFromServer)
+                } else {
+                    message.error("保存失败");
+                }
+            } else {
+                message.error("网络错误");
+            }
+        } catch (e) {
+            console.warn("保存异常", e);
+            message.error("保存异常");
+        }
     };
 
     handleCancel = () => {
-        console.warn("cancel");
         this.setState({
             subjectEditModalVisible: false,
         });
@@ -107,7 +164,9 @@ class ContentSubject extends Component {
         <Modal
             title={this.state.subjectEditModalTitle}
             visible={this.state.subjectEditModalVisible}
+            okText="保存"
             onOk={this.handleSave}
+            cancelText="取消"
             onCancel={this.handleCancel}
             className={"subject-edit"}
         >

@@ -46,7 +46,6 @@ class TaskForm extends Component {
                     format: values["format"],
                     formatProcessorId: values["formatProcessorId"],
                 });
-                console.warn(result);
                 if (result.status === 200) {
                     if (result.data.success) {
                         notification.open({
