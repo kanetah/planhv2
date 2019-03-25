@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@antv/data-set": "^0.10.2",
     "antd": "^3.2.3",
     "axios": "^0.18.0",
     "events": "^2.0.0",
@@ -11,6 +12,7 @@
     "react-app-rewire-less": "^2.1.0",
     "react-dom": "^16.2.0",
     "react-scripts": "1.1.1",
+    "viser-react": "^2.4.5",
     "webpack": "^0.2.0"
   },
   "scripts": {

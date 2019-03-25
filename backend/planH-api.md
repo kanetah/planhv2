@@ -327,7 +327,7 @@
     formerName: "poi.mp3",
     saveName: "1521192255_某某.mp3",
     size: 1000000,
-    path: "/planHFile/音乐/音乐作业/poi.mp3",
+    path: "/planHFile/音乐/音乐作业/1521192255_某某.mp3",
   },
 },
 {
@@ -699,6 +699,48 @@
 }
 ```
 
+### `get` /task/submission/:id 任务详情
+参数：
+- authorized `String` 管理员鉴权码
+- _taskId_ `Int` 任务Id `PathVariable:id`
+
+返回：
+提交列表  
+例：
+```
+[
+{
+  submissionId: 1,
+  taskId: 1,
+  userId: 55,
+  teamId: null,
+  submitDate: "2018/01/01 10:00:00",
+  fileAttributes: {
+    resourceId: 1,
+    formerName: "poi.mp3",
+    saveName: "1521192255_某某.mp3",
+    size: 1000000,
+    path: "/planHFile/音乐/音乐作业/1521192255_某某.mp3",
+  },
+},
+{
+  submissionId: 2,
+  taskId: 1,
+  userId: 56,
+  teamId: null,
+  submitDate: "2018/01/01 10:00:00",
+  fileAttributes: {
+    resourceId: 2,
+    formerName: "poi.wmv",
+    saveName: "1521192256_某某.wmv",
+    size: 1000000,
+    path: "/planHFile/音乐/音乐作业/1521192256_某某.jpg",
+  },
+},
+...
+]
+```
+
 ---
 
 ## 提交
@@ -722,7 +764,7 @@
     formerName: "poi.mp3",
     saveName: "1521192255_某某.mp3",
     size: 1000000,
-    path: "/planHFile/音乐/音乐作业/poi.mp3",
+    path: "/planHFile/音乐/音乐作业/1521192255_某某.mp3",
   },
 },
 {

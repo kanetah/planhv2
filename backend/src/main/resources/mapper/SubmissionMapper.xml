@@ -79,5 +79,11 @@
             user_id = #{userId}
         </where>
     </select>
+    <select id="findByTaskId" resultMap="submission_result">
+        <include refid="find_submission"/>
+        <where>
+            task_id = #{taskId}
+        </where>
+    </select>
 
 </mapper>

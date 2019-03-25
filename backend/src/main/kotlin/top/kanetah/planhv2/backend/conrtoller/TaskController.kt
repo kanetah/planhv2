@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*
 import top.kanetah.planhv2.backend.annotation.JsonValue
 import top.kanetah.planhv2.backend.annotation.PlanHApiController
 import top.kanetah.planhv2.backend.service.AccessSecurityService
+import top.kanetah.planhv2.backend.service.SubmissionService
 import top.kanetah.planhv2.backend.service.TaskService
 import java.sql.Timestamp
 
@@ -14,7 +15,8 @@ import java.sql.Timestamp
 @PlanHApiController
 class TaskController @Autowired constructor(
         private val taskService: TaskService,
-        private val accessSecurityService: AccessSecurityService
+        private val accessSecurityService: AccessSecurityService,
+        private val submissionService: SubmissionService
 ) {
 
     @GetMapping("/tasks")
@@ -94,4 +96,12 @@ class TaskController @Autowired constructor(
     fun findTask(
             @PathVariable("id") taskId: Int
     ) = taskService.findTask(taskId)
+
+    @GetMapping("/task/submission/{id}")
+    fun findSubmissionFroAdmin(
+            @RequestHeader authorized: String,
+            @PathVariable("id") taskId: Int
+    ) = submissionService.takeIf {
+        accessSecurityService.authCheck(authorized)
+    }?.findByTaskId(taskId)
 }

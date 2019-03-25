@@ -23,4 +23,6 @@ interface SubmissionRepository {
     fun findLastByUserId(userId: Int): Submission?
 
     fun findByUserId(userId: Int): ArrayList<Submission>?
+
+    fun findByTaskId(taskId: Int): ArrayList<Submission>?
 }

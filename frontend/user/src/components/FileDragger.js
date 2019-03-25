@@ -94,13 +94,14 @@ export default class FileDragger extends Component {
     beforeUpload = (accept) => ({name}) => {
         const type = name.substr(name.lastIndexOf("."));
         this.uploadCheck = accept.indexOf(type) > -1;
-        if (!this.uploadCheck)
+        if (!this.uploadCheck) {
             message.error(
                 <div>
                     <p>文件应是下列类型之一：</p>
                     <p>{accept}</p>
                 </div>
             );
+        }
         return this.uploadCheck;
     };
 
