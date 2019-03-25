@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import Global, {subjects, users} from "../frame/PlanHGlobal";
 import EventEmitter from '../frame/EventEmitter';
-import {Button, Card, Col, Divider, Row, Table, Tag} from "antd";
+import {Button, Card, Col, Divider, Row, Table, Tag, message} from "antd";
 import {Axis, Chart, Coord, Legend, Pie, Tooltip} from 'viser-react';
 import {axios} from "../index";
+import copy from 'copy-to-clipboard';
 
 const submissionColumns = that => [{
     title: '用户',
@@ -33,6 +34,8 @@ class TaskDetails extends Component {
         }
         this.state = {
             submissions: [],
+            submissionsCount: 0,
+            unsubmissionsList: [],
             subjects: subjects ? subjects : [],
             users: users ? users.filter(e => e).map(e => {
                 e.key = e.userId;
@@ -54,7 +57,7 @@ class TaskDetails extends Component {
                     e.key = e.userId;
                     return e;
                 }),
-            });
+            }, () => this.updateSubmissions(this.state.submissions));
         };
         EventEmitter.on("subjects", this.subjectsListener);
         EventEmitter.on("users", this.usersListener);
@@ -72,28 +75,40 @@ class TaskDetails extends Component {
                 authorized: window.auth,
             },
         });
-        const submissions = result.data.map(e => {
+        this.updateSubmissions(result.data);
+    };
+
+    updateSubmissions = submission => {
+        let submissionsCount = 0;
+        const submissionsIds = [];
+        const submissions = submission.map(e => {
+            submissionsIds[submissionsCount++] = e.userId;
             e.key = e.submissionId;
             return e;
         });
-        this.setState({submissions});
+        const unsubmissionsList = this.state.users
+            .filter(e => !submissionsIds.filter(i => i === e.userId).length)
+            .sort((a, b) => Number(a.userId) - Number(b.userId));
+        console.warn("un", unsubmissionsList, this.state.users);
+        this.setState({submissions, submissionsCount, unsubmissionsList});
     };
 
     handleBack = () => {
         this.props.setContent(null);
     };
 
+    handleCopy = () => {
+        copy(this.state.unsubmissionsList
+            .map(e => `${e.userCode}: ${e.userName}`).join("\n"));
+        message.success('复制成功');
+    };
+
     render = () => {
-        let data = [];
-        this.state.submissions.forEach(e => data[e.userId] = e);
-        data = data.filter(e => e);
-        const submissionsIds = data.map(e => e.userId);
-        const unsubmissionsList = this.state.users
-            .filter(e => !submissionsIds.filter(i => i === e.userId).length)
-            .sort((a, b) => Number(a.userId) - Number(b.userId));
-        const submissionsCount = data.length;
-        const unsubmissionsCount = this.state.users.length - submissionsCount;
-        data = [{item: "已提交", count: submissionsCount}, {item: "未提交", count: unsubmissionsCount}];
+        const unsubmissionsCount = this.state.users.length - this.state.submissionsCount;
+        const data = [
+            {item: "已提交", count: this.state.submissionsCount},
+            {item: "未提交", count: unsubmissionsCount},
+        ];
         return (
             <div>
                 <Button type={"danger"} shape="circle" icon="rollback" onClick={this.handleBack}/>
@@ -139,15 +154,15 @@ class TaskDetails extends Component {
                             </Col>
                             <Col span={12} style={{position: "absolute", top: 0, bottom: 0, right: 0}}>
                                 <Card title={"未交名单"} style={{height: "100%"}}
-                                      extra={<a>复制</a>} bodyStyle={{height: "100%"}}>
+                                      extra={<a onClick={this.handleCopy}>复制</a>} bodyStyle={{height: "100%"}}>
                                     <div style={{
                                         whiteSpace: "nowrap",
                                         display: "block",
                                         height: "100%",
                                         padding: "6px",
-                                        overflowY: "auto",
+                                        overflow: "auto",
                                     }}>{
-                                        unsubmissionsList.map(e =>
+                                        this.state.unsubmissionsList.map(e =>
                                             <p style={{
                                                 wordBreak: "none",
                                                 overflow: "auto",
