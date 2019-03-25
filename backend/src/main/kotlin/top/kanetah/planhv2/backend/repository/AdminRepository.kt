@@ -13,7 +13,7 @@ interface AdminRepository {
     
     fun delete(id: Int): Int
     
-    fun update(admin: Admin)
+    fun update(admin: Admin): Int
     
     fun findAll(): Array<Admin>
     

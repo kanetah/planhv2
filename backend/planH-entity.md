@@ -19,13 +19,17 @@
 
 属性：
 - adminId `Int` 管理员Id
-- password `String` 管理员口令
+- word `String` 管理员口令
+- allowNewKey `String` 是否允许新密钥
+- accessKeys `String` 访问密钥
 
 例：
 ```
 {
   adminId: 1,
-  password: 123,
+  word: poi,
+  allowNewKey: 1,
+  accessKeys: null,
 }
 ```
 

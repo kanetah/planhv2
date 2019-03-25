@@ -53,11 +53,28 @@ class AdminServiceImpl @Autowired constructor(
             authorized: String
     ) = repositoryService.authRepository.deleteByAuthorized(authorized) > 0
 
+    override fun allowNewKey(
+            authorized: String, clearAll: Boolean
+    ) = repositoryService.authRepository.findByAuthorized(authorized)?.let {
+        repositoryService.adminRepository.run {
+            find(it.adminId)?.let {
+                update(it.copy(
+                        allowNewKey = Admin.ALLOW_NEW_KEY,
+                        accessKeys = if (clearAll) "" else it.accessKeys
+                )) > 0
+            }
+        }
+    } ?: false
+
     override fun getAllAdmins() = ArrayList<Any>().also { list ->
         repositoryService.adminRepository.findAll().forEach {
             list.add(object {
                 @JsonValue
-                val adminId = it.adminId
+                val word = it.word
+                @JsonValue
+                val allowNewKey = it.allowNewKey == Admin.ALLOW_NEW_KEY
+                @JsonValue
+                val accessKeysCount = it.accessKeys?.split(",")?.size ?: 0
             })
         }
     }

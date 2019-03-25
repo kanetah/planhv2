@@ -17,7 +17,7 @@ class AdminController @Autowired constructor(
         private val adminService: AdminService,
         private val accessSecurityService: AccessSecurityService
 ) {
-    
+
     @PostMapping("/authorized")
     fun writeIn(
             @RequestBody values: Map<String, String>
@@ -29,14 +29,29 @@ class AdminController @Autowired constructor(
             val authorized = it
         }
     }
-    
+
     @DeleteMapping("/authorized")
     fun crossOut(
             @RequestBody values: Map<String, String>
     ) = adminService.takeIf {
         accessSecurityService.authCheck("${values["authorized"]}")
     }?.adminCrossOut("${values["authorized"]}")
-    
+
+    @PostMapping("/allow")
+    fun allowNewKey(
+            @RequestBody values: Map<String, String>
+    ) = adminService.takeIf {
+        accessSecurityService.authCheck("${values["authorized"]}")
+    }?.allowNewKey(
+            "${values["authorized"]}",
+            "true" == values["authorized"]?.trim()
+    ).let {
+        object {
+            @JsonValue
+            val success = it
+        }
+    }
+
     @PostMapping("/shutdown")
     fun shutdown(
             @RequestBody values: Map<String, String>
@@ -48,21 +63,21 @@ class AdminController @Autowired constructor(
             val success = it
         }
     }
-    
+
     @GetMapping("/admins")
     fun admins() = adminService.getAllAdmins()
-    
+
     @PostMapping("/admin")
     fun createAdmin(
             @RequestBody values: Map<String, String>
     ) = adminService.takeIf { accessSecurityService.authCheck("${values["authorized"]}") }
             ?.createAdmin("${values["word"]}").let {
-        object {
-            @JsonValue
-            val success = it
-        }
-    }
-    
+                object {
+                    @JsonValue
+                    val success = it
+                }
+            }
+
     @DeleteMapping("/admin/{id}")
     fun deleteAdmin(
             @PathVariable id: Int
@@ -70,7 +85,7 @@ class AdminController @Autowired constructor(
         @JsonValue
         val success = adminService.deleteAdmin(id)
     }
-    
+
     @GetMapping("/admin/{id}")
     fun findAdmin(
             @PathVariable("id") id: Int,
@@ -83,7 +98,7 @@ class AdminController @Autowired constructor(
             val word = it?.word
         }
     }
-    
+
     @GetMapping("/admin")
     fun findAdminByWord(
             @RequestHeader word: String

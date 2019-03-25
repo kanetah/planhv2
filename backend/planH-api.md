@@ -17,8 +17,8 @@
 
 ### `post` /authorized 管理员鉴权
 参数：
-- password `String` 管理员口令
-- validate `String` 人机身份验证
+- word `String` 管理员口令
+- key `String` 管理员密钥
 
 返回：
 管理员登录结果、管理员鉴权码  
@@ -36,6 +36,20 @@
 
 返回：
 注销鉴权结果  
+例：
+```
+{
+  success: true,
+}
+```
+
+### `post` /allow 允许新增密钥
+参数：
+- authorized `String` 管理员鉴权码
+- clearAll `Boolean` 是否清空
+
+返回：
+允许新增密钥结果  
 例：
 ```
 {
@@ -62,15 +76,14 @@
 - authorized `String` 管理员鉴权码
 
 返回：
-管理员列表（不包括密码）  
+管理员列表  
 例：
 ```
 [
 {
-  adminId: 1,
-},
-{
-  adminId: 2,
+  word: poi,
+  allowNewKey: true,
+  accessKeysCount: 0,
 },
 ...
 ]

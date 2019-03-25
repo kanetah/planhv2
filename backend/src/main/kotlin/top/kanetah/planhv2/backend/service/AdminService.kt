@@ -9,6 +9,7 @@ interface AdminService {
     fun shutdown(port: Int?): Boolean
     fun adminWriteIn(word: String, key: String): String?
     fun adminCrossOut(authorized: String): Boolean
+    fun allowNewKey(authorized: String, clearAll: Boolean): Boolean
     fun getAllAdmins(): ArrayList<Any>
     fun createAdmin(word: String): Boolean
     fun deleteAdmin(id: Int): Boolean
