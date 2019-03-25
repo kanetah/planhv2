@@ -13,7 +13,7 @@
     <delete id="delete">
         DELETE FROM user_tab
         <where>
-            id = #{id}
+            id = #{userId}
         </where>
     </delete>
 
@@ -50,7 +50,7 @@
     <select id="find" resultMap="user_result">
         <include refid="find_user"/>
         <where>
-            id = #{id}
+            id = #{userId}
         </where>
     </select>
     <select id="findByCode" resultMap="user_result">

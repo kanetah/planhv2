@@ -15,7 +15,7 @@
     <delete id="delete">
         DELETE FROM team_tab
         <where>
-            id = #{id}
+            id = #{teamId}
         </where>
     </delete>
 
@@ -52,7 +52,7 @@
     <select id="find" resultMap="team_result">
         <include refid="find_team"/>
         <where>
-            id = #{id}
+            id = #{teamId}
         </where>
     </select>
     <select id="findByIndex" resultMap="team_result">

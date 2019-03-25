@@ -8,5 +8,12 @@ import top.kanetah.planhv2.backend.annotation.Entity
 @Entity
 data class Admin(
         val adminId: Int = Int.MIN_VALUE,
-        val password: String
-)
+        val word: String,
+        val allowNewKey: Int = ALLOW_NEW_KEY,
+        val accessKeys: String? = null
+) {
+    companion object {
+        const val ALLOW_NEW_KEY = 1
+        const val NOT_ALLOW_NEW_KEY = 0
+    }
+}

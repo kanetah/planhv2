@@ -11,8 +11,7 @@ axios.defaults.baseURL = "https://planhapi.kanetah.top";
 // 鉴权并初始化
 (async word => {
     const result = await axios.post("/authorized", {
-        password: word,
-        validate: "validate",
+        word, key: "validate",
     });
     if (result.data.success) {
         window.auth = result.data.authorized;

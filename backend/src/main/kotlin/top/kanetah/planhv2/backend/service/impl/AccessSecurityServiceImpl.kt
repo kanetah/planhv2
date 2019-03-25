@@ -29,7 +29,7 @@ class AccessSecurityServiceImpl @Autowired constructor(
     
     override fun computeAuth(
             admin: Admin
-    ) = "\$planhII${admin.adminId}-${admin.password.hashCode()}-${Date().hashCode()}"
+    ) = "\$planhII${admin.adminId}-${admin.word.hashCode()}-${Date().hashCode()}"
     
     override fun authCheck(
             authorized: String?

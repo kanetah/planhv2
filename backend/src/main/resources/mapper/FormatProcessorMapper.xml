@@ -13,7 +13,7 @@
     <delete id="delete">
         DELETE FROM format_processor_tab
         <where>
-            id = #{id}
+            id = #{formatProcessorId}
         </where>
     </delete>
 
@@ -24,7 +24,7 @@
             format_processor_class_name = #{formatProcessorClassName}
         </set>
         <where>
-            id = #{id}
+            id = #{formatProcessorId}
         </where>
     </update>
 

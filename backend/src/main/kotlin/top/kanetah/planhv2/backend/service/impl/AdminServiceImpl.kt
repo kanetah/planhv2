@@ -24,10 +24,23 @@ class AdminServiceImpl @Autowired constructor(
     override fun shutdown(port: Int?) = (PortConfiguration.PORT == port).also {
         if (it) shutdownEndpoint.invoke()
     }
-    
+
+    private infix fun String?.join(key: String
+    ) = this@join?.let { arrayOf(this@join, key).joinToString(",") } ?: key
+
     override fun adminWriteIn(
-            password: String, validate: String
-    ) = repositoryService.adminRepository.findByPassword(password)?.let { admin ->
+            word: String, key: String
+    ) = repositoryService.adminRepository.findByWord(word)?.let { admin ->
+        if (admin.accessKeys?.contains(key) != true) {
+            if (admin.allowNewKey == Admin.ALLOW_NEW_KEY) {
+                repositoryService.adminRepository.update(admin.copy(
+                        allowNewKey = Admin.NOT_ALLOW_NEW_KEY,
+                        accessKeys = (admin.accessKeys join key)
+                ))
+            } else {
+                return@let null
+            }
+        }
         repositoryService.authRepository.deleteByAdminId(admin.adminId)
         accessSecurityService.computeAuth(admin).let { auth ->
             if (repositoryService.authRepository.save(
@@ -35,11 +48,11 @@ class AdminServiceImpl @Autowired constructor(
             ) auth else null
         }
     }
-    
+
     override fun adminCrossOut(
             authorized: String
     ) = repositoryService.authRepository.deleteByAuthorized(authorized) > 0
-    
+
     override fun getAllAdmins() = ArrayList<Any>().also { list ->
         repositoryService.adminRepository.findAll().forEach {
             list.add(object {
@@ -48,20 +61,20 @@ class AdminServiceImpl @Autowired constructor(
             })
         }
     }
-    
+
     override fun createAdmin(
-            password: String
-    ) = repositoryService.adminRepository.save(Admin(password = password)) > 0
-    
+            word: String
+    ) = repositoryService.adminRepository.save(Admin(word = word)) > 0
+
     override fun deleteAdmin(
             id: Int
     ) = repositoryService.adminRepository.delete(id) > 0
-    
+
     override fun findAdmin(
             id: Int
     ) = repositoryService.adminRepository.find(id)
-    
+
     override fun findAdmin(
-            password: String
-    ) = repositoryService.adminRepository.findByPassword(password)
+            word: String
+    ) = repositoryService.adminRepository.findByWord(word)
 }

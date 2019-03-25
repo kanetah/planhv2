@@ -13,7 +13,7 @@
     <delete id="delete">
         DELETE FROM submission_tab
         <where>
-            id = #{id}
+            id = #{submissionId}
         </where>
     </delete>
 
@@ -30,7 +30,7 @@
             path = #{path}
         </set>
         <where>
-            id = #{id}
+            id = #{submissionId}
         </where>
     </update>
 

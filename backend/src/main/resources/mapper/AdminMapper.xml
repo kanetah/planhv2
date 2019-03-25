@@ -4,32 +4,36 @@
 
     <insert id="save">
         INSERT INTO admin_tab (
-            psd
+            word, allow_new_key, access_keys
         ) VALUE (
-            #{password}
+            #{word}, #{allowNewKey}, #{accessKeys}
         )
     </insert>
 
     <delete id="delete">
         DELETE FROM admin_tab
         <where>
-            id = #{id}
+            id = #{adminId}
         </where>
     </delete>
 
     <update id="update">
         UPDATE admin_tab
         <set>
-            psd = #{psd}
+            word = #{word},
+            allow_new_key = #{allowNewKey},
+            access_keys = #{accessKeys}
         </set>
         <where>
-            id = #{id}
+            id = #{adminId}
         </where>
     </update>
 
     <resultMap id="admin_result" type="top.kanetah.planhv2.backend.entity.Admin">
         <id property="adminId" column="id" />
-        <result property="password" column="psd"/>
+        <result property="word" column="word"/>
+        <result property="allowNewKey" column="allow_new_key"/>
+        <result property="accessKeys" column="access_keys"/>
     </resultMap>
 
     <sql id="select_admin">
@@ -42,13 +46,13 @@
     <select id="find" resultMap="admin_result">
         <include refid="select_admin"/>
         <where>
-            id = #{id}
+            id = #{adminId}
         </where>
     </select>
-    <select id="findByPassword" resultMap="admin_result">
+    <select id="findByWord" resultMap="admin_result">
         <include refid="select_admin"/>
         <where>
-            psd = #{password}
+            word = #{word}
         </where>
     </select>
 

@@ -13,7 +13,7 @@
     <delete id="delete">
         DELETE FROM resource_tab
         <where>
-            id = #{id}
+            id = #{resourceId}
         </where>
     </delete>
 
@@ -25,7 +25,7 @@
             resource_url = #{resourceUrl}
         </set>
         <where>
-            id = #{id}
+            id = #{resourceId}
         </where>
     </update>
 
@@ -50,7 +50,7 @@
     <select id="find" resultMap="resource_result">
         <include refid="find_resource"/>
         <where>
-            id = #{id}
+            id = #{resourceId}
         </where>
     </select>
     <select id="findByNameLike" resultMap="resource_result">

@@ -19,5 +19,5 @@ interface AdminRepository {
     
     fun find(id: Int): Admin?
     
-    fun findByPassword(password: String): Admin?
+    fun findByWord(word: String): Admin?
 }

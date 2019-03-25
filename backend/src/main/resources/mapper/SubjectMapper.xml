@@ -15,7 +15,7 @@
     <delete id="delete">
         DELETE FROM subject_tab
         <where>
-            id = #{id}
+            id = #{subjectId}
         </where>
     </delete>
 
@@ -52,7 +52,7 @@
     <select id="find" resultMap="subject_result">
         <include refid="find_subject"/>
         <where>
-            id = #{id}
+            id = #{subjectId}
         </where>
     </select>
     <select id="findBySubjectName" resultMap="subject_result">

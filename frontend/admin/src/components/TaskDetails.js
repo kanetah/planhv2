@@ -160,7 +160,7 @@ class TaskDetails extends Component {
                                         display: "block",
                                         height: "100%",
                                         padding: "6px",
-                                        overflow: "auto",
+                                        overflowY: "auto",
                                     }}>{
                                         this.state.unsubmissionsList.map(e =>
                                             <p style={{

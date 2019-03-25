@@ -14,7 +14,7 @@
     <delete id="delete">
         DELETE FROM task_tab
         <where>
-            id = #{id}
+            id = #{taskId}
         </where>
     </delete>
 
@@ -54,7 +54,7 @@
     <select id="find" resultMap="task_result">
         <include refid="find_task"/>
         <where>
-            id = #{id}
+            id = #{taskId}
         </where>
     </select>
     <select id="findByTitleLike" resultMap="task_result">

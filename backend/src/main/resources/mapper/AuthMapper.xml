@@ -37,7 +37,7 @@
     <select id="find" resultMap="auth_result">
         <include refid="find_auth"/>
         <where>
-            id = #{id}
+            id = #{authorizedId}
         </where>
     </select>
     <select id="findByAuthorized" resultMap="auth_result">

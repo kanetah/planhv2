@@ -7,11 +7,11 @@ import top.kanetah.planhv2.backend.entity.Admin
  */
 interface AdminService {
     fun shutdown(port: Int?): Boolean
-    fun adminWriteIn(password: String, validate: String): String?
+    fun adminWriteIn(word: String, key: String): String?
     fun adminCrossOut(authorized: String): Boolean
     fun getAllAdmins(): ArrayList<Any>
-    fun createAdmin(password: String): Boolean
+    fun createAdmin(word: String): Boolean
     fun deleteAdmin(id: Int): Boolean
     fun findAdmin(id: Int): Admin?
-    fun findAdmin(password: String): Admin?
+    fun findAdmin(word: String): Admin?
 }

@@ -21,7 +21,7 @@ class AdminController @Autowired constructor(
     @PostMapping("/authorized")
     fun writeIn(
             @RequestBody values: Map<String, String>
-    ) = adminService.adminWriteIn("${values["password"]}", "${values["validate"]}").let {
+    ) = adminService.adminWriteIn("${values["word"]}", "${values["key"]}").let {
         object {
             @JsonValue
             val success = it !== null
@@ -56,7 +56,7 @@ class AdminController @Autowired constructor(
     fun createAdmin(
             @RequestBody values: Map<String, String>
     ) = adminService.takeIf { accessSecurityService.authCheck("${values["authorized"]}") }
-            ?.createAdmin("${values["password"]}").let {
+            ?.createAdmin("${values["word"]}").let {
         object {
             @JsonValue
             val success = it
@@ -80,15 +80,15 @@ class AdminController @Autowired constructor(
             @JsonValue
             val adminId = it?.adminId
             @JsonValue
-            val password = it?.password
+            val word = it?.word
         }
     }
     
     @GetMapping("/admin")
-    fun findAdminByPassword(
-            @RequestHeader password: String
+    fun findAdminByWord(
+            @RequestHeader word: String
     ) = object {
         @JsonValue
-        val adminId = adminService.findAdmin(password)?.adminId
+        val adminId = adminService.findAdmin(word)?.adminId
     }
 }
