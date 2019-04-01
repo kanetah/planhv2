@@ -92,7 +92,7 @@
 ### `post` /admin 新建管理员
 参数：
 - authorized `String` 管理员鉴权码
-- password `String` 新管理员口令
+- word `String` 新管理员口令
 
 返回：
 新建结果  
@@ -128,19 +128,21 @@
 ```
 {
   adminId: null,
-  password: null,
+  word: null,
 }
 ```
 
 ### `get` /admin 查找管理员
 参数：
-- password `String` 管理员口令
+- word `String` 管理员口令
+- authorized `String` 管理员鉴权码
 
 返回：
 查找结果  
 例：
 ```
 {
+  success: false,
   adminId: null,
 }
 ```
@@ -148,6 +150,7 @@
 ---
 
 ## 用户
+
 ### `post` /token 用户登录
 参数：
 - userCode `String` 用户代码
@@ -218,6 +221,8 @@
 参数：
 - authorized `String?` 管理员鉴权码
 - token `String?` 用户Token
+
+> authorized token 只需其一
 
 返回：
 所有用户（不包括config与accessToken）  
@@ -364,6 +369,7 @@
 ---
 
 ## 团队
+
 ### `get` /teams 团队列表
 参数：
 - token `String?` 用户Token
@@ -463,6 +469,7 @@
 ---
 
 ## 科目
+
 ### `get` /subjects 科目列表
 返回：
 所有科目详情列表  
@@ -561,6 +568,7 @@
 ---
 
 ## 任务
+
 ### `get` /tasks 所有任务
 参数：
 - userId `Int?` 用户Id
@@ -712,7 +720,7 @@
 }
 ```
 
-### `get` /task/submission/:id 任务详情
+### `get` /task/submission/:id 任务提交列表 
 参数：
 - authorized `String` 管理员鉴权码
 - _taskId_ `Int` 任务Id `PathVariable:id`
@@ -811,7 +819,7 @@
 ```
 {
   success: true,
-}
+  url: "https://planhapi.kanetah.top/download/task/音乐/音乐作业/1521192255_某某.mp3",}
 ```
 
 ### `put` /submission 更新提交
@@ -911,12 +919,37 @@
 }
 ```
 
-### `get` /resource/:id 下载资料
+### `get` /resource/:id 资料详情
 参数：
-- _fileName_ `String` 资料文档Id `PathVariable:filename`
+- _resourceId_ `Int` 资料文档Id `PathVariable:id`
 
 返回：
-资料文件
+资料详情  
+例：
+```
+{
+  resourceId: 1,
+  resourceName: "example.zip",
+  resourceSize: 100,
+  resourceUrl: "https://api.planhv2.kanetah.top/resource/example.zip",
+}
+```
+
+### `get` /download/:filename:.+ 下载资料
+参数：
+- _fileName_ `String` 资料文件名 `PathVariable:filename`
+
+返回：
+浏览器下载资料文件
+
+### `get` /download/:subject/:title/:filename:.+ 下载任务文件
+参数：
+- _subject_ `String` 科目名 `PathVariable:subject`
+- _title_ `String` 任务名 `PathVariable:title`
+- _fileName_ `String` 资料文件名 `PathVariable:filename`
+
+返回：
+浏览器下载任务文件
 
 ---
 

@@ -60,7 +60,7 @@ class AdminServiceImpl @Autowired constructor(
             find(it.adminId)?.let {
                 update(it.copy(
                         allowNewKey = Admin.ALLOW_NEW_KEY,
-                        accessKeys = if (clearAll) "" else it.accessKeys
+                        accessKeys = if (clearAll) null else it.accessKeys
                 )) > 0
             }
         }

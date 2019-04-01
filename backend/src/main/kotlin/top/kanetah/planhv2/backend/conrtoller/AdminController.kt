@@ -1,11 +1,9 @@
 package top.kanetah.planhv2.backend.conrtoller
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.actuate.endpoint.ShutdownEndpoint
 import org.springframework.web.bind.annotation.*
 import top.kanetah.planhv2.backend.annotation.JsonValue
 import top.kanetah.planhv2.backend.annotation.PlanHApiController
-import top.kanetah.planhv2.backend.configuration.PortConfiguration
 import top.kanetah.planhv2.backend.service.AccessSecurityService
 import top.kanetah.planhv2.backend.service.AdminService
 
@@ -65,7 +63,11 @@ class AdminController @Autowired constructor(
     }
 
     @GetMapping("/admins")
-    fun admins() = adminService.getAllAdmins()
+    fun admins(
+            @RequestBody values: Map<String, String>
+    ) = adminService.takeIf {
+        accessSecurityService.authCheck("${values["authorized"]}")
+    }?.getAllAdmins() ?: arrayListOf()
 
     @PostMapping("/admin")
     fun createAdmin(
@@ -80,10 +82,13 @@ class AdminController @Autowired constructor(
 
     @DeleteMapping("/admin/{id}")
     fun deleteAdmin(
-            @PathVariable id: Int
+            @PathVariable id: Int,
+            @RequestBody values: Map<String, String>
     ) = object {
         @JsonValue
-        val success = adminService.deleteAdmin(id)
+        val success = adminService.takeIf {
+            accessSecurityService.authCheck("${values["authorized"]}")
+        }?.deleteAdmin(id)
     }
 
     @GetMapping("/admin/{id}")
@@ -101,9 +106,14 @@ class AdminController @Autowired constructor(
 
     @GetMapping("/admin")
     fun findAdminByWord(
-            @RequestHeader word: String
-    ) = object {
-        @JsonValue
-        val adminId = adminService.findAdmin(word)?.adminId
+            @RequestHeader word: String,
+            @RequestHeader("authorized") authorized: String
+    ) = adminService.takeIf { accessSecurityService.authCheck(authorized) }?.findAdmin(word)?.adminId.let {
+        object {
+            @JsonValue
+            val success = it != null
+            @JsonValue
+            val adminId = it
+        }
     }
 }
