@@ -54,15 +54,13 @@ class AdminServiceImpl @Autowired constructor(
     ) = repositoryService.authRepository.deleteByAuthorized(authorized) > 0
 
     override fun allowNewKey(
-            authorized: String, clearAll: Boolean
-    ) = repositoryService.authRepository.findByAuthorized(authorized)?.let {
-        repositoryService.adminRepository.run {
-            find(it.adminId)?.let {
-                update(it.copy(
-                        allowNewKey = Admin.ALLOW_NEW_KEY,
-                        accessKeys = if (clearAll) null else it.accessKeys
-                )) > 0
-            }
+            word: String, clearAll: Boolean, allow: Boolean
+    ) = repositoryService.adminRepository.run {
+        findByWord(word)?.let {
+            update(it.copy(
+                    allowNewKey = if (allow) Admin.ALLOW_NEW_KEY else Admin.NOT_ALLOW_NEW_KEY,
+                    accessKeys = if (clearAll) null else it.accessKeys
+            )) > 0
         }
     } ?: false
 

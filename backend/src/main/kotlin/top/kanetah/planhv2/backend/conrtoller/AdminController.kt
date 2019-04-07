@@ -41,8 +41,9 @@ class AdminController @Autowired constructor(
     ) = adminService.takeIf {
         accessSecurityService.authCheck("${values["authorized"]}")
     }?.allowNewKey(
-            "${values["authorized"]}",
-            "true" == values["authorized"]?.trim()
+            "${values["word"]}",
+            "true" == values["clearAll"]?.trim(),
+            "true" == values["allow"]?.trim()
     ).let {
         object {
             @JsonValue
@@ -64,9 +65,9 @@ class AdminController @Autowired constructor(
 
     @GetMapping("/admins")
     fun admins(
-            @RequestBody values: Map<String, String>
+            @RequestHeader authorized: String
     ) = adminService.takeIf {
-        accessSecurityService.authCheck("${values["authorized"]}")
+        accessSecurityService.authCheck(authorized)
     }?.getAllAdmins() ?: arrayListOf()
 
     @PostMapping("/admin")
@@ -83,11 +84,11 @@ class AdminController @Autowired constructor(
     @DeleteMapping("/admin/{id}")
     fun deleteAdmin(
             @PathVariable id: Int,
-            @RequestBody values: Map<String, String>
+            @RequestHeader authorized: String
     ) = object {
         @JsonValue
         val success = adminService.takeIf {
-            accessSecurityService.authCheck("${values["authorized"]}")
+            accessSecurityService.authCheck(authorized)
         }?.deleteAdmin(id)
     }
 

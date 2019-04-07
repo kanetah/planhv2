@@ -203,36 +203,40 @@ class ContentUser extends Component {
     };
 
     handleSave = async () => {
-        try {
-            let result;
-            if (this.state.userId) {
-                result = await axios.put(`/user/${this.state.userId}`, {
-                    authorized: window.auth,
-                    userCode: this.state.userCode,
-                    userName: this.state.userName,
-                });
-            } else {
-                result = await axios.post("/user", {
-                    authorized: window.auth,
-                    userCode: this.state.userCode,
-                    userName: this.state.userName,
-                });
-            }
-            if (result.status === 200) {
-                if (result.data.success) {
-                    message.success("保存成功");
-                    this.setState({
-                        userEditModalVisible: false,
-                    }, Global.getUsersFromServer)
+        if (this.state.userCode && this.state.userName) {
+            try {
+                let result;
+                if (this.state.userId) {
+                    result = await axios.put(`/user/${this.state.userId}`, {
+                        authorized: window.auth,
+                        userCode: this.state.userCode,
+                        userName: this.state.userName,
+                    });
                 } else {
-                    message.error("保存失败");
+                    result = await axios.post("/user", {
+                        authorized: window.auth,
+                        userCode: this.state.userCode,
+                        userName: this.state.userName,
+                    });
                 }
-            } else {
-                message.error("网络错误");
+                if (result.status === 200) {
+                    if (result.data.success) {
+                        message.success("保存成功");
+                        this.setState({
+                            userEditModalVisible: false,
+                        }, Global.getUsersFromServer);
+                    } else {
+                        message.error("保存失败");
+                    }
+                } else {
+                    message.error("网络错误");
+                }
+            } catch (e) {
+                console.error("保存异常", e);
+                message.error("保存异常");
             }
-        } catch (e) {
-            console.error("保存异常", e);
-            message.error("保存异常");
+        } else {
+            message.warn("请填写学号姓名");
         }
     };
 
