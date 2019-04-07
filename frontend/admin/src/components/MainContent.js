@@ -4,6 +4,7 @@ import ContentTask from "./ContentTask";
 import ContentSubject from "./ContentSubject";
 import ContentUser from "./ContentUser";
 import ContentAdmin from "./ContentAdmin";
+import ContentResource from "./ContentResource";
 
 const {Content, Sider} = Layout;
 const defaultSelectedKey = 0;
@@ -11,6 +12,7 @@ const items = [
     "任务列表",
     "科目列表",
     "用户列表",
+    "资料文档",
     "管理操作",
 ];
 
@@ -76,7 +78,8 @@ class MainContent extends Component {
                         setTitle={this.setTitle} setContent={this.setContent}/> : null}
                     {this.state.selectedKey === 1 ? <ContentSubject setTitle={this.setTitle}/> : null}
                     {this.state.selectedKey === 2 ? <ContentUser setTitle={this.setTitle}/> : null}
-                    {this.state.selectedKey === 3 ? <ContentAdmin setTitle={this.setTitle}/> : null}
+                    {this.state.selectedKey === 3 ? <ContentResource setTitle={this.setTitle}/> : null}
+                    {this.state.selectedKey === 4 ? <ContentAdmin setTitle={this.setTitle}/> : null}
                     {this.state.selectedKey >= 100 ? this.component : null}
                 </Content>
                 <span style={{fontSize: "10px", color: "#999"}}>Coding By Kane</span>

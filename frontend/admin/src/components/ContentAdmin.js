@@ -59,7 +59,7 @@ class ContentAdmin extends Component {
         });
         this.setState({
             admins: result.data,
-        })
+        });
     };
 
     handleAllowNewKey = record => async () => {

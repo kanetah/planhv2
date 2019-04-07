@@ -22,10 +22,12 @@ class ResourceController @Autowired constructor(
 
     @PostMapping("/resource")
     fun createResource(
-            @RequestParam token: String,
+            @RequestParam(required = false) authorized: String?,
+            @RequestParam(required = false) token: String?,
             @RequestPart file: MultipartFile
     ) = resourceService.takeIf {
-        accessSecurityService.tokenCheck(token)
+        accessSecurityService.authCheck(authorized) ||
+                accessSecurityService.tokenCheck(token)
     }?.createResource(file).let {
         object {
             @JsonValue

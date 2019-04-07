@@ -893,7 +893,8 @@
 
 ### `post` /resource 上传资料文档
 参数：
-- token `String` 用户Token
+- authorized `String?` 管理员鉴权码
+- token `String?` 用户Token
 - file `File` 资料文件
 
 返回：
