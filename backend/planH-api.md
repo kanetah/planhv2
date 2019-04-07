@@ -46,6 +46,7 @@
 ### `post` /allow 允许新增密钥
 参数：
 - authorized `String` 管理员鉴权码
+- allow `Boolean` 是否允许
 - clearAll `Boolean` 是否清空
 
 返回：
