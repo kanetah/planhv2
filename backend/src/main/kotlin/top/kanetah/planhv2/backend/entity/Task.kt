@@ -19,5 +19,3 @@ data class Task(
         val formatProcessorId: Int,
         val format: String? = null
 )
-
-fun Task.send() = FormatProcessorClass[taskId].sendEMail(this)

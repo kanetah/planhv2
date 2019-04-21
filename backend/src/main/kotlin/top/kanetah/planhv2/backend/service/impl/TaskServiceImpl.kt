@@ -3,6 +3,7 @@ package top.kanetah.planhv2.backend.service.impl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import top.kanetah.planhv2.backend.entity.Task
+import top.kanetah.planhv2.backend.format.MailSenderHandle
 import top.kanetah.planhv2.backend.service.RepositoryService
 import top.kanetah.planhv2.backend.service.TaskService
 import java.sql.Timestamp
@@ -12,7 +13,8 @@ import java.sql.Timestamp
  */
 @Service
 class TaskServiceImpl @Autowired constructor(
-        private val repositoryService: RepositoryService
+        private val repositoryService: RepositoryService,
+        private val mailSenderHandle: MailSenderHandle
 ) : TaskService {
 
     override fun getTasks(
@@ -45,16 +47,21 @@ class TaskServiceImpl @Autowired constructor(
             type: String,
             format: String?,
             formatProcessorId: Int
-    ) = repositoryService.taskRepository.save(Task(
-            subjectId = subjectId,
-            title = title,
-            content = content,
-            isTeamTask = isTeamTask,
-            deadline = deadline,
-            type = type,
-            format = format,
-            formatProcessorId = formatProcessorId
-    )) > 0
+    ): Boolean {
+        val task = Task(
+                subjectId = subjectId,
+                title = title,
+                content = content,
+                isTeamTask = isTeamTask,
+                deadline = deadline,
+                type = type,
+                format = format,
+                formatProcessorId = formatProcessorId
+        )
+        val success = repositoryService.taskRepository.save(task) > 0
+        if (success) mailSenderHandle.setTimer(task)
+        return success
+    }
 
     override fun deleteTask(
             id: Int
@@ -70,20 +77,25 @@ class TaskServiceImpl @Autowired constructor(
             type: String,
             format: String?,
             formatProcessorId: Int
-    ) = with(repositoryService.taskRepository) {
-        find(id)?.let {
-            update(it.copy(
-                    subjectId = subjectId,
-                    title = title,
-                    content = content,
-                    isTeamTask = isTeamTask,
-                    deadline = deadline,
-                    type = type,
-                    format = format,
-                    formatProcessorId = formatProcessorId
-            )) > 0
+    ): Boolean {
+        with(repositoryService.taskRepository) {
+            val (task, oldDeadline) = find(id)?.let {
+                it.copy(
+                        subjectId = subjectId,
+                        title = title,
+                        content = content,
+                        isTeamTask = isTeamTask,
+                        deadline = deadline,
+                        type = type,
+                        format = format,
+                        formatProcessorId = formatProcessorId
+                ) to it.deadline
+            } ?: return false
+            val success = update(task) > 0
+            if (success) mailSenderHandle.setTimer(task, oldDeadline)
+            return success
         }
-    } ?: false
+    }
 
     override fun findTask(
             id: Int

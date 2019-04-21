@@ -11,6 +11,9 @@
 backend/.gradle/
 backend/build/
 backend/out/
+mail/.gradle/
+mail/build/
+mail/out/
 *.jar
 
 

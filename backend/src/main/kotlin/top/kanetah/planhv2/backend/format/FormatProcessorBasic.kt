@@ -31,7 +31,6 @@ interface FormatProcessorClass {
         get() = PropertyListener.getProperty("submission-path")!!
     
     fun saveFile(user: User, task: Task, team: Team?, file: MultipartFile): SubmitFileAttributes
-    fun sendEMail(task: Task): Boolean
     
     private enum class FormatValue(private val key: String) {
         Code("code"),
@@ -53,7 +52,7 @@ interface FormatProcessorClass {
     fun getFormatName(
             user: User, task: Task, team: Team?, file: MultipartFile
     ) = if (task.format.isNullOrEmpty()) throw Exception("任务指定的格式化处理器不合适")
-    else task.format!!.let { format ->
+    else task.format.let { format ->
         fun replace(
                 source: String
         ): String = Regex("\\[[\\w]*]").find(source).let { result ->
@@ -139,7 +138,7 @@ fun File.uncompress() {
 
 private fun unRar(file: File, descPath: String): String {
     val archive = Archive(file)
-    var fh: FileHeader? = null
+    var fh: FileHeader?
     while (null != archive.nextFileHeader().also { fh = it }) {
         val fileName = if (fh!!.fileNameW.isEmpty()) fh!!.fileNameString else fh!!.fileNameW
         if (fh!!.isDirectory)
@@ -172,7 +171,7 @@ private fun unZip(file: File, descPath: String, charSet: String = "utf-8") {
             val out = FileOutputStream(outPath)
             val buff = ByteArray(1024)
             zip.getInputStream(it).apply {
-                var len = 0
+                var len: Int
                 while (0 < read(buff).also { len = it })
                     out.write(buff, 0, len)
                 close()

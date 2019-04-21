@@ -8,7 +8,6 @@ import top.kanetah.planhv2.backend.format.FormatProcessorClass
 import top.kanetah.planhv2.backend.format.uncompress
 import top.kanetah.planhv2.backend.format.typeBy
 import top.kanetah.planhv2.backend.repository.SubjectRepository
-import top.kanetah.planhv2.backend.repository.SubmissionRepository
 import top.kanetah.planhv2.backend.service.ResourceService
 import java.io.File
 
@@ -32,7 +31,7 @@ object OutsideFileNameFormatProcessor : FormatProcessorClass {
     ): SubmitFileAttributes {
         val subjectName = subjectRepository.find(task.subjectId)!!.subjectName
         val path = File(
-                "$storePath$subjectName/${task.title}"
+                "$storePath$subjectName/${task.taskId}-${task.title}"
         ).apply { if (!exists()) mkdirs() }.canonicalPath
         val target = File(
                 "$path/${getFormatName(user, task, team, file)}${file typeBy task}"
@@ -50,10 +49,5 @@ object OutsideFileNameFormatProcessor : FormatProcessorClass {
                     path = target.canonicalPath
             )
         } ?: throw Exception("资源创建失败")
-    }
-    
-    override fun sendEMail(task: Task): Boolean {
-        //TODO("not implemented")
-        return false
     }
 }

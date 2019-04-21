@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ch"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        main {
+            width: 80%;
+            margin: auto;
+            padding: 60px 40px;
+            border-radius: 20px;
+            background: whitesmoke;
+            box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+        }
+        p {
+            text-indent: 2em;
+        }
+        a {
+            text-decoration: none;
+        }
+        table {
+            margin: auto;
+        }
+        sub {
+            float: right;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <p>
+    <span id="sayHello" th:text="${teacherName}">
+    </span>
+        老师，您好。这是一封由
+        <a href="https://planh.kanetah.top">
+            PlanH 平台
+        </a>
+        自动发送的邮件，用于提交厦理软15级移春2班
+        <span id="taskTitle" th:text="${taskTitle}">
+    </span>
+        的作业文件。
+    </p>
+    <p>
+        作业文件的压缩包<b>请见附件</b>，以下是本次作业的提交情况：
+    </p>
+    <p>
+        本次作业提交人数：
+        <span th:text="${submitSize}"></span>
+        人，应交
+        <span th:text="${userCount}"></span>
+        人，
+        <span th:text="${userCount}-${submitSize}"></span>
+        人未交。
+    </p>
+    <div th:if="${userCount}==${submitSize}">
+        <p>所有人都提交了。</p>
+    </div>
+    <div th:unless="${userCount}==${submitSize}">
+        <p th:if="${submitSize}>=${flagSize}"><b>未交名单</b>如下：</p>
+        <p th:unless="${submitSize}>=${flagSize}">因提交人数少于
+            <span th:text="${flagSize}"></span>
+            人，故列出<b>提交名单</b>，如下：
+        </p>
+        <table>
+            <tr>
+                <th>学号</th>
+                <th>姓名</th>
+            </tr>
+            <tr th:each="elem:${table}">
+                <td class="userCode" th:text="${elem.first}"></td>
+                <td th:text="${elem.second}"></td>
+            </tr>
+        </table>
+    </div>
+    <sub>如果有任何问题，可直接回复本邮件。</sub>
+</main>
+</body>
+</html>
