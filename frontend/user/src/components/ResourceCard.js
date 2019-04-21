@@ -3,6 +3,9 @@ import {Button, Card, Col, Icon, Row, Upload, message, List, Divider, Tooltip} f
 import Global, {token} from "../frame/PlanHGlobal";
 import EventEmitter from '../frame/EventEmitter';
 
+/**
+ * 资源文件列表组件
+ */
 export default class ResourceCard extends Component {
 
     constructor(props) {
@@ -11,7 +14,9 @@ export default class ResourceCard extends Component {
             resources: [],
         };
         Global.resources();
-        EventEmitter.on("resources", resources => this.setState({resources}));
+        // 响应资料文件数据的分发
+        EventEmitter.on("resources", resources =>
+            this.setState({resources}));
     }
 
     uploadProps = {

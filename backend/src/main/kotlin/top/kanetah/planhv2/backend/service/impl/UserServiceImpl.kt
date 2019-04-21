@@ -100,9 +100,13 @@ class UserServiceImpl @Autowired constructor(
 
     val userCodeMark = "学号"
     val userNameMark = "姓名"
+    /**
+     * 通过Excel文件，批量创建用户
+     */
     override fun createUserBatch(
             file: MultipartFile
     ) = with(HSSFWorkbook(POIFSFileSystem(file.inputStream)).getSheetAt(0)) {
+        // 获取需要关注的列的索引值
         fun getIndexByValue(value: String): Int {
             getRow(0).forEach {
                 if (it.stringCellValue == value)

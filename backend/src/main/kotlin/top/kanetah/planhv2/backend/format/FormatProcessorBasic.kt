@@ -108,33 +108,37 @@ fun File.deleteAll(): Boolean {
     return delete()
 }
 
-fun File.uncompress() {
-    val descPath by lazy {
-        with(canonicalPath) {
-            (substring(0, lastIndexOf(".")) + File.separator).also {
-                File(it).apply { if (!exists()) mkdirs() }
-            }
-        }
-    }
-    when (name.substring(name.lastIndexOf("."))) {
-        ".rar" -> unRar(this, descPath)
-        ".zip" -> unZip(this, descPath)
-        ".7z" -> un7z(this, descPath)
-        else -> return
-    }
-    File(descPath).listFiles()?.apply {
-        get(0)?.let { dir ->
-            if (size == 1 && dir.isDirectory) {
-                dir.listFiles()?.forEach {
-                    it.renameTo(File(descPath + "/" + it.name))
-                    it.deleteAll()
+    /**
+     * 解压缩文件
+     */
+    fun File.uncompress() {
+        // 使用懒加载，只有在确定需要时才创建新的作业存放目录
+        val descPath by lazy {
+            with(canonicalPath) {
+                (substring(0, lastIndexOf(".")) + File.separator).also {
+                    File(it).apply { if (!exists()) mkdirs() }
                 }
-                dir.delete()
             }
         }
+        when (name.substring(name.lastIndexOf("."))) {
+            ".rar" -> unRar(this, descPath)
+            ".zip" -> unZip(this, descPath)
+            ".7z" -> un7z(this, descPath)
+            else -> return
+        }
+        File(descPath).listFiles()?.apply {
+            get(0)?.let { dir ->
+                if (size == 1 && dir.isDirectory) {
+                    dir.listFiles()?.forEach {
+                        it.renameTo(File(descPath + "/" + it.name))
+                        it.deleteAll()
+                    }
+                    dir.delete()
+                }
+            }
+        }
+        delete()
     }
-    delete()
-}
 
 private fun unRar(file: File, descPath: String): String {
     val archive = Archive(file)

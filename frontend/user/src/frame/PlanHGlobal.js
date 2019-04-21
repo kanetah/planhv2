@@ -57,10 +57,15 @@ async function getTaskResource(resourceId, taskId) {
     EventEmitter.emit("resource", resourceId, taskId);
 }
 
+// 资料文件数组
 let resources = void(0);
 
+// 异步获取所有资料文件
 async function getResources() {
-    resources = (await axios.get("/resources")).data.filter(resources => resources.key = resources["resourceId"]);
+    // 挂起等待接口返回
+    resources = (await axios.get("/resources")).data
+        .filter(resources => resources.key = resources["resourceId"]);
+    // 分发资料文件数据
     EventEmitter.emit("resources", resources);
 }
 

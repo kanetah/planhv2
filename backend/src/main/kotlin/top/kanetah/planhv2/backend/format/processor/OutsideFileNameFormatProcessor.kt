@@ -25,7 +25,10 @@ object OutsideFileNameFormatProcessor : FormatProcessorClass {
     private val subjectRepository by lazy {
         APP_CONTEXT.getBean(SubjectRepository::class.java)!!
     }
-    
+
+    /**
+     * 保存作业文件
+     */
     override fun saveFile(
             user: User, task: Task, team: Team?, file: MultipartFile
     ): SubmitFileAttributes {
@@ -33,6 +36,7 @@ object OutsideFileNameFormatProcessor : FormatProcessorClass {
         val path = File(
                 "$storePath$subjectName/${task.taskId}-${task.title}"
         ).apply { if (!exists()) mkdirs() }.canonicalPath
+        // 数据写入目标文件
         val target = File(
                 "$path/${getFormatName(user, task, team, file)}${file typeBy task}"
         ).apply { if (!exists()) createNewFile(); file.transferTo(this); uncompress(); }

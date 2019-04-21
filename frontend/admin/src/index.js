@@ -8,27 +8,27 @@ import './style/index.css';
 import App from './frame/App';
 import registerServiceWorker from './registerServiceWorker';
 
-window.admin = Cookies.get("admin-word");
-axios.defaults.baseURL = "https://planhapi.kanetah.top";
-// 鉴权并初始化
-const init = async word => {
-    let key = Cookies.get("key");
-    if (!key) {
-        key = uuid();
-        Cookies.set("key", key);
-    }
-    const result = await axios.post("/authorized", {
-        word, key,
-    });
-    if (result.data.success) {
-        window.auth = result.data.authorized;
-        ReactDOM.render(<App/>, document.getElementById('root'));
-        registerServiceWorker();
-    } else {
-        message.error("鉴权失败");
-        checkAuth(true);
-    }
-};
+    window.admin = Cookies.get("admin-word");
+    axios.defaults.baseURL = "https://planhapi.kanetah.top";
+    // 鉴权并初始化
+    const init = async word => {
+        let key = Cookies.get("key");
+        if (!key) {
+            key = uuid();
+            Cookies.set("key", key);
+        }
+        const result = await axios.post("/authorized", {
+            word, key,
+        });
+        if (result.data.success) {
+            window.auth = result.data.authorized;
+            ReactDOM.render(<App/>, document.getElementById('root'));
+            registerServiceWorker();
+        } else {
+            message.error("鉴权失败");
+            checkAuth(true);
+        }
+    };
 const checkAuth = checkedFlag => {
     if (!window.admin || checkedFlag) {
         let admin, modal;

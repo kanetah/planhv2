@@ -19,7 +19,7 @@ spring:
   mail:
     host: smtp.qq.com
     username: 2205485120@qq.com
-    password: chzlkvtdydlodicg
+    password: zfygzukhzrsndhjc
     default-encoding: UTF-8
     port: 587
     properties:

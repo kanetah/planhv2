@@ -31,6 +31,9 @@ class ResourceServiceImpl @Autowired constructor(
     override fun findAllResourceWithoutSubmissionResource(
     ) = repositoryService.resourceRepository.findAllWithoutForeignKeyWithSubmission()
 
+    /**
+     * 在服务端保存文件
+     */
     override fun createResource(
             name: String,
             size: Double,

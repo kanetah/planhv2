@@ -20,6 +20,9 @@ class ResourceController @Autowired constructor(
     @GetMapping("/resources")
     fun resources() = resourceService.findAllResourceWithoutSubmissionResource()
 
+    /**
+     * 文件上传控制器
+     */
     @PostMapping("/resource")
     fun createResource(
             @RequestParam(required = false) authorized: String?,

@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {Button, Card, DatePicker, Form, Icon, Input, message, Select, Tooltip, notification, Divider} from "antd";
 import Global from "../frame/PlanHGlobal";
 import {axios} from "../index";
+import moment from 'moment';
 import EventEmitter from '../frame/EventEmitter';
 
 const {Item} = Form;
@@ -54,7 +55,7 @@ class TaskForm extends Component {
                             description: <div>
                                 <h3>
                                     {values["title"]}
-                                    <Divider type="vertical" />
+                                    <Divider type="vertical"/>
                                     {this.state.subjects[values["subjectId"]].subjectName}
                                 </h3>
                                 <p>{values["content"]}</p>
@@ -75,6 +76,10 @@ class TaskForm extends Component {
             }
         });
     };
+
+    disabledDate = current => {
+        return current && current < moment().startOf('day');
+    }
 
     render = () => {
         const {getFieldDecorator} = this.props.form;
@@ -120,6 +125,7 @@ class TaskForm extends Component {
                             <DatePicker
                                 showTime
                                 format="YYYY-MM-DD HH:mm:ss"
+                                disabledDate={this.disabledDate}
                                 placeholder=""
                                 style={{width: "14vw"}}
                             />
