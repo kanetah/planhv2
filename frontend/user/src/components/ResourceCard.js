@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Card, Col, Icon, Row, Upload, message, List, Divider, Tooltip} from "antd";
+import {Button, Card, Col, Icon, Row, Upload, message, List, Divider} from "antd";
 import Global, {token} from "../frame/PlanHGlobal";
 import EventEmitter from '../frame/EventEmitter';
 

@@ -17,7 +17,8 @@ export default class TaskContent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            tasks: []
+            tasks: [],
+            searchKey: "",
         };
         EventEmitter.on("filter-subject",
             (subjectId, checked) => this.subjectSelect = {subjectId, checked});
@@ -64,6 +65,8 @@ export default class TaskContent extends Component {
         });
     };
 
+    handleSearchChange = e => this.setState({searchKey: e.target.value});
+
     render() {
         const token = Cookies.getJSON("token");
         return (
@@ -85,14 +88,20 @@ export default class TaskContent extends Component {
                                     <Row>
                                         <Col xs={0} sm={0} md={24}>
                                             <Search
+                                                value={this.state.searchKey}
                                                 placeholder="搜索"
+                                                onChange={this.handleSearchChange}
+                                                onFocus={() => this.filter("search", this.state.searchKey)}
                                                 onSearch={value => this.filter("search", value)}
                                             />
                                         </Col>
                                         <Col sm={24} md={0}>
                                             <Popover content={
                                                 <Search
+                                                    value={this.state.searchKey}
                                                     placeholder="搜索"
+                                                    onChange={this.handleSearchChange}
+                                                    onFocus={() => this.filter("search", this.state.searchKey)}
                                                     onSearch={value => this.filter("search", value)}
                                                 />
                                             } trigger="click">
@@ -106,7 +115,10 @@ export default class TaskContent extends Component {
                             </Menu>
                         </Header>
                         <Content style={{padding: "0 6px 0", marginTop: "-6px"}}>
-                            <TaskCard tasks={this.state.tasks}/>
+                            {
+                                (!this.state.tasks || this.state.tasks.length === 0) ? "该条件下无任务"
+                                    : <TaskCard tasks={this.state.tasks}/>
+                            }
                         </Content>
                     </Layout>
                 )}
