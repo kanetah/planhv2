@@ -32,11 +32,11 @@ class TeamController @Autowired constructor(
                     values["memberUserIdArrayJsonString"]?.toIntArray()!!,
                     values["leaderUserIdArrayJsonString"]?.toIntArray()!!
             ).let {
-        object {
-            @JsonValue
-            val success = it
-        }
-    }
+                object {
+                    @JsonValue
+                    val success = it
+                }
+            }
 
     @DeleteMapping("/team/{id}")
     fun deleteTeam(
@@ -44,11 +44,11 @@ class TeamController @Autowired constructor(
             @PathVariable("id") teamId: Int
     ) = teamService.takeIf { accessSecurityService.tokenCheck("${values["token"]}") }
             ?.deleteTeam("${values["token"]}", teamId).let {
-        object {
-            @JsonValue
-            val success = it
-        }
-    }
+                object {
+                    @JsonValue
+                    val success = it
+                }
+            }
 
     @PutMapping("/team/{id}")
     fun updateTeam(
@@ -63,11 +63,11 @@ class TeamController @Autowired constructor(
                     values["memberUserIdArrayJsonString"]?.toIntArray()!!,
                     values["leaderUserIdArrayJsonString"]?.toIntArray()!!
             ).let {
-        object {
-            @JsonValue
-            val success = it
-        }
-    }
+                object {
+                    @JsonValue
+                    val success = it
+                }
+            }
 
     @GetMapping("/team/{id}")
     fun findTeam(

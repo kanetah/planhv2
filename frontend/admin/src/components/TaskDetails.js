@@ -17,6 +17,11 @@ const submissionColumns = that => [{
 }, {
     title: '文件',
     dataIndex: 'saveName',
+    render: (savename, submission) => {
+        const path = submission.fileAttributes.path;
+        cosnt url = "https://planhapi.kanetah.top/download/task" + path.substring(path.indexOf("submission") + 10)
+        return <a href={url} download={savename}>{{savename}}</a>
+    },
     key: 'saveName',
 }, {
     title: '提交时间',

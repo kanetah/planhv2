@@ -7,6 +7,8 @@ import Global, {taskResources} from "../frame/PlanHGlobal";
 
 const {Dragger} = Upload;
 
+const allowUserDownload = false; // 是否允许用户下载被提交的文件
+
 export default class FileDragger extends Component {
 
     constructor(props) {
@@ -29,9 +31,9 @@ export default class FileDragger extends Component {
         else this.setState({
             fileList: [{
                 uid: 1,
-                name: "点击下载：" + this.props["submission"]["formerName"],
                 status: 'done',
-                url: resource["resourceUrl"],
+                url: allowUserDownload ? resource["resourceUrl"] : null,
+                name: allowUserDownload ? "点击下载：" : "已提交文件：" + this.props["submission"]["formerName"],
             }],
             submitted: true,
         });
@@ -77,8 +79,8 @@ export default class FileDragger extends Component {
                 fileList = fileList.slice(-1);
                 fileList = fileList.map((file) => {
                     if (file.response) {
-                        file.url = file.response.url;
-                        file.name = "点击下载：" + file.name
+                        file.url = allowUserDownload ? file.response.url : null;
+                        file.name = allowUserDownload ? "点击下载：" : "已提交文件：" + file.name
                     }
                     return file;
                 });

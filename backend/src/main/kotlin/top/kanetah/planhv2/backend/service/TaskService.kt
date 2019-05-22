@@ -13,4 +13,5 @@ interface TaskService {
     fun deleteTask(id: Int): Boolean
     fun updateTask(id: Int, subjectId: Int, title: String, content: String, isTeamTask: Boolean, deadline: Timestamp, type: String, format: String?, formatProcessorId: Int): Boolean
     fun findTask(id: Int): Task?
+    fun sendTask(id: Int)
 }

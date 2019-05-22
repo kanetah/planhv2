@@ -22,29 +22,29 @@ class AccessSecurityServiceImpl @Autowired constructor(
         private val tokenRepository: TokenRepository,
         private val userRepository: UserRepository
 ) : AccessSecurityService {
-    
+
     private fun checkHelper(
             srt: String?, block: (String) -> Boolean
     ) = srt !== null && block(srt)
-    
+
     override fun computeAuth(
             admin: Admin
     ) = "\$planhII${admin.adminId}-${admin.word.hashCode()}-${Date().hashCode()}"
-    
+
     override fun authCheck(
             authorized: String?
     ) = checkHelper(authorized) {
         authRepository.findByAuthorized(it) !== null
     }
-    
+
     override fun computeAccessToken(
             user: User
     ) = "\$${user.userId}-planhII-${user.userCode.hashCode() + user.userName.hashCode()}-"
-    
+
     override fun computeToken(
             user: User
     ) = "${computeAccessToken(user)}static"
-    
+
     override fun tokenCheck(
             token: String?, id: Int?
     ) = checkHelper(token) {

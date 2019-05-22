@@ -8,14 +8,14 @@ import top.kanetah.planhv2.backend.entity.Auth
  */
 @DataAccess
 interface AuthRepository {
-    
+
     fun save(auth: Auth): Int
-    
+
     fun deleteByAdminId(adminId: Int): Int
-    
+
     fun deleteByAuthorized(authorized: String): Int
-    
+
     fun find(id: Int): Auth?
-    
+
     fun findByAuthorized(authorized: String): Auth?
 }

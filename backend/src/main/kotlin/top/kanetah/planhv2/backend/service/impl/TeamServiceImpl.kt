@@ -15,13 +15,13 @@ import java.util.*
 class TeamServiceImpl @Autowired constructor(
         private val repositoryService: RepositoryService
 ) : TeamService {
-    
+
     override fun getAllTeam(
             token: String?
     ) = with(repositoryService.teamRepository) {
         if (token === null || token.isEmpty()) findAll() else findAllByUserToken(token)
     }
-    
+
     override fun createTeam(
             subjectId: Int,
             teamName: String?,
@@ -37,14 +37,14 @@ class TeamServiceImpl @Autowired constructor(
                 leaderUserIdArray = leaderUserIdArray
         )) > 0
     }
-    
+
     override fun deleteTeam(
             token: String, teamId: Int
     ) = repositoryService.teamRepository.findAllByUserToken(token)?.forEach {
         if (it.teamId == teamId)
             return repositoryService.teamRepository.delete(teamId) > 0
     }.let { false }
-    
+
     override fun updateTeam(
             token: String,
             teamId: Int,
@@ -63,7 +63,7 @@ class TeamServiceImpl @Autowired constructor(
             )) > 0
         else false
     }
-    
+
     override fun find(
             teamId: Int
     ) = repositoryService.teamRepository.find(teamId)
@@ -73,7 +73,7 @@ fun LinkedList<Int>?.sortAndGetNextMinTeamIndex(
         teamRepository: TeamRepository
 ) = 1.also {
     if (this !== null)
-        (1 .. this.size).filter { this[it] != it + 1 }
+        (1..this.size).filter { this[it] != it + 1 }
                 .forEach { key ->
                     with(teamRepository) {
                         findByIndex(this@sortAndGetNextMinTeamIndex[key])

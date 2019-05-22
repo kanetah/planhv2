@@ -9,20 +9,20 @@ import java.util.*
  */
 @DataAccess
 interface TeamRepository {
-    
+
     fun save(team: Team): Int
-    
+
     fun delete(id: Int): Int
-    
+
     fun update(team: Team): Int
-    
+
     fun findAll(): ArrayList<Team>?
-    
+
     fun find(id: Int): Team?
-    
+
     fun findByIndex(teamIndex: Int): Team?
-    
+
     fun findAllByUserToken(token: String): ArrayList<Team>?
-    
+
     fun findAllIndexBySubjectId(subjectId: Int): LinkedList<Int>?
 }

@@ -14,7 +14,7 @@ class IndexController {
     @RequestMapping("/", "/{port}/health")
     fun index(
             @PathVariable(required = false) port: Int?
-    ) = if (port == null || PortConfiguration.PORT == port){
+    ) = if (port == null || PortConfiguration.PORT == port) {
         "Hello, PlanH V2 backend is running on port: ${PortConfiguration.PORT}"
     } else {
         throw IllegalAccessException()

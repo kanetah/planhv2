@@ -30,11 +30,11 @@ class SubjectController @Autowired constructor(
                     "${values["emailAddress"]}",
                     values["teamLimit"]?.toIntArray()
             ).let {
-        object {
-            @JsonValue
-            val success = it
-        }
-    }
+                object {
+                    @JsonValue
+                    val success = it
+                }
+            }
 
     @DeleteMapping("/subject/{id}")
     fun deleteSubject(
@@ -56,12 +56,12 @@ class SubjectController @Autowired constructor(
     ) = subjectService.takeIf {
         accessSecurityService.authCheck("${values["authorized"]}")
     }?.updateSubject(
-                    subjectId,
-                    "${values["subjectName"]}",
-                    "${values["teacherName"]}",
-                    "${values["emailAddress"]}",
-                    values["teamLimit"]?.toIntArray()
-            ).let {
+            subjectId,
+            "${values["subjectName"]}",
+            "${values["teacherName"]}",
+            "${values["emailAddress"]}",
+            values["teamLimit"]?.toIntArray()
+    ).let {
         object {
             @JsonValue
             val success = it

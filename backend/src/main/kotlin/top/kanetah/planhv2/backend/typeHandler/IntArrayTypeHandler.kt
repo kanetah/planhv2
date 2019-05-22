@@ -25,7 +25,7 @@ class IntArrayTypeHandler : BaseTypeHandler<IntArray>() {
     override fun getNullableResult(
             cs: CallableStatement?, columnIndex: Int
     ) = cs?.getString(columnIndex)?.toIntArray()
-    
+
     override fun setNonNullParameter(
             ps: PreparedStatement?, i: Int, parameter: IntArray?, jdbcType: JdbcType?
     ) {

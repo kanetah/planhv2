@@ -8,16 +8,16 @@ import top.kanetah.planhv2.backend.entity.Subject
  */
 @DataAccess
 interface SubjectRepository {
-    
+
     fun save(subject: Subject): Int
-    
+
     fun delete(id: Int): Int
-    
+
     fun update(subject: Subject): Int
-    
+
     fun findAll(): ArrayList<Subject>?
-    
+
     fun find(id: Int): Subject?
-    
+
     fun findBySubjectName(subjectName: String): Subject?
 }

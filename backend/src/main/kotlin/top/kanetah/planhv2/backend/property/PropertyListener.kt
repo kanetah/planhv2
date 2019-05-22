@@ -11,32 +11,32 @@ import java.util.*
  */
 @Suppress("unused")
 class PropertyListener : ApplicationListener<ApplicationStartingEvent> {
-    
+
     private val propertyFileName = "planhv2.properties"
-    
+
     override fun onApplicationEvent(event: ApplicationStartingEvent?) {
         loadAllProperties(propertyFileName)
     }
 
     companion object {
         private val propertiesMap = HashMap<String, String>()
-        
+
         private fun processProperties(props: Properties) {
             propertiesMap.clear()
             for (key in props.keys()) {
                 val keyStr = key.toString()
-                propertiesMap[keyStr] = String(props.getProperty(keyStr).toByteArray(), Charset.forName("UTF-8"))
+                propertiesMap[keyStr] = String(props.getProperty(keyStr).toByteArray(), Charset.defaultCharset())
             }
         }
-        
+
         fun loadAllProperties(propertiesFileName: String) {
             processProperties(
                     PropertiesLoaderUtils.loadAllProperties(propertiesFileName)
             )
         }
-    
+
         fun getProperty(name: String) = propertiesMap[name]
-        
+
         fun getAllProperties() = propertiesMap
     }
 }

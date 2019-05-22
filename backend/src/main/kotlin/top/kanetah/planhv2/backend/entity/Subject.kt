@@ -18,16 +18,16 @@ data class Subject(
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
-        
+
         other as Subject
-        
+
         if (subjectId != other.subjectId) return false
         if (subjectName != other.subjectName) return false
         if (teacherName != other.teacherName) return false
         if (emailAddress != other.emailAddress) return false
         if (!Arrays.equals(teamLimit, other.teamLimit)) return false
         if (recommendProcessorId != other.recommendProcessorId) return false
-        
+
         return true
     }
 

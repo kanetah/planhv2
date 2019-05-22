@@ -19,9 +19,9 @@ data class Submission(
 ) {
     constructor(
             taskId: Int, userId: Int, teamId: Int?, fileAttributes: SubmitFileAttributes
-    ): this(taskId = taskId, userId = userId, teamId = teamId,
+    ) : this(taskId = taskId, userId = userId, teamId = teamId,
             submitDate = Timestamp(Date().time), fileAttributes = fileAttributes)
-    
+
     fun getResourceId() = fileAttributes.resourceId
     fun getFormerName() = fileAttributes.formerName
     fun getSaveName() = fileAttributes.saveName

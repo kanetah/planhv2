@@ -111,17 +111,9 @@ class TaskController @Autowired constructor(
     fun sendTaskEmail(
             @RequestBody values: Map<String, String>,
             @PathVariable("id") taskId: Int
-    ) = submissionService.takeIf {
+    ) = taskService.takeIf {
         accessSecurityService.authCheck(values["authorized"])
-    }?.let {
-        Thread {
-            try {
-                mailSenderHandle.sendMail(taskId)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                mailSenderHandle.report(e)
-            }
-        }.start()
+    }?.sendTask(taskId).let {
         object {
             @JsonValue
             val success = true

@@ -18,19 +18,19 @@ data class Team(
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
-        
+
         other as Team
-        
+
         if (teamId != other.teamId) return false
         if (subjectId != other.subjectId) return false
         if (teamIndex != other.teamIndex) return false
         if (teamName != other.teamName) return false
         if (!Arrays.equals(memberUserIdArray, other.memberUserIdArray)) return false
         if (!Arrays.equals(leaderUserIdArray, other.leaderUserIdArray)) return false
-        
+
         return true
     }
-    
+
     override fun hashCode(): Int {
         var result = teamId.hashCode()
         result = 31 * result + subjectId.hashCode()

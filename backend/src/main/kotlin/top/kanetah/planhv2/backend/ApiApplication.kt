@@ -13,7 +13,7 @@ class ApiApplication {
     companion object {
         private var context: ApplicationContext? = null
         internal fun context() = context!!
-        
+
         @JvmStatic
         fun main(args: Array<String>
         ) = SpringApplication(ApiApplication::class.java).run {

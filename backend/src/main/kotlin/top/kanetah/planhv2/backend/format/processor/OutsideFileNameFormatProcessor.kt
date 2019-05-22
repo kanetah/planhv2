@@ -16,9 +16,9 @@ import java.io.File
  */
 @FormatProcessorName("最外层文件名格式化处理器")
 object OutsideFileNameFormatProcessor : FormatProcessorClass {
-    
+
     override val id = 1
-    
+
     private val resourceService by lazy {
         APP_CONTEXT.getBean(ResourceService::class.java)!!
     }
@@ -43,7 +43,7 @@ object OutsideFileNameFormatProcessor : FormatProcessorClass {
         return resourceService.createResource(
                 target.name,
                 file.size.toDouble(),
-                "task/$subjectName/${task.title}/${target.name}"
+                "task/$subjectName/${task.title}-${task.title}/${target.name}"
         )?.let {
             SubmitFileAttributes(
                     resourceId = it.resourceId,

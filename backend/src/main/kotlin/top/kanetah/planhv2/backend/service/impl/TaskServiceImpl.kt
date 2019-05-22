@@ -2,6 +2,7 @@ package top.kanetah.planhv2.backend.service.impl
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import top.kanetah.planhv2.backend.annotation.JsonValue
 import top.kanetah.planhv2.backend.entity.Task
 import top.kanetah.planhv2.backend.format.MailSenderHandle
 import top.kanetah.planhv2.backend.service.RepositoryService
@@ -102,4 +103,17 @@ class TaskServiceImpl @Autowired constructor(
     override fun findTask(
             id: Int
     ) = repositoryService.taskRepository.find(id)
+
+    override fun sendTask(id: Int) {
+        Thread {
+            with(mailSenderHandle) {
+                try {
+                    sendMail(id)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    report(e)
+                }
+            }
+        }.start()
+    }
 }

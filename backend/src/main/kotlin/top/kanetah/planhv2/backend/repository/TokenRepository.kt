@@ -8,12 +8,12 @@ import top.kanetah.planhv2.backend.entity.Token
  */
 @DataAccess
 interface TokenRepository {
-    
+
     fun save(token: Token): Int
-    
+
     fun deleteByUserId(userId: Int): Int
-    
+
     fun deleteByToken(token: String): Int
-    
+
     fun findByToken(token: String): Token?
 }

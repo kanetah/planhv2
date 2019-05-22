@@ -1,12 +1,14 @@
 package top.kanetah.planhv2.backend.conrtoller
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import top.kanetah.planhv2.backend.annotation.JsonValue
 import top.kanetah.planhv2.backend.annotation.PlanHApiController
 import top.kanetah.planhv2.backend.service.AccessSecurityService
 import top.kanetah.planhv2.backend.service.ResourceService
+import javax.servlet.http.HttpServletResponse
 
 /**
  * created by kane on 2018/1/31
@@ -60,13 +62,21 @@ class ResourceController @Autowired constructor(
 
     @GetMapping("/download/{filename:.+}")
     fun download(
-            @PathVariable("filename") fileName: String
-    ) = resourceService.download(fileName)
+            @PathVariable("filename") fileName: String,
+            response: HttpServletResponse
+    ): ResponseEntity<ByteArray>? {
+        response.contentType = "application/x-download"
+        return resourceService.download(fileName)
+    }
 
     @GetMapping("/download/task/{subject}/{title}/{filename:.+}")
     fun downloadTaskResource(
             @PathVariable("subject") subjectName: String,
             @PathVariable("title") taskTitle: String,
-            @PathVariable("filename") fileName: String
-    ) = resourceService.download(subjectName, taskTitle, fileName)
+            @PathVariable("filename") fileName: String,
+            response: HttpServletResponse
+    ): ResponseEntity<ByteArray>? {
+        response.contentType = "application/x-download"
+        return resourceService.download(subjectName, taskTitle, fileName)
+    }
 }

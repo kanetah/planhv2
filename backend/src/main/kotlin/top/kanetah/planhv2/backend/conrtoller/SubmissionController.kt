@@ -27,15 +27,15 @@ class SubmissionController(
     fun createSubmission(
             @RequestParam token: String,
             @RequestParam taskId: Int,
-            @RequestParam teamId: String,
+            @RequestParam(required = false) teamId: String,
             @RequestPart file: MultipartFile
     ) = submissionService.takeIf {
         accessSecurityService.tokenCheck(token)
     }?.createSubmission(token, taskId, try {
-                teamId.toInt()
-            } catch (e: NumberFormatException) {
-                null
-            }, file).let {
+        teamId.toInt()
+    } catch (e: NumberFormatException) {
+        null
+    }, file).let {
         object {
             @JsonValue
             val success = it
@@ -48,15 +48,15 @@ class SubmissionController(
     fun updateSubmission(
             @RequestHeader token: String,
             @RequestHeader taskId: Int,
-            @RequestHeader teamId: String,
+            @RequestHeader(required = false) teamId: String,
             @RequestPart file: MultipartFile
     ) = submissionService.takeIf {
         accessSecurityService.tokenCheck(token)
     }?.updateSubmission(token, taskId, try {
-                teamId.toInt()
-            } catch (e: NumberFormatException) {
-                null
-            }, file).let {
+        teamId.toInt()
+    } catch (e: NumberFormatException) {
+        null
+    }, file).let {
         object {
             @JsonValue
             val success = it

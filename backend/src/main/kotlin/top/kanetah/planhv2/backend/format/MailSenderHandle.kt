@@ -1,6 +1,5 @@
 package top.kanetah.planhv2.backend.format
 
-import org.codehaus.plexus.util.StringOutputStream
 import org.springframework.beans.factory.InitializingBean
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -20,9 +19,9 @@ import java.io.PrintStream
 import java.text.DateFormat
 import java.util.*
 import java.util.logging.Logger
-import java.util.stream.Stream
 import kotlin.collections.ArrayList
 
+const val CLASS_TITLE = "15移动春2班"
 
 /**
  * created by kane on 2019/4/10
@@ -35,10 +34,8 @@ class MailSenderHandle @Autowired constructor(
 ) : InitializingBean {
 
     private val logger = Logger.getLogger(MailSenderHandle::class.qualifiedName)
-    val classTitle: String
-        get() = PropertyListener.getProperty("class-title") ?: "PlanHv2"
     val storePath: String
-        get() = PropertyListener.getProperty("submission-path")!!
+        get() = PropertyListener.getProperty("submission-path") ?: "/planh/submission/"
     private val dateMap = TreeMap<Date, ArrayList<Int>>()
     @Value(value = "\${spring.mail.username}")
     private lateinit var mailUsername: String
@@ -73,14 +70,15 @@ class MailSenderHandle @Autowired constructor(
                             )
                             dateMap[deadline]?.forEach(this::sendMail)
                             dateMap.remove(deadline)
-                            continue
+                        } else {
+                            logger.info("no task need to be sent, sleep a hour.")
+                            Thread.sleep(A_HOUR)
                         }
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
                     report(e)
                 }
-                Thread.sleep(A_HOUR)
             }
         }.start()
     }
@@ -89,7 +87,7 @@ class MailSenderHandle @Autowired constructor(
         if (PortConfiguration.PORT == 9713) {
             startMailProcessor()
         }
-        report(DateFormat.getInstance().format(Date()) + "\t服务启动")
+        report(DateFormat.getInstance().format(Date()) + "&nbsp;&nbsp;服务启动")
     }
 
     fun report(e: Exception) {
@@ -137,8 +135,8 @@ class MailSenderHandle @Autowired constructor(
         val helper = MimeMessageHelper(message, true)
         helper.setFrom(mailUsername)
         helper.setTo(subject.emailAddress)
-        logger.info("mail mime subject title: 作业提交：${task.title}_$classTitle")
-        helper.setSubject("作业提交：${task.title}_$classTitle")
+        logger.info("mail mime subject title: 作业提交：${task.title}_$CLASS_TITLE")
+        helper.setSubject("作业提交：${task.title}_$CLASS_TITLE")
         helper.addAttachment(submitZip.name, submitZip)
         helper.setText(content, true)
         logger.info("mail sending...")
@@ -155,18 +153,17 @@ class MailSenderHandle @Autowired constructor(
         val users = repositoryService.userRepository.findAll() ?: throw Exception("can not find users")
         // 切换提交与未交名单的阈值
         val flagSize = 20
-        val context = Context()
-
-        context.setVariable("teacherName", subject.teacherName)
-        context.setVariable("taskTitle", task.title)
-        context.setVariable("submitSize", submissionList.size)
-        context.setVariable("userCount", users.size)
-        context.setVariable("flagSize", flagSize)
-        val submittedUserIds = submissionList.map { it.userId }
-        val flag = submissionList.size < flagSize
-        context.setVariable("table", users.filter { submittedUserIds.contains(it.userId) and flag }.map {
-            it.userCode to it.userName
-        })
+        val context = Context().apply {
+            setVariable("teacherName", subject.teacherName)
+            setVariable("taskTitle", task.title)
+            setVariable("submitSize", submissionList.size)
+            setVariable("userCount", users.size)
+            setVariable("flagSize", flagSize)
+            val submittedUserIds = submissionList.map { it.userId }
+            setVariable("table", users.filter {
+                submittedUserIds.contains(it.userId) and (submissionList.size < flagSize)
+            }.map { it.userCode to it.userName })
+        }
 
         return thymeleaf.process("mail", context)
     }
@@ -174,6 +171,6 @@ class MailSenderHandle @Autowired constructor(
     private fun createTaskZipFile(task: Task, subject: Subject): File {
         val srcPath = "$storePath${subject.subjectName}/${task.taskId}-${task.title}"
         logger.info("create zip file for $srcPath")
-        return CompactTool("$srcPath.zip").zip(srcPath)
+        return File(srcPath).zip()
     }
 }

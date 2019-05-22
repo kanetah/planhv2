@@ -13,10 +13,10 @@ import top.kanetah.planhv2.backend.service.SubjectService
 class SubjectServiceImpl @Autowired constructor(
         private val repositoryService: RepositoryService
 ) : SubjectService {
-    
+
     override fun getAllSubject(
     ) = repositoryService.subjectRepository.findAll()
-    
+
     override fun createSubject(
             subjectName: String,
             teacherName: String,
@@ -30,11 +30,11 @@ class SubjectServiceImpl @Autowired constructor(
             teamLimit = teamLimit,
             recommendProcessorId = recommendProcessorId
     )) > 0
-    
+
     override fun deleteSubject(
             id: Int
     ) = repositoryService.subjectRepository.delete(id) > 0
-    
+
     override fun updateSubject(
             id: Int,
             subjectName: String,
@@ -53,7 +53,7 @@ class SubjectServiceImpl @Autowired constructor(
             )) > 0
         }
     } ?: false
-    
+
     override fun findSubject(
             id: Int
     ) = repositoryService.subjectRepository.find(id)
