@@ -17,6 +17,13 @@
         </where>
     </delete>
 
+    <delete id="deleteByTaskId">
+        DELETE FROM submission_tab
+        <where>
+            task_id = #{taskId}
+        </where>
+    </delete>
+
     <update id="update">
         UPDATE submission_tab
         <set>

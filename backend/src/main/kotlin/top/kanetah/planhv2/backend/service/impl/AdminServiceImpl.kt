@@ -83,7 +83,9 @@ class AdminServiceImpl @Autowired constructor(
 
     override fun deleteAdmin(
             id: Int
-    ) = repositoryService.adminRepository.delete(id) > 0
+    ) = repositoryService.authRepository.deleteByAdminId(id).let {
+        repositoryService.adminRepository.delete(id) > 0
+    }
 
     override fun findAdmin(
             id: Int

@@ -6,7 +6,7 @@ import copy from 'copy-to-clipboard';
 const uploadProps = {
     name: "file",
     multiple: true,
-    action: "https://planhapi.kanetah.top/resource",
+    action: "//planhapi.kanetah.top/resource",
 };
 const columns = that => [{
     title: '文档名',
@@ -91,14 +91,14 @@ class ContentResource extends Component {
                     message.success("删除成功");
                     this.getResourceFromServer();
                 } else {
-                    message.error("删除失败");
+                    message.error("该资源目前无法删除");
                 }
             } else {
                 message.error("网络错误");
             }
         } catch (e) {
-            console.error("删除异常", e);
-            message.error("删除异常");
+            console.error("删除失败", e);
+            message.error("删除失败");
         }
     };
 

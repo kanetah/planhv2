@@ -65,7 +65,9 @@ class TaskServiceImpl @Autowired constructor(
 
     override fun deleteTask(
             id: Int
-    ) = repositoryService.taskRepository.delete(id) > 0
+    ) = repositoryService.submissionRepository.deleteByTaskId(id).let {
+        repositoryService.taskRepository.delete(id) > 0
+    }
 
     override fun updateTask(
             id: Int,

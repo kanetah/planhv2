@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import top.kanetah.planhv2.backend.annotation.JsonValue
 import top.kanetah.planhv2.backend.annotation.PlanHApiController
+import top.kanetah.planhv2.backend.format.MailSenderHandle
 import top.kanetah.planhv2.backend.service.AccessSecurityService
 import top.kanetah.planhv2.backend.service.SubmissionService
 import top.kanetah.planhv2.backend.service.TaskService
@@ -16,7 +17,8 @@ import java.sql.Timestamp
 class TaskController @Autowired constructor(
         private val taskService: TaskService,
         private val accessSecurityService: AccessSecurityService,
-        private val submissionService: SubmissionService
+        private val submissionService: SubmissionService,
+        private val mailSenderHandle: MailSenderHandle
 ) {
 
     @GetMapping("/tasks")
@@ -104,4 +106,25 @@ class TaskController @Autowired constructor(
     ) = submissionService.takeIf {
         accessSecurityService.authCheck(authorized)
     }?.findByTaskId(taskId)
+
+    @PostMapping("/send/{id}")
+    fun sendTaskEmail(
+            @RequestBody values: Map<String, String>,
+            @PathVariable("id") taskId: Int
+    ) = submissionService.takeIf {
+        accessSecurityService.authCheck(values["authorized"])
+    }?.let {
+        Thread {
+            try {
+                mailSenderHandle.sendMail(taskId)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                mailSenderHandle.report(e)
+            }
+        }.start()
+        object {
+            @JsonValue
+            val success = true
+        }
+    }
 }

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import top.kanetah.planhv2.backend.annotation.JsonValue
 import top.kanetah.planhv2.backend.annotation.PlanHApiController
+import top.kanetah.planhv2.backend.configuration.PortConfiguration
 import top.kanetah.planhv2.backend.service.AccessSecurityService
 import top.kanetah.planhv2.backend.service.AdminService
 
@@ -51,7 +52,7 @@ class AdminController @Autowired constructor(
         }
     }
 
-    @PostMapping("/shutdown")
+    @PostMapping("/{port}/shutdown")
     fun shutdown(
             @RequestBody values: Map<String, String>
     ) = adminService.takeIf {

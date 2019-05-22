@@ -128,7 +128,9 @@ class UserServiceImpl @Autowired constructor(
 
     override fun deleteUser(
             id: Int
-    ) = repositoryService.userRepository.delete(id) > 0
+    ) = repositoryService.tokenRepository.deleteByUserId(id).let {
+        repositoryService.userRepository.delete(id) > 0
+    }
 
     override fun updateUser(
             id: Int, userCode: String?, userName: String?

@@ -1,5 +1,6 @@
 package top.kanetah.planhv2.backend.format
 
+import org.codehaus.plexus.util.StringOutputStream
 import org.springframework.beans.factory.InitializingBean
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -13,10 +14,13 @@ import top.kanetah.planhv2.backend.entity.Subject
 import top.kanetah.planhv2.backend.entity.Task
 import top.kanetah.planhv2.backend.property.PropertyListener
 import top.kanetah.planhv2.backend.service.RepositoryService
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.PrintStream
 import java.text.DateFormat
 import java.util.*
 import java.util.logging.Logger
+import java.util.stream.Stream
 import kotlin.collections.ArrayList
 
 
@@ -57,7 +61,6 @@ class MailSenderHandle @Autowired constructor(
     private fun startMailProcessor() {
         repositoryService.taskRepository.allTasks()?.forEach { setTimer(it) }
         Thread {
-            val exception: Exception
             while (true) {
                 try {
                     logger.info("enter a new cycle for mail process.")
@@ -73,14 +76,12 @@ class MailSenderHandle @Autowired constructor(
                             continue
                         }
                     }
-                    Thread.sleep(A_HOUR)
                 } catch (e: Exception) {
-                    exception = e
-                    break
+                    e.printStackTrace()
+                    report(e)
                 }
+                Thread.sleep(A_HOUR)
             }
-            report(DateFormat.getInstance().format(Date()) + "\t邮件服务异常关闭")
-            throw RuntimeException(exception)
         }.start()
     }
 
@@ -91,34 +92,60 @@ class MailSenderHandle @Autowired constructor(
         report(DateFormat.getInstance().format(Date()) + "\t服务启动")
     }
 
-    fun report(msg: String, targetAddress: String = mailUsername) {
+    fun report(e: Exception) {
+        val stringBuilder = StringBuilder()
+        stringBuilder.append("<h3>${DateFormat.getInstance().format(Date())}&nbsp;&nbsp;邮件服务异常</h3>\n")
+        val outputStream = ByteArrayOutputStream()
+        val printStream = PrintStream(outputStream)
+        e.printStackTrace(printStream)
+        val stackTrace = outputStream.toString()
+        stackTrace.split(System.lineSeparator()).forEach {
+            stringBuilder.append("<p>").append(it
+                    .replace(" ", "&nbsp;")
+                    .replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;")
+            ).append("</p>${System.lineSeparator()}")
+        }
+        outputStream.close()
+        report(stringBuilder.toString())
+    }
+
+    fun report(content: String, targetAddress: String = mailUsername) {
+        logger.info("send report mail to $targetAddress, content: $content")
         val message = mailSender.createMimeMessage()
         val helper = MimeMessageHelper(message, true)
         helper.setFrom(mailUsername)
         helper.setTo(targetAddress)
         helper.setSubject("PlanH v2 报告")
-        helper.setText(msg)
+        helper.setText(content, true)
         mailSender.send(message)
-        logger.info("send mail to $targetAddress, content: $msg")
+        logger.info("send report mail success.")
     }
 
-    private fun sendMail(taskId: Int) {
-        val task = repositoryService.taskRepository.find(taskId) ?: throw Exception("can not find task for send")
+    fun sendMail(taskId: Int) {
+        logger.info("start send mail for task: $taskId")
+        val task = repositoryService.taskRepository.find(taskId)
+                ?: throw Exception("can not find task for send: $taskId")
         val subject = repositoryService.subjectRepository.find(task.subjectId)
-                ?: throw Exception("can not find subject for send")
-        val submitZip = createTaskZipFile(task, subject)
-        val content = emailText(task, subject)
+                ?: throw Exception("can not find subject for send: ${task.subjectId}")
 
+        logger.info("mail content processing...")
+        val content = emailText(task, subject)
+        val submitZip = createTaskZipFile(task, subject)
+
+        logger.info("mail mime processing...")
         val message = mailSender.createMimeMessage()
         val helper = MimeMessageHelper(message, true)
         helper.setFrom(mailUsername)
         helper.setTo(subject.emailAddress)
+        logger.info("mail mime subject title: 作业提交：${task.title}_$classTitle")
         helper.setSubject("作业提交：${task.title}_$classTitle")
         helper.addAttachment(submitZip.name, submitZip)
         helper.setText(content, true)
+        logger.info("mail sending...")
         mailSender.send(message)
         if (!submitZip.delete())
             throw Exception("can not delete zip file: '${submitZip.name}'.")
+        logger.info("send mail success")
     }
 
     private fun emailText(
@@ -146,6 +173,7 @@ class MailSenderHandle @Autowired constructor(
 
     private fun createTaskZipFile(task: Task, subject: Subject): File {
         val srcPath = "$storePath${subject.subjectName}/${task.taskId}-${task.title}"
+        logger.info("create zip file for $srcPath")
         return CompactTool("$srcPath.zip").zip(srcPath)
     }
 }

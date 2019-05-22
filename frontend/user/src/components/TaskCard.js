@@ -34,7 +34,7 @@ export default class TaskCard extends Component {
     }
 
     componentWillReceiveProps = nextProps => {
-        if (nextProps.tasks !== void(0))
+        if (nextProps.tasks !== void (0))
             this.setState({
                 tasks: nextProps.tasks,
             });

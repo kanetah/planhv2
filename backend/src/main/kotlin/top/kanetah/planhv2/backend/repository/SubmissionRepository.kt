@@ -14,6 +14,8 @@ interface SubmissionRepository {
 
     fun delete(id: Int): Int
 
+    fun deleteByTaskId(taskId: Int): Int
+
     fun update(submission: Submission): Int
 
     fun findAllByUserId(userId: Int): ArrayList<Submission>?

@@ -40,7 +40,7 @@ export default class TaskContent extends Component {
     };
 
     filter = (mode, keyWord) => {
-        if(this.subjectSelect.checked)
+        if (this.subjectSelect.checked)
             EventEmitter.emit("filter-subject", this.subjectSelect.subjectId, false);
         let taskArray;
         switch (mode) {
@@ -55,7 +55,7 @@ export default class TaskContent extends Component {
                 taskArray = this.tasks;
                 break;
             case "search":
-                if (keyWord === void(0)) return;
+                if (keyWord === void (0)) return;
                 taskArray = this.tasks.filter(task => {
                     return task["title"].indexOf(keyWord) > -1 || task["content"].indexOf(keyWord) > -1;
                 });

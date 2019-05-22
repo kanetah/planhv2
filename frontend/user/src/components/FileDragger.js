@@ -39,13 +39,13 @@ export default class FileDragger extends Component {
 
     componentWillReceiveProps = nextProps => {
         const submission = nextProps["submission"];
-        if (submission !== this.props["submission"] && taskResources[submission["resourceId"]] === void(0))
+        if (submission !== this.props["submission"] && taskResources[submission["resourceId"]] === void (0))
             Global.taskResource(submission["resourceId"], this.props["task"]["taskId"]);
     };
 
     componentWillMount = () => {
         const submission = this.props["submission"];
-        if (submission !== void(0) && taskResources[submission["resourceId"]] !== void(0))
+        if (submission !== void (0) && taskResources[submission["resourceId"]] !== void (0))
             this.renderResource(submission["resourceId"], this.props["task"]["taskId"]);
     };
 

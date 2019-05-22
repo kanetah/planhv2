@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Global, {subjects, users} from "../frame/PlanHGlobal";
 import EventEmitter from '../frame/EventEmitter';
-import {Button, Card, Col, Divider, Row, Table, Tag, message} from "antd";
+import {Button, Card, Col, Divider, Row, Table, Tag, message, Popconfirm} from "antd";
 import {Axis, Chart, Coord, Legend, Pie, Tooltip} from 'viser-react';
 import {axios} from "../index";
 import copy from 'copy-to-clipboard';
@@ -9,7 +9,10 @@ import copy from 'copy-to-clipboard';
 const submissionColumns = that => [{
     title: '用户',
     dataIndex: 'userId',
-    render: userId => that.state.users[userId] ? that.state.users[userId].userName : null,
+    render: userId => {
+        const user = that.state.users.filter(e => e.userId === userId);
+        return user.length > 0 ? user[0].userName : null;
+    },
     key: 'taskId',
 }, {
     title: '文件',
@@ -89,12 +92,54 @@ class TaskDetails extends Component {
         const unsubmissionsList = this.state.users
             .filter(e => !submissionsIds.filter(i => i === e.userId).length)
             .sort((a, b) => Number(a.userId) - Number(b.userId));
-        console.warn("un", unsubmissionsList, this.state.users);
         this.setState({submissions, submissionsCount, unsubmissionsList});
     };
 
     handleBack = () => {
         this.props.setContent(null);
+    };
+
+    handleDelete = async () => {
+        try {
+            const result = await axios.delete(`/task/${this.props.task.taskId}`, {
+                data: {
+                    authorized: window.auth,
+                },
+            });
+            if (result.status === 200) {
+                if (result.data.success) {
+                    message.success("删除成功");
+                    EventEmitter.once("tasks", (tasks) => {
+                        this.props.setContent(null);
+                    });
+                    Global.getTaskFromServer();
+                } else {
+                    message.error("该资源目前无法删除");
+                }
+            } else {
+                message.error("网络错误");
+            }
+        } catch (e) {
+            console.error("删除失败", e);
+            message.error("删除失败");
+        }
+    };
+
+    handleSend = async () => {
+        try {
+            const result = await axios.post(`/send/${this.props.task.taskId}`, {
+                authorized: window.auth,
+            });
+            if (result.status === 200) {
+                message.success("请求成功");
+            } else {
+                console.error("发送失败", result);
+                message.error("发送失败");
+            }
+        } catch (e) {
+            console.error("发送异常", e);
+            message.error("发送异常");
+        }
     };
 
     handleCopy = () => {
@@ -111,7 +156,17 @@ class TaskDetails extends Component {
         ];
         return (
             <div>
-                <Button type={"danger"} shape="circle" icon="rollback" onClick={this.handleBack}/>
+                <Button type={"dashed"} shape="circle" icon="rollback" onClick={this.handleBack}/>
+                <Divider type="vertical"/>
+                <Popconfirm title={`确认删除任务"${this.props.task.title}"?`} onConfirm={this.handleDelete}
+                            okText="确认" okType="danger" cancelText="取消">
+                    <Button type={"danger"} shape="circle" icon="delete"/>
+                </Popconfirm>
+                <Divider type="vertical"/>
+                <Popconfirm title={`确认发送邮件"${this.props.task.title}"?`} onConfirm={this.handleSend}
+                            okText="确认" okType="primary" cancelText="取消">
+                    <Button shape="circle" icon="mail"/>
+                </Popconfirm>
                 <h2 style={{display: "inline", marginLeft: "12px"}}>
                     <Tag>id: {this.props.task.taskId}</Tag>
                     <Divider type="vertical"/>

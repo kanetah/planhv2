@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        kotlinVersion = '1.3.21'
+        kotlinVersion = '1.3.31'
         springBootVersion = '1.5.9.RELEASE'
     }
     repositories {
@@ -25,7 +25,7 @@ noArg {
 }
 
 group = 'top.kanetah.planhv2'
-version = '1.1'
+version = '2.1'
 sourceCompatibility = 1.8
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"

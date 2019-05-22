@@ -115,14 +115,14 @@ class ContentSubject extends Component {
                         subjectEditModalVisible: false,
                     }, Global.getSubjectsFromServer);
                 } else {
-                    message.error("删除失败");
+                    message.error("该资源目前无法删除");
                 }
             } else {
                 message.error("网络错误");
             }
         } catch (e) {
-            console.error("删除异常", e);
-            message.error("删除异常");
+            console.error("删除失败", e);
+            message.error("删除失败");
         }
     };
 

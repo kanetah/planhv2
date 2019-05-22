@@ -47,10 +47,10 @@ class ContentTask extends Component {
             Global.getTaskFromServer();
         }
         this.state = {
-            dataSource: tasks ? tasks : [],
+            dataSource: tasks ? tasks.reverse() : [],
         };
         this.subjectsListener = subjects => {
-            const dataSource = (Object.assign([], this.state.dataSource).map(e => {
+            const tasks = (Object.assign([], this.state.dataSource).map(e => {
                     if (subjects[e.subjectId]) {
                         e.subjectName = subjects[e.subjectId].subjectName;
                     }
@@ -58,12 +58,12 @@ class ContentTask extends Component {
                 }
             ));
             this.setState({
-                dataSource,
+                dataSource: tasks.reverse(),
             });
         };
         this.tasksListener = tasks => {
             this.setState({
-                dataSource: tasks,
+                dataSource: tasks.reverse(),
             });
         };
         EventEmitter.on("subjects", this.subjectsListener);
