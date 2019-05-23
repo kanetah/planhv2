@@ -22,7 +22,7 @@ async function getTaskFromServer() {
         }
         return task;
     });
-    EventEmitter.emit("tasks", tasks);
+    EventEmitter.emit("tasks", tasks.reverse());
 }
 
 let users = [];

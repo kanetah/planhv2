@@ -25,7 +25,7 @@ noArg {
 }
 
 group = 'top.kanetah.planhv2'
-version = '2.1'
+version = '2.7'
 sourceCompatibility = 1.8
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"

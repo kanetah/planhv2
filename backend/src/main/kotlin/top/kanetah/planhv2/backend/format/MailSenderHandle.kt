@@ -70,15 +70,15 @@ class MailSenderHandle @Autowired constructor(
                             )
                             dateMap[deadline]?.forEach(this::sendMail)
                             dateMap.remove(deadline)
-                        } else {
-                            logger.info("no task need to be sent, sleep a hour.")
-                            Thread.sleep(A_HOUR)
+                            continue
                         }
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
                     report(e)
                 }
+                logger.info("no task need to be sent, sleep a hour.")
+                Thread.sleep(A_HOUR)
             }
         }.start()
     }
@@ -87,7 +87,7 @@ class MailSenderHandle @Autowired constructor(
         if (PortConfiguration.PORT == 9713) {
             startMailProcessor()
         }
-        report(DateFormat.getInstance().format(Date()) + "&nbsp;&nbsp;服务启动")
+        report(DateFormat.getInstance().format(Date()) + "&nbsp;&nbsp;服务启动, 端口：${PortConfiguration.PORT}")
     }
 
     fun report(e: Exception) {

@@ -57,7 +57,7 @@ export default class Banner extends Component {
                     margin: "5em",
                 }}>
                     <p style={{fontSize: "3em"}}>PlanH V2</p>
-                    <p style={{fontSize: "2em"}}>{{CLASS_TITLE}}班的作业提交平台</p>
+                    <p style={{fontSize: "2em"}}>{CLASS_TITLE}班的作业提交平台</p>
                 </span>
             </TweenOne>
         )

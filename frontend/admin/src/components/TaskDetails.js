@@ -17,10 +17,10 @@ const submissionColumns = that => [{
 }, {
     title: '文件',
     dataIndex: 'saveName',
-    render: (savename, submission) => {
+    render: (saveName, submission) => {
         const path = submission.fileAttributes.path;
-        cosnt url = "https://planhapi.kanetah.top/download/task" + path.substring(path.indexOf("submission") + 10)
-        return <a href={url} download={savename}>{{savename}}</a>
+        const url = "https://planhapi.kanetah.top/download/task" + path.substring(path.indexOf("submission") + 10);
+        return <a href={url} download={saveName}>{saveName}</a>
     },
     key: 'saveName',
 }, {

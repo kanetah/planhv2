@@ -2,11 +2,13 @@ create table admin_tab
 (
   id int auto_increment
     primary key,
-  psd varchar(32) not null,
+  word varchar(32) not null,
+  allow_new_key tinyint(1) null,
+  access_keys text null,
   constraint admin_tab_id_uindex
   unique (id),
   constraint admin_tab_psd_uindex
-  unique (psd)
+  unique (word)
 )
   engine=InnoDB
 ;
