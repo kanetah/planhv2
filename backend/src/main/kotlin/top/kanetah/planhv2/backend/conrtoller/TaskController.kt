@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import top.kanetah.planhv2.backend.annotation.JsonValue
 import top.kanetah.planhv2.backend.annotation.PlanHApiController
-import top.kanetah.planhv2.backend.format.MailSenderHandle
 import top.kanetah.planhv2.backend.service.AccessSecurityService
 import top.kanetah.planhv2.backend.service.SubmissionService
 import top.kanetah.planhv2.backend.service.TaskService
@@ -17,8 +16,7 @@ import java.sql.Timestamp
 class TaskController @Autowired constructor(
         private val taskService: TaskService,
         private val accessSecurityService: AccessSecurityService,
-        private val submissionService: SubmissionService,
-        private val mailSenderHandle: MailSenderHandle
+        private val submissionService: SubmissionService
 ) {
 
     @GetMapping("/tasks")

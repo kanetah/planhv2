@@ -1,16 +1,11 @@
 package top.kanetah.planhv2.backend.service.impl
 
 import org.springframework.beans.factory.annotation.Autowired
-//import org.springframework.security.core.GrantedAuthority
-//import org.springframework.security.core.userdetails.User
-//import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import top.kanetah.planhv2.backend.entity.Admin
 import top.kanetah.planhv2.backend.entity.User
-import top.kanetah.planhv2.backend.repository.AuthRepository
-import top.kanetah.planhv2.backend.repository.TokenRepository
-import top.kanetah.planhv2.backend.repository.UserRepository
 import top.kanetah.planhv2.backend.service.AccessSecurityService
+import top.kanetah.planhv2.backend.service.RepositoryService
 import java.util.*
 
 /**
@@ -18,9 +13,7 @@ import java.util.*
  */
 @Service
 class AccessSecurityServiceImpl @Autowired constructor(
-        private val authRepository: AuthRepository,
-        private val tokenRepository: TokenRepository,
-        private val userRepository: UserRepository
+        private val repositoryService: RepositoryService
 ) : AccessSecurityService {
 
     private fun checkHelper(
@@ -34,7 +27,7 @@ class AccessSecurityServiceImpl @Autowired constructor(
     override fun authCheck(
             authorized: String?
     ) = checkHelper(authorized) {
-        authRepository.findByAuthorized(it) !== null
+        repositoryService.authRepository.findByAuthorized(it) !== null
     }
 
     override fun computeAccessToken(
@@ -48,9 +41,9 @@ class AccessSecurityServiceImpl @Autowired constructor(
     override fun tokenCheck(
             token: String?, id: Int?
     ) = checkHelper(token) {
-        tokenRepository.findByToken(it).let {
+        repositoryService.tokenRepository.findByToken(it).let {
             if (id === null) it !== null else it?.userId === id
-        } || (id !== null && userRepository.find(id)?.let {
+        } || (id !== null && repositoryService.userRepository.find(id)?.let {
             it.userConfig.enableAccessToken && token.equals(computeAccessToken(it))
         } ?: false)
     }

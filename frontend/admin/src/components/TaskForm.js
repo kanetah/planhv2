@@ -1,5 +1,7 @@
 import React, {Component} from "react";
-import {Button, Card, DatePicker, Form, Icon, Input, message, Select, Tooltip, notification, Divider} from "antd";
+import {
+    Button, Card, DatePicker, Form, Icon, Input, message, Select, Tooltip, notification, Divider, Mention
+} from "antd";
 import Global from "../frame/PlanHGlobal";
 import {axios} from "../index";
 import moment from 'moment';
@@ -7,6 +9,12 @@ import EventEmitter from '../frame/EventEmitter';
 
 const {Item} = Form;
 const {TextArea} = Input;
+const {toContentState} = Mention;
+
+const fileTypes = [
+    "txt", "doc", "xsl", "zip", "rar", "7z",
+    "java", "jpg", "png", "cpp", "pdf", "ppt",
+];
 
 class TaskForm extends Component {
 
@@ -37,6 +45,8 @@ class TaskForm extends Component {
                 return;
             }
             try {
+                const types = values["type"].getPlainText().replace(/ /g, ",").replace(/。/g, ".")
+                    .split(",").filter(e => e);
                 const result = await axios.post("/task", {
                     authorized: window.auth,
                     subjectId: values["subjectId"],
@@ -44,7 +54,7 @@ class TaskForm extends Component {
                     content: values["content"],
                     isTeamTask: values["isTeamTask"] === true,
                     deadline: values["deadline"].format("YYYY-MM-DD HH:mm:ss"),
-                    type: values["type"],
+                    type: types.join(","),
                     format: values["format"],
                     formatProcessorId: values["formatProcessorId"],
                 });
@@ -133,9 +143,15 @@ class TaskForm extends Component {
                     </Item>
                     <Item label="文件类型">
                         {getFieldDecorator("type", {
-                            rules: [{required: true, message: "输入文件类型"}]
+                            rules: [{required: true, message: "输入文件类型"}],
+                            initialValue: toContentState(""),
                         })(
-                            <Input style={{maxWidth: "30em", width: "14vw"}}/>
+                            <Mention
+                                onChange={this.handleMentionChange}
+                                style={{maxWidth: "30em", width: "14vw"}}
+                                prefix="."
+                                suggestions={fileTypes}
+                            />
                         )}
                     </Item>
                     <Item label="命名格式">

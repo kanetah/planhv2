@@ -43,7 +43,7 @@ object OutsideFileNameFormatProcessor : FormatProcessorClass {
         return resourceService.createResource(
                 target.name,
                 file.size.toDouble(),
-                "task/$subjectName/${task.title}-${task.title}/${target.name}"
+                "task/$subjectName/${task.taskId}-${task.title}/${target.name}"
         )?.let {
             SubmitFileAttributes(
                     resourceId = it.resourceId,

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Divider, Input, message, Modal, Popconfirm, Table} from "antd";
+import {Button, Divider, Input, message, Modal, Popconfirm, Table, Tag} from "antd";
 import {axios} from "../index";
 
 const columns = that => [{
@@ -27,10 +27,13 @@ const columns = that => [{
         <Divider type="vertical"/>
         <a onClick={that.handleReset(record)}>重置</a>
         <Divider type="vertical"/>
-        <Popconfirm title={`确认删除口令"${record.word}"?`} onConfirm={that.handleDelete(record)}
-                    okText="确认" okType="danger" cancelText="取消">
-            <a>删除</a>
-        </Popconfirm>
+        {
+            record.word !== window.admin ?
+                <Popconfirm title={`确认删除管理员口令"${record.word}"?`} onConfirm={that.handleDelete(record)}
+                            okText="确认" okType="danger" cancelText="取消">
+                    <a>删除</a>
+                </Popconfirm> : <Tag color="volcano">正在使用</Tag>
+        }
     </span>,
     key: 'action',
 }];

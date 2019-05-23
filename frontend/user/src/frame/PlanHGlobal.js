@@ -107,10 +107,8 @@ export default {
         }
     },
     resources: () => {
-        if (resources === void (0)) {
-            resources = null;
-            getResources();
-        }
+        resources = null;
+        getResources();
     },
 }
 

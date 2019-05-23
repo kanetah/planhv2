@@ -27,6 +27,7 @@ export default class ResourceCard extends Component {
         onChange: info => {
             if (info.file.status === 'done') {
                 message.success(`${info.file.name} 文件上传成功`);
+                Global.resources();
             } else if (info.file.status === 'error') {
                 message.error(`${info.file.name} 文件上传失败`);
             }

@@ -118,6 +118,7 @@ export default class FileDragger extends Component {
                 fileList={this.state.fileList}
                 data={this.uploadData}
                 disabled={timeout}
+                accept={this.props["task"]["type"]}
                 beforeUpload={this.beforeUpload(this.props["task"]["type"])}
             >
                 <Popover content={timeout ? "不可提交" : `要求文件类型：${task.type}`} trigger="hover">

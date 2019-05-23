@@ -22,7 +22,7 @@ const columns = that => [{
         <Button type="dashed" icon="plus" onClick={that.handleCreate}>
             添加
         </Button>
-        <Upload name="file" action={`${Global.backendDomain}/users`}
+        <Upload name="file" action={`${Global.backendDomain}/users`} accept={".xls"}
                 headers={{authorized: window.auth}} onChange={that.handlePatchCreate}>
             <Button type="dashed" icon="file-add">
                 快速添加

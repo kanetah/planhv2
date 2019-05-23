@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {Card, Button, Popconfirm} from "antd";
 import axios from "axios";
-import Global from "../frame/PlanHGlobal";
 
 export default class ShutdownCard extends Component {
 

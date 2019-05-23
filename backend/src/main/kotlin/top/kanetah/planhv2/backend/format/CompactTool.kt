@@ -27,8 +27,14 @@ infix fun File.zipFrom(srcFile: File): File {
         if (srcFile.isFile) {
             zipFile(srcFile, out, "")
         } else {
-            for (elem in srcFile.listFiles())
+            for (elem in srcFile.listFiles().filter {
+                if (it.isDirectory) true else {
+                    val suffix = it.name.substring(it.name.lastIndexOf(".")).toLowerCase()
+                    !arrayOf(".rar", ".zip", ".7z").contains(suffix)
+                }
+            }) {
                 compress(elem, out, srcFile.name + File.separator)
+            }
         }
     }
     return this
@@ -45,12 +51,16 @@ private fun zipFile(srcFile: File, out: ZipOutputStream, basedir: String) {
     if (!srcFile.exists()) return
 
     val buf = ByteArray(1024)
-    FileInputStream(srcFile).use { input ->
-        out.use { out ->
-            out.putNextEntry(ZipEntry(basedir + srcFile.name))
-            while (input.read(buf).takeIf { it > 0 }?.let { out.write(buf, 0, it);true } == true) {
-            }
-        }
+    var `in`: FileInputStream? = null
+    try {
+        var len: Int
+        `in` = FileInputStream(srcFile)
+        out.putNextEntry(ZipEntry(basedir + srcFile.name))
+        while (`in`.read(buf).also { len = it } > 0)
+            out.write(buf, 0, len)
+    } finally {
+        out.closeEntry()
+        `in`?.close()
     }
 }
 
@@ -86,7 +96,7 @@ fun File.uncompress() {
             }
         }
     }
-    when (name.substring(name.lastIndexOf("."))) {
+    when (name.substring(name.lastIndexOf(".")).toLowerCase()) {
         ".rar" -> unRar(this, descPath)
         ".zip" -> unZip(this, descPath)
         ".7z" -> un7z(this, descPath)
@@ -103,7 +113,7 @@ fun File.uncompress() {
             }
         }
     }
-    delete()
+//    delete()
 }
 
 private fun unRar(file: File, descPath: String): String {
@@ -136,7 +146,7 @@ private fun unZip(file: File, descPath: String, charSet: String = "utf-8") {
             val zipEntryName = entry.name
             val outPath = (descPath + zipEntryName)
                     .replace("\\*".toRegex(), "/")
-            File(outPath.substring(0, outPath.lastIndexOf('/'))).apply { if (!exists()) mkdirs() }
+            File(outPath.substring(0, outPath.lastIndexOf(File.separator))).apply { if (!exists()) mkdirs() }
             if (File(outPath).isDirectory) return@forEach
             val out = FileOutputStream(outPath)
             val buff = ByteArray(1024)
@@ -151,6 +161,8 @@ private fun unZip(file: File, descPath: String, charSet: String = "utf-8") {
     } catch (e: Exception) {
         if (charSet == "utf-8")
             unZip(file, descPath, "GBK")
+        else
+            e.printStackTrace()
     } finally {
         zip.close()
     }

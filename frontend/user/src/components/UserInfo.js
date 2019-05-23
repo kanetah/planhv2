@@ -26,7 +26,7 @@ export default class UserInfo extends Component {
 
     getWeekIndex = () => {
         const now = new Date();
-        let beginDate = new Date(2018, 2, 5);
+        let beginDate = new Date(2019, 2, 25);
         return Math.floor(Math.floor((now.valueOf() - beginDate.valueOf()) / 86400000) / 7) + 1;
     };
 

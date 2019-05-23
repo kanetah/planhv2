@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import top.kanetah.planhv2.backend.annotation.PlanHApiController
 import top.kanetah.planhv2.backend.configuration.PortConfiguration
+import javax.servlet.http.HttpServletResponse
 import javax.sound.sampled.Port
 
 /**
@@ -13,10 +14,12 @@ import javax.sound.sampled.Port
 class IndexController {
     @RequestMapping("/", "/{port}/health")
     fun index(
-            @PathVariable(required = false) port: Int?
+            @PathVariable(required = false) port: Int?,
+            response: HttpServletResponse
     ) = if (port == null || PortConfiguration.PORT == port) {
         "Hello, PlanH V2 backend is running on port: ${PortConfiguration.PORT}"
     } else {
-        throw IllegalAccessException()
+        response.status = 502
+        "Port $port is close"
     }
 }
