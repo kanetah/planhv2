@@ -159,9 +159,12 @@ class MailSenderHandle @Autowired constructor(
             setVariable("submitSize", submissionList.size)
             setVariable("userCount", users.size)
             setVariable("flagSize", flagSize)
+            // 提交用户Id集合
             val submittedUserIds = submissionList.map { it.userId }
             setVariable("table", users.filter {
-                submittedUserIds.contains(it.userId) and (submissionList.size < flagSize)
+                val threshold = submissionList.size < flagSize
+                val contains = submittedUserIds.contains(it.userId)
+                if (threshold) contains else !contains
             }.map { it.userCode to it.userName })
         }
 

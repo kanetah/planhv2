@@ -29,7 +29,11 @@ class ResourceServiceImpl @Autowired constructor(
     val submissionPath = PropertyListener.getProperty("submission-path")
 
     override fun findAllResourceWithoutSubmissionResource(
-    ) = repositoryService.resourceRepository.findAllWithoutForeignKeyWithSubmission()
+    ) = repositoryService.resourceRepository.findAllWithoutForeignKeyWithSubmission()?.filter {
+        !it.resourceUrl.startsWith(
+                "https://planhapi.kanetah.top/download/task/"
+        )
+    }
 
     /**
      * 在服务端保存文件

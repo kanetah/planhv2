@@ -8,7 +8,7 @@ import top.kanetah.planhv2.backend.entity.Resource
  * created by kane on 2018/1/31
  */
 interface ResourceService {
-    fun findAllResourceWithoutSubmissionResource(): ArrayList<Resource>?
+    fun findAllResourceWithoutSubmissionResource(): List<Resource>?
     fun createResource(name: String, size: Double, url: String): Resource?
     fun createResource(file: MultipartFile): Resource?
     fun deleteResource(resourceId: Int): Boolean
