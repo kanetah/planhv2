@@ -10,6 +10,7 @@ import org.thymeleaf.context.Context
 import org.thymeleaf.spring4.SpringTemplateEngine
 import top.kanetah.planhv2.backend.configuration.PortConfiguration
 import top.kanetah.planhv2.backend.entity.Subject
+import top.kanetah.planhv2.backend.entity.Submission
 import top.kanetah.planhv2.backend.entity.Task
 import top.kanetah.planhv2.backend.property.PropertyListener
 import top.kanetah.planhv2.backend.service.RepositoryService
@@ -120,36 +121,45 @@ class MailSenderHandle @Autowired constructor(
     }
 
     fun sendMail(taskId: Int) {
-        logger.info("start send mail for task: $taskId")
-        val task = repositoryService.taskRepository.find(taskId)
-                ?: throw Exception("can not find task for send: $taskId")
-        val subject = repositoryService.subjectRepository.find(task.subjectId)
-                ?: throw Exception("can not find subject for send: ${task.subjectId}")
+        try {
+            logger.info("start send mail for task: $taskId")
+            val task = repositoryService.taskRepository.find(taskId)
+                    ?: throw Exception("can not find task for send: $taskId")
+            val subject = repositoryService.subjectRepository.find(task.subjectId)
+                    ?: throw Exception("can not find subject for send: ${task.subjectId}")
+            val submissionList = repositoryService.submissionRepository.findByTaskId(task.taskId)
+            if (submissionList.isNullOrEmpty())
+                throw Exception("can not find submisstion for send: $taskId")
 
-        logger.info("mail content processing...")
-        val content = emailText(task, subject)
-        val submitZip = createTaskZipFile(task, subject)
+            logger.info("mail content processing...")
+            val content = emailText(task, subject, submissionList)
+            val submitZip = createTaskZipFile(task, subject)
 
-        logger.info("mail mime processing...")
-        val message = mailSender.createMimeMessage()
-        val helper = MimeMessageHelper(message, true)
-        helper.setFrom(mailUsername)
-        helper.setTo(subject.emailAddress)
-        logger.info("mail mime subject title: 作业提交：${task.title}_$CLASS_TITLE")
-        helper.setSubject("作业提交：${task.title}_$CLASS_TITLE")
-        helper.addAttachment(submitZip.name, submitZip)
-        helper.setText(content, true)
-        logger.info("mail sending...")
-        mailSender.send(message)
-        if (!submitZip.delete())
-            throw Exception("can not delete zip file: '${submitZip.name}'.")
-        logger.info("send mail success")
+            logger.info("mail mime processing...")
+            val message = mailSender.createMimeMessage()
+            val helper = MimeMessageHelper(message, true)
+            helper.setFrom(mailUsername)
+            helper.setTo(subject.emailAddress)
+            logger.info("mail mime subject title: 作业提交：${task.title}_$CLASS_TITLE")
+            helper.setSubject("作业提交：${task.title}_$CLASS_TITLE")
+            helper.addAttachment(submitZip.name, submitZip)
+            helper.setText(content, true)
+            logger.info("mail sending...")
+            mailSender.send(message)
+            if (!submitZip.delete())
+                throw Exception("can not delete zip file: '${submitZip.name}'.")
+            logger.info("send mail success")
+        } catch (e: Exception) {
+            e.printStackTrace()
+            report(e)
+        }
     }
 
     private fun emailText(
-            task: Task, subject: Subject = repositoryService.subjectRepository.find(task.subjectId)!!
+            task: Task,
+            subject: Subject,
+            submissionList: List<Submission>
     ): String {
-        val submissionList = repositoryService.submissionRepository.findByTaskId(task.taskId) ?: ArrayList()
         val users = repositoryService.userRepository.findAll() ?: throw Exception("can not find users")
         // 切换提交与未交名单的阈值
         val flagSize = 20

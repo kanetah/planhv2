@@ -29,7 +29,8 @@ infix fun File.zipFrom(srcFile: File): File {
         } else {
             for (elem in srcFile.listFiles().filter {
                 if (it.isDirectory) true else {
-                    val suffix = it.name.substring(it.name.lastIndexOf(".")).toLowerCase()
+                    val suffix = it.name.substring(it.name.lastIndexOf("."))
+                            .toLowerCase()
                     !arrayOf(".rar", ".zip", ".7z").contains(suffix)
                 }
             }) {
@@ -91,9 +92,8 @@ fun File.uncompress() {
     // 使用懒加载，只有在确定需要时才创建新的作业存放目录
     val descPath by lazy {
         with(canonicalPath) {
-            (substring(0, lastIndexOf(".")) + File.separator).also {
-                File(it).apply { if (!exists()) mkdirs() }
-            }
+            (substring(0, lastIndexOf(".")) + File.separator)
+                    .also { File(it).apply { if (!exists()) mkdirs() } }
         }
     }
     when (name.substring(name.lastIndexOf(".")).toLowerCase()) {
@@ -113,7 +113,6 @@ fun File.uncompress() {
             }
         }
     }
-//    delete()
 }
 
 private fun unRar(file: File, descPath: String): String {

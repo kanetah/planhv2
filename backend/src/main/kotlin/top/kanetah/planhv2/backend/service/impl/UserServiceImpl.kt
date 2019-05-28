@@ -104,7 +104,9 @@ class UserServiceImpl @Autowired constructor(
      */
     override fun createUserBatch(
             file: MultipartFile
-    ) = with(HSSFWorkbook(POIFSFileSystem(file.inputStream)).getSheetAt(0)) {
+    ) = with(
+            HSSFWorkbook(POIFSFileSystem(file.inputStream)).getSheetAt(0)
+    ) {
         // 获取需要关注的列的索引值
         fun getIndexByValue(value: String): Int {
             getRow(0).forEach {
@@ -113,14 +115,16 @@ class UserServiceImpl @Autowired constructor(
             }
             throw Exception("Column does not exist.")
         }
+        val (userCodeIndex, userNameIndex) =
+                (getIndexByValue(userCodeMark) to getIndexByValue(userNameMark))
         (1..lastRowNum).count {
             try {
                 with(getRow(it)) {
                     createUser(User(
-                            userCode = with(getCell(getIndexByValue(userCodeMark))) {
+                            userCode = with(getCell(userCodeIndex)) {
                                 setCellType(CellType.STRING)
                                 stringCellValue
-                            }, userName = getCell(getIndexByValue(userNameMark)).stringCellValue
+                            }, userName = getCell(userNameIndex).stringCellValue
                     ))
                 }
             } catch (e: NullPointerException) {
