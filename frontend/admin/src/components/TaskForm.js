@@ -12,8 +12,8 @@ const {TextArea} = Input;
 const {toContentState} = Mention;
 
 const fileTypes = [
-    "txt", "doc", "xsl", "zip", "rar", "7z",
-    "java", "jpg", "png", "cpp", "pdf", "ppt",
+    "txt", "doc", "xls", "zip", "rar", "7z", "svg",
+    "java", "jpg", "png", "gif", "cpp", "pdf", "ppt",
 ];
 
 class TaskForm extends Component {
