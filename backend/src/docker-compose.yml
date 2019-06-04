@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+  planh-db:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=nicopoiduang
+    restart: always
+  api-9713:
+    build: .
+    image: planhapi
+    volumes:
+      - /planh:/planh
+    network_mode: host
+  api-9913:
+    build: .
+    image: planhapi
+    volumes:
+      - /planh:/planh
+    network_mode: host
