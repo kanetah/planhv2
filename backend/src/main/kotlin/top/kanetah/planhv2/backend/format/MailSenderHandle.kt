@@ -17,10 +17,10 @@ import top.kanetah.planhv2.backend.service.RepositoryService
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.PrintStream
+import java.sql.Timestamp
 import java.text.DateFormat
 import java.util.*
 import java.util.logging.Logger
-import kotlin.collections.ArrayList
 
 const val CLASS_TITLE = "15移动春2班"
 
@@ -37,7 +37,7 @@ class MailSenderHandle @Autowired constructor(
     private val logger = Logger.getLogger(MailSenderHandle::class.qualifiedName)
     val storePath: String
         get() = PropertyListener.getProperty("submission-path") ?: "/planh/submission/"
-    private val dateMap = TreeMap<Date, ArrayList<Int>>()
+    private val dateMap = TreeMap<Timestamp, ArrayList<Int>>()
     @Value(value = "\${spring.mail.username}")
     private lateinit var mailUsername: String
 
@@ -47,17 +47,24 @@ class MailSenderHandle @Autowired constructor(
 
     fun setTimer(task: Task) {
         if (Date().before(task.deadline)) {
-            dateMap[task.deadline] = (dateMap[task.deadline] ?: ArrayList()).apply { add(task.taskId) }
+            if (dateMap[task.deadline] == null) {
+                dateMap[task.deadline] = arrayListOf(task.taskId)
+            } else {
+                dateMap[task.deadline]?.add(task.taskId)
+            }
         }
     }
 
     fun setTimer(task: Task, oldTime: Date) {
-        (dateMap[oldTime] ?: ArrayList()).apply { remove(task.taskId) }
+        dateMap[oldTime]?.remove(task.taskId)
         setTimer(task)
     }
 
     private fun startMailProcessor() {
         repositoryService.taskRepository.allTasks()?.forEach { setTimer(it) }
+        dateMap.forEach {
+            println("task: ${it.value} on ${it.key}")
+        }
         Thread {
             while (true) {
                 try {
@@ -88,7 +95,7 @@ class MailSenderHandle @Autowired constructor(
         if (PortConfiguration.PORT == 9713) {
             startMailProcessor()
         }
-        report(DateFormat.getInstance().format(Date()) + "&nbsp;&nbsp;服务启动, 端口：${PortConfiguration.PORT}")
+//        report(DateFormat.getInstance().format(Date()) + "&nbsp;&nbsp;服务启动, 端口：${PortConfiguration.PORT}")
     }
 
     fun report(e: Exception) {

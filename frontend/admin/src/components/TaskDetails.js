@@ -214,7 +214,7 @@ class TaskDetails extends Component {
                             </Col>
                             <Col span={12} style={{position: "absolute", top: 0, bottom: 0, right: 0}}>
                                 <Card title={"未交名单"} style={{height: "100%"}}
-                                      extra={<a onClick={this.handleCopy}>复制</a>} bodyStyle={{height: "100%"}}>
+                                      extra={<a onClick={this.handleCopy}>复制</a>} bodyStyle={{height: "85%"}}>
                                     <div style={{
                                         whiteSpace: "nowrap",
                                         display: "block",
